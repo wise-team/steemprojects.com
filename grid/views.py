@@ -11,7 +11,7 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView
 
 from grid.forms import ElementForm, FeatureForm, GridForm, GridPackageForm
 from grid.models import Element, Feature, Grid, GridPackage
-from package.models import Package
+from package.models import Project
 from package.forms import PackageForm
 from package.views import repo_data_for_js
 
@@ -261,7 +261,7 @@ def add_grid_package(request, grid_slug, template_name="grid/add_grid_package.ht
     form = GridPackageForm(request.POST or None, instance=grid_package)
 
     if form.is_valid():
-        package = get_object_or_404(Package, id=request.POST['package'])
+        package = get_object_or_404(Project, id=request.POST['package'])
         try:
             GridPackage.objects.get(grid=grid, package=package)
             message = "Sorry, but '%s' is already in this grid." % package.title
@@ -293,7 +293,7 @@ def add_new_grid_package(request, grid_slug, template_name="package/package_form
 
     grid = get_object_or_404(Grid, slug=grid_slug)
 
-    new_package = Package()
+    new_package = Project()
     form = PackageForm(request.POST or None, instance=new_package)
 
     if form.is_valid():

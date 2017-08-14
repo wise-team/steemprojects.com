@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.views.generic.dates import ArchiveIndexView
 
-from package.models import Package
+from package.models import Project
 from package.views import (
                             add_example,
                             add_package,
@@ -28,7 +28,7 @@ urlpatterns = [
     url(
         regex=r"^latest/$",
         view=ArchiveIndexView.as_view(
-                        queryset=Package.objects.filter().select_related(),
+                        queryset=Project.objects.filter().select_related(),
                         paginate_by=50,
                         date_field="created"
         ),

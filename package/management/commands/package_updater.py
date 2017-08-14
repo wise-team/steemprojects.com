@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 
 from github3 import login as github_login
 
-from package.models import Package
+from package.models import Project
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class Command(NoArgsCommand):
 
         github = github_login(token=settings.GITHUB_TOKEN)
 
-        for index, package in enumerate(Package.objects.iterator()):
+        for index, package in enumerate(Project.objects.iterator()):
 
             # Simple attempt to deal with Github rate limiting
             while True:

@@ -7,7 +7,7 @@ from package.repos.bitbucket import repo_handler as bitbucket_handler
 from package.repos.github import repo_handler as github_handler
 from package.repos.base_handler import BaseHandler
 from package.repos.unsupported import UnsupportedHandler
-from package.models import Commit, Package, Category
+from package.models import Commit, Project, Category
 
 
 class BaseBase(TestCase):
@@ -24,7 +24,7 @@ class BaseBase(TestCase):
 class TestBaseHandler(BaseBase):
     def setUp(self):
         super(TestBaseHandler, self).setUp()
-        self.package = Package.objects.create(
+        self.package = Project.objects.create(
             title="Django Piston",
             slug="django-piston",
             repo_url="https://bitbucket.org/jespern/django-piston",
@@ -206,7 +206,7 @@ class TestBitbucketRepo(TestBaseHandler):
 class TestGithubRepo(TestBaseHandler):
     def setUp(self):
         super(TestGithubRepo, self).setUp()
-        self.package = Package.objects.create(
+        self.package = Project.objects.create(
             title="Django",
             slug="django",
             repo_url="https://github.com/django/django",

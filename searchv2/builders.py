@@ -5,7 +5,7 @@ from sys import stdout
 import requests
 
 from grid.models import Grid
-from package.models import Package, Commit
+from package.models import Project, Commit
 from searchv2.models import SearchV2
 from searchv2.utils import remove_prefix, clean_title
 
@@ -19,7 +19,7 @@ def build_1(print_out=False):
     last_week = now - timedelta(7)
 
     SearchV2.objects.filter(created__lte=last_week).delete()
-    for package in Package.objects.filter():
+    for package in Project.objects.filter():
 
         obj, created = SearchV2.objects.get_or_create(
             item_type="package",

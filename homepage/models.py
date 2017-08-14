@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from grid.models import Grid
-from package.models import BaseModel, Package
+from package.models import BaseModel, Project
 
 
 class RotatorManager(models.Manager):
@@ -16,7 +16,7 @@ class RotatorManager(models.Manager):
 
 class Dpotw(BaseModel):
 
-    package = models.ForeignKey(Package)
+    package = models.ForeignKey(Project)
     start_date = models.DateField(_("Start Date"))
     end_date = models.DateField(_("End Date"))
 

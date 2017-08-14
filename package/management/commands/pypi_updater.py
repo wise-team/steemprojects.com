@@ -4,7 +4,7 @@ import logging.config
 from django.core.management.base import NoArgsCommand
 
 
-from package.models import Package
+from package.models import Project
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ class Command(NoArgsCommand):
 
         count = 0
         count_updated = 0
-        for package in Package.objects.filter().iterator():
+        for package in Project.objects.filter().iterator():
 
             updated = package.fetch_pypi_data()
             if updated:

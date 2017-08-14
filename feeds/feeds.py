@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
 
-from package.models import Package
+from package.models import Project
 
 
 class RssLatestPackagesFeed(Feed):
@@ -15,7 +15,7 @@ class RssLatestPackagesFeed(Feed):
 
     def items(self):
         """Returns 15 most recently created repositories"""
-        return Package.objects.all().order_by("-created")[:15]
+        return Project.objects.all().order_by("-created")[:15]
 
     def item_title(self, item):
         """Get title of the repository"""

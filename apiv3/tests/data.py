@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from grid.models import Grid, GridPackage
-from package.models import Package, Category
+from package.models import Project, Category
 from profiles.models import Profile
 
 
@@ -26,14 +26,14 @@ class BaseData(TestCase):
             title='A Grid',
             slug='grid',
         )
-        self.pkg1 = Package.objects.create(
+        self.pkg1 = Project.objects.create(
             title='Package1',
             slug='package1',
             category=self.app,
             repo_url='https://github.com/pydanny/django-uni-form',
             last_fetched=self.now
         )
-        self.pkg2 = Package.objects.create(
+        self.pkg2 = Project.objects.create(
             title='Package2',
             slug='package2',
             category=self.app,
@@ -49,7 +49,7 @@ class BaseData(TestCase):
 
         self.pkg1.usage.add(self.user)
 
-        self.pkg3 = Package.objects.create(
+        self.pkg3 = Project.objects.create(
             title='Package3',
             slug='package3',
             category=self.framework,

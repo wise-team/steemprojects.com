@@ -6,7 +6,7 @@ import io
 
 from django.http import HttpResponse
 
-from package.models import Package
+from package.models import Project
 
 
 
@@ -15,7 +15,7 @@ def package_csv(request):
     output = io.StringIO()
     fieldnames = ['title', 'created', 'num_participants', 'pypi_downloads', 'repo_forks', ]
     writer = csv.DictWriter(output, fieldnames=fieldnames)
-    for package in Package.objects.all():
+    for package in Project.objects.all():
         try:
             writer.writerow(
                 {

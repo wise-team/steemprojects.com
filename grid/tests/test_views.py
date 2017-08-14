@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User, Permission
 
 from grid.models import Grid, Element, Feature, GridPackage
-from package.models import Package
+from package.models import Project
 
 from grid.tests import data
 
@@ -192,7 +192,7 @@ class FunctionalGridTest(TestCase):
         self.assertContains(response, 'Another Test')
 
     def test_add_new_grid_package_view(self):
-        Package.objects.all().delete()
+        Project.objects.all().delete()
         url = reverse('add_new_grid_package', kwargs={'grid_slug': 'testing'})
         response = self.client.get(url)
 
@@ -206,7 +206,7 @@ class FunctionalGridTest(TestCase):
         self.assertTemplateUsed(response, 'package/package_form.html')
 
         # Test form post
-        count = Package.objects.count()
+        count = Project.objects.count()
         response = self.client.post(url, {
             'repo_url': 'http://www.example.com',
             'title': 'Test package',
@@ -214,7 +214,7 @@ class FunctionalGridTest(TestCase):
             'pypi_url': 'http://pypi.python.org/pypi/mogo/0.1.1',
             'category': 1
         }, follow=True)
-        self.assertEqual(Package.objects.count(), count + 1)
+        self.assertEqual(Project.objects.count(), count + 1)
         self.assertContains(response, 'Test package')
 
     def test_ajax_grid_list_view(self):

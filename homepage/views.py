@@ -9,7 +9,7 @@ import feedparser
 from core.decorators import lru_cache
 from grid.models import Grid
 from homepage.models import Dpotw, Gotw, PSA
-from package.models import Category, Package, Version
+from package.models import Category, Project, Version
 from django.views.generic import TemplateView
 
 
@@ -20,7 +20,7 @@ class SitemapView(TemplateView):
 
     def get_context_data(self, **kwargs):
         data = super(SitemapView, self).get_context_data(**kwargs)
-        data['packages'] = Package.objects.all()
+        data['packages'] = Project.objects.all()
         data['grids'] = Grid.objects.all()
         return data
 
@@ -34,7 +34,7 @@ def get_feed():
 def homepage(request, template_name="homepage.html"):
 
     categories = []
-    for category in Category.objects.annotate(package_count=Count("package")):
+    for category in Category.objects.annotate(package_count=Count("project")):
         element = {
             "title": category.title,
             "description": category.description,
@@ -46,7 +46,7 @@ def homepage(request, template_name="homepage.html"):
         categories.append(element)
 
     # get up to 5 random packages
-    package_count = Package.objects.count()
+    package_count = Project.objects.count()
     random_packages = []
     if package_count > 1:
         package_ids = set([])
@@ -58,13 +58,13 @@ def homepage(request, template_name="homepage.html"):
         )
 
         # Get the random packages
-        random_packages = Package.objects.filter(pk__in=package_ids)[:5]
+        random_packages = Project.objects.filter(pk__in=package_ids)[:5]
 
     try:
         potw = Dpotw.objects.latest().package
     except Dpotw.DoesNotExist:
         potw = None
-    except Package.DoesNotExist:
+    except Project.DoesNotExist:
         potw = None
 
     try:
@@ -92,7 +92,7 @@ def homepage(request, template_name="homepage.html"):
 
     return render(request,
         template_name, {
-            "latest_packages": Package.objects.all().order_by('-created')[:5],
+            "latest_packages": Project.objects.all().order_by('-created')[:5],
             "random_packages": random_packages,
             "potw": potw,
             "gotw": gotw,
@@ -101,7 +101,7 @@ def homepage(request, template_name="homepage.html"):
             "blogpost_body": blogpost_body,
             "categories": categories,
             "package_count": package_count,
-            "py3_compat": Package.objects.filter(version__supports_python3=True).select_related().distinct().count(),
+            "py3_compat": Project.objects.filter(version__supports_python3=True).select_related().distinct().count(),
             "latest_python3": Version.objects.filter(supports_python3=True).select_related("package").distinct().order_by("-created")[0:5]
         }
     )

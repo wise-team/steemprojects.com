@@ -1,6 +1,6 @@
 from floppyforms.__future__ import ModelForm, TextInput
 
-from package.models import Category, Package, PackageExample
+from package.models import Category, Project, PackageExample
 
 
 def package_help_text():
@@ -28,7 +28,7 @@ class PackageForm(ModelForm):
         return self.cleaned_data['slug'].lower()
 
     class Meta:
-        model = Package
+        model = Project
         fields = ['repo_url', 'title', 'slug', 'pypi_url', 'category', ]
 
 
@@ -49,5 +49,5 @@ class PackageExampleModeratorForm(ModelForm):
 class DocumentationForm(ModelForm):
 
     class Meta:
-        model = Package
+        model = Project
         fields = ["documentation_url", ]

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from package.models import Category, Package, PackageExample
+from package.models import Category, Project, PackageExample
 from package.tests import initial_data
 
 from profiles.models import Profile
@@ -23,7 +23,7 @@ class FunctionalPackageTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'package/package_list.html')
-        packages = Package.objects.all()
+        packages = Project.objects.all()
         for p in packages:
             self.assertContains(response, p.title)
 
@@ -31,7 +31,7 @@ class FunctionalPackageTest(TestCase):
         url = reverse('package', kwargs={'slug': 'testability'})
         response = self.client.get(url)
         self.assertTemplateUsed(response, 'package/package.html')
-        p = Package.objects.get(slug='testability')
+        p = Project.objects.get(slug='testability')
         self.assertContains(response, p.title)
         self.assertContains(response, p.repo_description)
         for participant in p.participant_list():
@@ -46,14 +46,14 @@ class FunctionalPackageTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'package/package_archive.html')
-        packages = Package.objects.all()
+        packages = Project.objects.all()
         for p in packages:
             self.assertContains(response, p.title)
             self.assertContains(response, p.repo_description)
 
     def test_add_package_view(self):
         # this test has side effects, remove Package 3
-        Package.objects.get(pk=3).delete()
+        Project.objects.get(pk=3).delete()
         url = reverse('add_package')
         response = self.client.get(url)
 
@@ -67,7 +67,7 @@ class FunctionalPackageTest(TestCase):
         self.assertTemplateUsed(response, 'package/package_form.html')
         for c in Category.objects.all():
             self.assertContains(response, c.title)
-        count = Package.objects.count()
+        count = Project.objects.count()
         response = self.client.post(url, {
             'category': Category.objects.all()[0].pk,
             'repo_url': 'https://github.com/django/django',
@@ -75,10 +75,10 @@ class FunctionalPackageTest(TestCase):
             'title': 'django',
         })
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(Package.objects.count(), count + 1)
+        self.assertEqual(Project.objects.count(), count + 1)
 
     def test_edit_package_view(self):
-        p = Package.objects.get(slug='testability')
+        p = Project.objects.get(slug='testability')
         url = reverse('edit_package', kwargs={'slug': 'testability'})
         response = self.client.get(url)
 
@@ -104,7 +104,7 @@ class FunctionalPackageTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # Check that it actually changed the package
-        p = Package.objects.get(slug='testability')
+        p = Project.objects.get(slug='testability')
         self.assertEqual(p.title, 'TEST TITLE')
 
     def test_add_example_view(self):
@@ -161,19 +161,19 @@ class FunctionalPackageTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
         user = User.objects.get(username='user')
-        count = user.package_set.count()
+        count = user.project_set.count()
         self.assertTrue(self.client.login(username='user', password='user'))
 
         # Now that the user is logged in, make sure that the number of packages
         # they use has increased by one.
         response = self.client.get(url)
-        self.assertEqual(count + 1, user.package_set.count())
+        self.assertEqual(count + 1, user.project_set.count())
 
         # Now we remove that same package from the user's list of used packages,
         # making sure that the total number has decreased by one.
         url = reverse('usage', kwargs={'slug': 'testability', 'action': 'remove'})
         response = self.client.get(url)
-        self.assertEqual(count, user.package_set.count())
+        self.assertEqual(count, user.project_set.count())
 
 
 class PackagePermissionTest(TestCase):
