@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from package.models import Package, Version, versioner
+from package.models import Project, Version, versioner
 from package.tests import data, initial_data
 
 class VersionTests(TestCase):
@@ -8,7 +8,7 @@ class VersionTests(TestCase):
         data.load()
 
     def test_version_order(self):
-        p = Package.objects.get(slug='django-cms')
+        p = Project.objects.get(slug='django-cms')
         versions = p.version_set.by_version()
         expected_values = [ '2.0.0',
                             '2.0.1',
@@ -31,5 +31,5 @@ class PackageTests(TestCase):
         initial_data.load()
 
     def test_license_latest(self):
-        for p in Package.objects.all():
+        for p in Project.objects.all():
             self.assertEqual("UNKNOWN", p.license_latest)

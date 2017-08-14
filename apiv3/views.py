@@ -6,7 +6,7 @@ from .resources import (
         grid_resource, package_resource, category_resource, user_resource
     )
 from grid.models import Grid
-from package.models import Package, Category
+from package.models import Project, Category
 from profiles.models import Profile
 
 
@@ -72,7 +72,7 @@ def grid_list(request):
 
 @json_view
 def package_detail(request, slug):
-    package = get_object_or_404(Package, slug=slug)
+    package = get_object_or_404(Project, slug=slug)
     return package_resource(package)
 
 
@@ -81,10 +81,10 @@ def package_list(request):
     category = request.GET.get("category", None)
     try:
         category = Category.objects.get(slug=category)
-        count = Package.objects.filter(category=category).count()
+        count = Project.objects.filter(category=category).count()
     except Category.DoesNotExist:
         category = None
-        count = Package.objects.count()
+        count = Project.objects.count()
 
     limit = GET_int(request, "limit", 20)
     offset = GET_int(request, "offset", 0)
@@ -103,10 +103,10 @@ def package_list(request):
 
     if category:
         data['objects'] = [
-            package_resource(x) for x in Package.objects.filter(category=category)[offset:offset + limit]
+            package_resource(x) for x in Project.objects.filter(category=category)[offset:offset + limit]
         ]
     else:
-        data['objects'] = [package_resource(x) for x in Package.objects.all()[offset:offset + limit]]
+        data['objects'] = [package_resource(x) for x in Project.objects.all()[offset:offset + limit]]
 
     return data
 
@@ -165,7 +165,7 @@ def user_detail(request, github_account):
 @json_view
 def grid_packages_list(request, slug):
     grid = get_object_or_404(Grid, slug=slug)
-    packages = Package.objects.filter(grid=grid)
+    packages = Project.objects.filter(grid=grid)
     count = packages.count()
     limit = GET_int(request, "limit", 20)
     offset = GET_int(request, "offset", 0)

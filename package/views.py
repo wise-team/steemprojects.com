@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from grid.models import Grid
 from homepage.models import Dpotw, Gotw
 from package.forms import PackageForm, PackageExampleForm, DocumentationForm
-from package.models import Category, Package, PackageExample
+from package.models import Category, Project, PackageExample
 from package.repos import get_all_repos
 
 from .utils import quote_plus
@@ -41,7 +41,7 @@ def add_package(request, template_name="package/package_form.html"):
     if not request.user.profile.can_add_package:
         return HttpResponseForbidden("permission denied")
 
-    new_package = Package()
+    new_package = Project()
     form = PackageForm(request.POST or None, instance=new_package)
 
     if form.is_valid():
@@ -67,7 +67,7 @@ def edit_package(request, slug, template_name="package/package_form.html"):
     if not request.user.profile.can_edit_package:
         return HttpResponseForbidden("permission denied")
 
-    package = get_object_or_404(Package, slug=slug)
+    package = get_object_or_404(Project, slug=slug)
     form = PackageForm(request.POST or None, instance=package)
 
     if form.is_valid():
@@ -88,7 +88,7 @@ def edit_package(request, slug, template_name="package/package_form.html"):
 @login_required
 def update_package(request, slug):
 
-    package = get_object_or_404(Package, slug=slug)
+    package = get_object_or_404(Project, slug=slug)
     package.fetch_metadata()
     package.fetch_commits()
     package.last_fetched = timezone.now()
@@ -100,7 +100,7 @@ def update_package(request, slug):
 @login_required
 def add_example(request, slug, template_name="package/add_example.html"):
 
-    package = get_object_or_404(Package, slug=slug)
+    package = get_object_or_404(Project, slug=slug)
     new_package_example = PackageExample()
     form = PackageExampleForm(request.POST or None, instance=new_package_example)
 
@@ -140,7 +140,7 @@ def package_autocomplete(request):
     titles = []
     q = request.GET.get("q", "")
     if q:
-        titles = (x.title for x in Package.objects.filter(title__istartswith=q))
+        titles = (x.title for x in Project.objects.filter(title__istartswith=q))
 
     response = HttpResponse("\n".join(titles))
 
@@ -150,7 +150,7 @@ def package_autocomplete(request):
 
 def category(request, slug, template_name="package/category.html"):
     category = get_object_or_404(Category, slug=slug)
-    packages = category.package_set.select_related().annotate(usage_count=Count("usage")).order_by("-repo_watchers", "title")
+    packages = category.project_set.select_related().annotate(usage_count=Count("usage")).order_by("-repo_watchers", "title")
     return render(request, template_name, {
         "category": category,
         "packages": packages,
@@ -165,7 +165,7 @@ def ajax_package_list(request, template_name="package/ajax_package_list.html"):
         _dash = "%s-%s" % (settings.PACKAGINATOR_SEARCH_PREFIX, q)
         _space = "%s %s" % (settings.PACKAGINATOR_SEARCH_PREFIX, q)
         _underscore = '%s_%s' % (settings.PACKAGINATOR_SEARCH_PREFIX, q)
-        packages = Package.objects.filter(
+        packages = Project.objects.filter(
                         Q(title__istartswith=q) |
                         Q(title__istartswith=_dash) |
                         Q(title__istartswith=_space) |
@@ -203,7 +203,7 @@ def ajax_package_list(request, template_name="package/ajax_package_list.html"):
 @login_required
 def usage(request, slug, action):
     success = False
-    package = get_object_or_404(Package, slug=slug)
+    package = get_object_or_404(Project, slug=slug)
 
     # Update the current user's usage of the given package as specified by the
     # request.
@@ -251,7 +251,7 @@ def usage(request, slug, action):
 
 
 def python3_list(request, template_name="package/python3_list.html"):
-    packages = Package.objects.filter(version__supports_python3=True).distinct()
+    packages = Project.objects.filter(version__supports_python3=True).distinct()
     packages = packages.order_by("-pypi_downloads", "-repo_watchers", "title")
 
     values = "category, category_id, commit, commit_list, created, created_by, created_by_id, documentation_url, dpotw, grid, gridpackage, id, last_fetched, last_modified_by, last_modified_by_id, modified, packageexample, participants, pypi_downloads, pypi_url, repo_description, repo_forks, repo_url, repo_watchers, slug, title, usage, version".split(',')
@@ -279,7 +279,7 @@ def package_list(request, template_name="package/package_list.html"):
             "slug": category.slug,
             "title_plural": category.title_plural,
             "show_pypi": category.show_pypi,
-            "packages": category.package_set.annotate(usage_count=Count("usage")).order_by("-pypi_downloads", "-repo_watchers", "title")[:9]
+            "packages": category.project_set.annotate(usage_count=Count("usage")).order_by("-pypi_downloads", "-repo_watchers", "title")[:9]
         }
         categories.append(element)
 
@@ -295,7 +295,7 @@ def package_list(request, template_name="package/package_list.html"):
 
 def package_detail(request, slug, template_name="package/package.html"):
 
-    package = get_object_or_404(Package, slug=slug)
+    package = get_object_or_404(Project, slug=slug)
     no_development = package.no_development
     try:
         if package.category == Category.objects.get(slug='projects'):
@@ -346,7 +346,7 @@ def post_data(request, slug):
         #     package.fetch_commits()  # also saves
         # except Exception as e:
         #     print e
-    package = get_object_or_404(Package, slug=slug)
+    package = get_object_or_404(Project, slug=slug)
     package.fetch_pypi_data()
     package.repo.fetch_metadata(package)
     package.repo.fetch_commits(package)
@@ -357,7 +357,7 @@ def post_data(request, slug):
 
 @login_required
 def edit_documentation(request, slug, template_name="package/documentation_form.html"):
-    package = get_object_or_404(Package, slug=slug)
+    package = get_object_or_404(Project, slug=slug)
     form = DocumentationForm(request.POST or None, instance=package)
     if form.is_valid():
         form.save()
@@ -386,7 +386,7 @@ def github_webhook(request):
         if repo_url == "http://github.com/mojombo/grit":
             return HttpResponse("Service Test pass")
 
-        package = get_object_or_404(Package, repo_url=repo_url)
+        package = get_object_or_404(Project, repo_url=repo_url)
         package.repo.fetch_commits(package)
         package.last_fetched = timezone.now()
         package.save()

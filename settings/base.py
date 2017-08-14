@@ -228,7 +228,7 @@ SUPPORTED_REPO = []
 
 ########################## Site specific stuff
 FRAMEWORK_TITLE = "Django"
-SITE_TITLE = "Django Packages"
+SITE_TITLE = "Steem Projects"
 
 if LOCAL_INSTALLED_APPS:
     INSTALLED_APPS.extend(LOCAL_INSTALLED_APPS)

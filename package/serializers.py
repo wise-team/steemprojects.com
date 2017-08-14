@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Package
+from .models import Project
 
 
 class PackageSerializer(serializers.ModelSerializer):
@@ -22,7 +22,7 @@ class PackageSerializer(serializers.ModelSerializer):
         return obj.development_status
 
     class Meta:
-        model = Package
+        model = Project
         fields = (
                     "id",
                     "slug",

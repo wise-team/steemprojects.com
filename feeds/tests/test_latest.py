@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-from package.models import Package
+from package.models import Project
 
 import feedparser
 
@@ -13,7 +13,7 @@ class LatestFeedsTest(TestCase):
 
     def test_latest_feeds(self):
 
-        packages = Package.objects.all().order_by('-created')[:15]
+        packages = Project.objects.all().order_by('-created')[:15]
 
         for feed_type in ('rss', 'atom'):
             url = reverse('feeds_latest_packages_%s' % feed_type)

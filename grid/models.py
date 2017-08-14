@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from core.models import BaseModel
 from grid.utils import make_template_fragment_key
-from package.models import Package
+from package.models import Project
 
 
 class Grid(BaseModel):
@@ -24,7 +24,7 @@ class Grid(BaseModel):
     slug = models.SlugField(_('Slug'), help_text="Slugs will be lowercased", unique=True)
     description = models.TextField(_('Description'), blank=True, help_text="Lines are broken and urls are urlized")
     is_locked = models.BooleanField(_('Is Locked'), default=False, help_text="Moderators can lock grid access")
-    packages = models.ManyToManyField(Package, through="GridPackage")
+    packages = models.ManyToManyField(Project, through="GridPackage")
     header = models.BooleanField(_("Header tab?"), default=False, help_text="If checked then displayed on homepage header")
 
     def elements(self):
@@ -77,7 +77,7 @@ class GridPackage(BaseModel):
     """
 
     grid = models.ForeignKey(Grid)
-    package = models.ForeignKey(Package)
+    package = models.ForeignKey(Project)
 
     class Meta:
         verbose_name = 'Grid Package'

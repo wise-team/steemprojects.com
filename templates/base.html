@@ -105,11 +105,11 @@
 
 <span>
     <div class="container" ng-hide="items">
-        <div class="sponsored">
-          <a href="https://pyup.io/safety/">
-            <span class="badge">AD</span> Safety checks your installed dependencies for known security vulnerabilities. <span class="link">Learn more</span>
-          </a>
-        </div>
+{#        <div class="sponsored">#}
+{#          <a href="https://pyup.io/safety/">#}
+{#            <span class="badge">AD</span> Safety checks your installed dependencies for known security vulnerabilities. <span class="link">Learn more</span>#}
+{#          </a>#}
+{#        </div>#}
 
         {% block body %}
         {% endblock %}
@@ -170,7 +170,7 @@
   <div class="container">
       <div class="row">
           <div class="col-12">
-              &copy; 2010-{% now "Y" %} <a href="http://pydanny.com">Daniel Greenfeld</a>, <a href="http://www.audreymroy.com">Audrey Roy</a> & <a href="https://twoscoops.academy">Two Scoops Academy</a>
+              &copy; {% now "Y" %} <a href="https://steemit.com/@noisy">Krzysztof Szumny - @noisy</a>
               - <a href="https://github.com/pydanny/djangopackages">Repo</a>
               - <a href="{% url 'faq' %}">{% trans "FAQ" %}</a>
               - <a href="{% url 'terms' %}">{% trans "Terms" %}</a>

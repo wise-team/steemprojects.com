@@ -47,7 +47,7 @@ class Category(BaseModel):
         return ("category", [self.slug])
 
 
-class Package(BaseModel):
+class Project(BaseModel):
 
     title = models.CharField(_("Title"), max_length=100)
     slug = models.SlugField(_("Slug"), help_text="Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens. Values will be converted to lowercase.", unique=True)
@@ -233,7 +233,7 @@ class Package(BaseModel):
         if not self.repo_description:
             self.repo_description = ""
         self.grid_clear_detail_template_cache()
-        super(Package, self).save(*args, **kwargs)
+        super(Project, self).save(*args, **kwargs)
 
     def fetch_commits(self):
         self.repo.fetch_commits(self)
@@ -297,7 +297,7 @@ class Package(BaseModel):
 
 class PackageExample(BaseModel):
 
-    package = models.ForeignKey(Package)
+    package = models.ForeignKey(Project)
     title = models.CharField(_("Title"), max_length=100)
     url = models.URLField(_("URL"))
     active = models.BooleanField(_("Active"), default=True, help_text="Moderators have to approve links before they are provided")
@@ -317,7 +317,7 @@ class PackageExample(BaseModel):
 
 class Commit(BaseModel):
 
-    package = models.ForeignKey(Package)
+    package = models.ForeignKey(Project)
     commit_date = models.DateTimeField(_("Commit Date"))
     commit_hash = models.CharField(_("Commit Hash"), help_text="Example: Git sha or SVN commit id", max_length=150, blank=True, default="")
 
@@ -362,7 +362,7 @@ class VersionManager(models.Manager):
 
 class Version(BaseModel):
 
-    package = models.ForeignKey(Package, blank=True, null=True)
+    package = models.ForeignKey(Project, blank=True, null=True)
     number = models.CharField(_("Version"), max_length=100, default="", blank="")
     downloads = models.IntegerField(_("downloads"), default=0)
     license = models.CharField(_("license"), max_length=100)

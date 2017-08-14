@@ -1,5 +1,5 @@
 from django.test import TestCase
-from package.models import Package, Category
+from package.models import Project, Category
 from package.signals import signal_fetch_latest_metadata
 
 
@@ -12,7 +12,7 @@ class SignalTests(TestCase):
                         slug='blah'
                         )
         category.save()
-        package = Package.objects.create(slug='dummy', category=category)
+        package = Project.objects.create(slug='dummy', category=category)
 
         def handle_signal(sender, **kwargs):
             self.sender_name = sender.slug

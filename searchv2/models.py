@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from core.models import BaseModel
-from package.models import Package
+from package.models import Project
 from grid.models import Grid
 
 ITEM_TYPE_CHOICES = (
@@ -64,8 +64,8 @@ class SearchV2(BaseModel):
         if pypi_name:
             return pypi_name
         try:
-            package = Package.objects.get(slug=self.slug)
-        except Package.DoesNotExist:
+            package = Project.objects.get(slug=self.slug)
+        except Project.DoesNotExist:
             return ""
         pypi_name = package.pypi_name
         cache.set(key, pypi_name, 24 * 60 * 60)

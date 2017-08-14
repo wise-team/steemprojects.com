@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from grid.models import Grid, GridPackage
-from package.models import Package, Category
+from package.models import Project, Category
 import json
 from requests.compat import urlencode
 
@@ -25,19 +25,19 @@ class PackageV1Tests(TestCase):
             title='A Grid',
             slug='grid',
         )
-        self.pkg1 = Package.objects.create(
+        self.pkg1 = Project.objects.create(
             title='Package1',
             slug='package1',
             category=self.app,
             repo_url='https://github.com/pydanny/django-uni-form'
         )
-        self.pkg2 = Package.objects.create(
+        self.pkg2 = Project.objects.create(
             title='Package2',
             slug='package2',
             category=self.app,
             repo_url='https://github.com/cartwheelweb/opencomparison'
         )
-        self.pkg3 = Package.objects.create(
+        self.pkg3 = Project.objects.create(
             title='Package3',
             slug='package3',
             category=self.framework,
@@ -84,8 +84,8 @@ class PackageV1Tests(TestCase):
         raw_json_app_pkg = response_app_pkg.content.decode("utf-8")
         app_pkg = json.loads(raw_json_app_pkg)
         app_pkg_count = int(app_pkg['meta']['total_count'])
-        self.assertEqual(app_pkg_count, self.app.package_set.count() + 1)
+        self.assertEqual(app_pkg_count, self.app.project_set.count() + 1)
         # Check that we have filter applied correclty
-        app_package_slug_list = self.app.package_set.values_list('slug', flat=True)
+        app_package_slug_list = self.app.project_set.values_list('slug', flat=True)
         self.assertIn(self.pkg1.slug, app_package_slug_list)
         self.assertIn(self.pkg2.slug, app_package_slug_list)

@@ -11,7 +11,7 @@ from django.shortcuts import render
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 
 from homepage.views import homepage
-from package.models import Package
+from package.models import Project
 from searchv2.forms import SearchForm
 from searchv2.builders import build_1
 from searchv2.models import SearchV2
@@ -63,21 +63,21 @@ def search(request, template_name='searchv2/search.html'):
         except IndexError:
             pass
     try:
-        package = Package.objects.get(title=q)
+        package = Project.objects.get(title=q)
         url = reverse("package", args=[package.slug.lower()])
         return HttpResponseRedirect(url)
-    except Package.DoesNotExist:
+    except Project.DoesNotExist:
         pass
-    except Package.MultipleObjectsReturned:
+    except Project.MultipleObjectsReturned:
         pass
 
     try:
-        package = Package.objects.get(slug=q)
+        package = Project.objects.get(slug=q)
         url = reverse("package", args=[package.slug.lower()])
         return HttpResponseRedirect(url)
-    except Package.DoesNotExist:
+    except Project.DoesNotExist:
         pass
-    except Package.MultipleObjectsReturned:
+    except Project.MultipleObjectsReturned:
         pass
 
     form = SearchForm(request.GET or None)

@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 
-from package.models import Category, Package
+from package.models import Category, Project
 
 STOCK_PASSWORD = "stock_password"
 
@@ -16,7 +16,7 @@ def make():
     )
     category.save()
 
-    package, created = Package.objects.get_or_create(
+    package, created = Project.objects.get_or_create(
         category = category,
         participants = "malcomt,jacobian",
         repo_description = "Increase your testing ability with this steroid free supplement.",
@@ -25,7 +25,7 @@ def make():
         title="Testability"
     )
     package.save()
-    package, created = Package.objects.get_or_create(
+    package, created = Project.objects.get_or_create(
         category = category,
         participants = "thetestman",
         repo_description = "Test everything under the sun with one command!",
@@ -34,7 +34,7 @@ def make():
         title="Supertester"
     )
     package.save()
-    package, created = Package.objects.get_or_create(
+    package, created = Project.objects.get_or_create(
         category = category,
         participants = "pydanny",
         repo_description = "Make testing as painless as frozen yogurt.",
@@ -42,8 +42,8 @@ def make():
         slug = "serious-testing",
         title="Serious Testing"
     )
-    package.save()    
-    package, created = Package.objects.get_or_create(
+    package.save()
+    package, created = Project.objects.get_or_create(
         category = category,
         participants = "pydanny",
         repo_description = "Yet another test package, with no grid affiliation.",

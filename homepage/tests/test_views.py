@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from grid.models import Grid
 from homepage.models import Dpotw, Gotw
-from package.models import Package, Category
+from package.models import Project, Category
 
 from homepage.tests import data
 
@@ -20,11 +20,11 @@ class FunctionalHomepageTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'homepage.html')
 
-        for p in Package.objects.all():
+        for p in Project.objects.all():
             self.assertContains(response, p.title)
             self.assertContains(response, p.repo_description)
 
-        self.assertEqual(response.context['package_count'], Package.objects.count())
+        self.assertEqual(response.context['package_count'], Project.objects.count())
 
     def test_categories_on_homepage(self):
         url = reverse('home')
@@ -42,7 +42,7 @@ class FunctionalHomepageTest(TestCase):
         yesterday = today - timedelta(days=1)
         tomorrow = today + timedelta(days=1)
 
-        p = Package.objects.all()[0]
+        p = Project.objects.all()[0]
         g = Grid.objects.all()[0]
 
         d_live = Dpotw.objects.create(package=p, start_date=yesterday, end_date=tomorrow)
@@ -61,7 +61,7 @@ class FunctionalHomepageTestWithoutPackages(TestCase):
         data.load()
 
     def test_homepage_view(self):
-        Package.objects.all().delete()
+        Project.objects.all().delete()
         url = reverse('home')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

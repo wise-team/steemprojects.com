@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 
 from core.tests import datautil
-from package.models import Category, Package, Version
+from package.models import Category, Project, Version
 from profiles.models import Profile
 
 
@@ -15,7 +15,7 @@ def load():
         slug='frameworks',
     )
 
-    package, created = Package.objects.get_or_create(
+    package, created = Project.objects.get_or_create(
         pk=6,
         category=category,
         title='Django CMS',
@@ -1115,7 +1115,7 @@ def load():
         date_joined='2011-03-14 18:52:34',
     )
 
-    package6 = Package.objects.get(pk=6)
+    package6 = Project.objects.get(pk=6)
 
     version, created = Version.objects.get_or_create(
         pk=2278,
@@ -1206,5 +1206,5 @@ def load():
         hidden=False,
     )
 
-    datautil.reset_sequences(Category, Package, Profile, Version, User)
+    datautil.reset_sequences(Category, Project, Profile, Version, User)
 

@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group, User, Permission
 from core.tests import datautil
 from grid.models import Grid
 from grid.models import Element, Feature, GridPackage
-from package.models import Category, PackageExample, Package
+from package.models import Category, PackageExample, Project
 from profiles.models import Profile
 
 
@@ -15,7 +15,7 @@ def load():
         description='Small components used to build projects.',
     )
 
-    package1, created = Package.objects.get_or_create(
+    package1, created = Project.objects.get_or_create(
         pk=1,
         category=category,
         repo_watchers=0,
@@ -29,7 +29,7 @@ def load():
         slug='testability',
         repo_description='Increase your testing ability with this steroid free supplement.',
     )
-    package2, created = Package.objects.get_or_create(
+    package2, created = Project.objects.get_or_create(
         pk=2,
         category=category,
         repo_watchers=0,
@@ -43,7 +43,7 @@ def load():
         slug='supertester',
         repo_description='Test everything under the sun with one command!',
     )
-    package3, created = Package.objects.get_or_create(
+    package3, created = Project.objects.get_or_create(
         pk=3,
         category=category,
         repo_watchers=0,
@@ -57,7 +57,7 @@ def load():
         slug='serious-testing',
         repo_description='Make testing as painless as waxing your legs.',
     )
-    package4, created = Package.objects.get_or_create(
+    package4, created = Project.objects.get_or_create(
         pk=4,
         category=category,
         repo_watchers=0,
@@ -218,5 +218,5 @@ def load():
         profile = Profile.objects.create(user=user)
 
     datautil.reset_sequences(Grid, Group, User, Permission, Category, PackageExample,
-                             Package, Element, Feature, GridPackage)
+                             Project, Element, Feature, GridPackage)
 

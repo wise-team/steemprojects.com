@@ -8,7 +8,7 @@ from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from grid.models import Grid
-from package.models import Package, Category
+from package.models import Project, Category
 from searchv2.models import SearchV2
 
 class GridSerializer(serializers.ModelSerializer):
@@ -25,7 +25,7 @@ class PackageSerializer(serializers.HyperlinkedModelSerializer):
     category = serializers.HyperlinkedRelatedField(view_name='apiv4:category-detail', read_only=True)
 
     class Meta:
-        model = Package
+        model = Project
         fields = (
             'category',
             'grids',
