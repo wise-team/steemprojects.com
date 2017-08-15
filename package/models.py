@@ -18,6 +18,7 @@ from core.models import BaseModel
 from package.repos import get_repo_for_repo_url
 from package.signals import signal_fetch_latest_metadata
 from package.utils import get_version, get_pypi_version, normalize_license
+from profiles.models import Profile
 
 repo_url_help_text = settings.PACKAGINATOR_HELP_TEXT['REPO_URL']
 pypi_url_help_text = settings.PACKAGINATOR_HELP_TEXT['PYPI_URL']
@@ -50,6 +51,8 @@ class Category(BaseModel):
 class Project(BaseModel):
 
     title = models.CharField(_("Title"), max_length=100)
+    created_by = models.ForeignKey(Profile, blank=True, null=True, related_name="creator", on_delete=models.SET_NULL)
+
     slug = models.SlugField(_("Slug"), help_text="Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens. Values will be converted to lowercase.", unique=True)
     category = models.ForeignKey(Category, verbose_name="Installation")
     repo_description = models.TextField(_("Repo Description"), blank=True)
@@ -61,7 +64,7 @@ class Project(BaseModel):
     participants = models.TextField(_("Participants"),
                         help_text="List of collaborats/participants on the project", blank=True)
     usage = models.ManyToManyField(User, blank=True)
-    created_by = models.ForeignKey(User, blank=True, null=True, related_name="creator", on_delete=models.SET_NULL)
+    added_by = models.ForeignKey(User, blank=True, null=True, related_name="added_by", on_delete=models.SET_NULL)
     last_modified_by = models.ForeignKey(User, blank=True, null=True, related_name="modifier", on_delete=models.SET_NULL)
     last_fetched = models.DateTimeField(blank=True, null=True, default=timezone.now)
     documentation_url = models.URLField(_("Documentation URL"), blank=True, null=True, default="")
