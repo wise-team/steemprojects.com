@@ -19,7 +19,7 @@ def load():
         pk=6,
         category=category,
         title='Django CMS',
-        created_by=None,
+        added_by=None,
         repo_watchers=967,
         pypi_url='http://pypi.python.org/pypi/django-cms',
         pypi_downloads=26257,

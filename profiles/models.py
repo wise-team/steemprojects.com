@@ -7,13 +7,14 @@ from core.models import BaseModel
 
 
 class Profile(BaseModel):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Note to coders: The '_url' fields below need to JUST be the name of the account.
     #     Examples:
     #       github_url = 'pydanny'
     #       bitbucket_url = 'pydanny'
     #       google_code_url = 'pydanny'
+    steem_account = models.CharField(_("Steem account"), null=True, blank=True, max_length=40, unique=True)
     github_account = models.CharField(_("Github account"), null=True, blank=True, max_length=40)
     github_url = models.CharField(_("Github account"), null=True, blank=True, max_length=100, editable=False)
     bitbucket_url = models.CharField(_("Bitbucket account"), null=True, blank=True, max_length=100)
@@ -21,9 +22,9 @@ class Profile(BaseModel):
     email = models.EmailField(_("Email"), null=True, blank=True)
 
     def __str__(self):
-        if not self.github_account:
+        if not self.steem_account:
             return self.user.username
-        return self.github_account
+        return self.steem_account
 
     def save(self, **kwargs):
         """ Override save to always populate email changes to auth.user model

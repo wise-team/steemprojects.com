@@ -18,6 +18,7 @@ class PackageForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
             super(PackageForm, self).__init__(*args, **kwargs)
+            self.fields['created_by'].required = True
             self.fields['category'].help_text = package_help_text()
             self.fields['repo_url'].required = True
             self.fields['repo_url'].widget = TextInput(attrs={
@@ -29,7 +30,7 @@ class PackageForm(ModelForm):
 
     class Meta:
         model = Project
-        fields = ['repo_url', 'title', 'slug', 'pypi_url', 'category', ]
+        fields = ['title', 'created_by', 'repo_url', 'slug', 'pypi_url', 'category', ]
 
 
 class PackageExampleForm(ModelForm):

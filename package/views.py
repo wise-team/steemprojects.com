@@ -46,7 +46,7 @@ def add_package(request, template_name="package/package_form.html"):
 
     if form.is_valid():
         new_package = form.save()
-        new_package.created_by = request.user
+        new_package.added_by = request.user
         new_package.last_modified_by = request.user
         new_package.save()
         #new_package.fetch_metadata()
@@ -254,7 +254,7 @@ def python3_list(request, template_name="package/python3_list.html"):
     packages = Project.objects.filter(version__supports_python3=True).distinct()
     packages = packages.order_by("-pypi_downloads", "-repo_watchers", "title")
 
-    values = "category, category_id, commit, commit_list, created, created_by, created_by_id, documentation_url, dpotw, grid, gridpackage, id, last_fetched, last_modified_by, last_modified_by_id, modified, packageexample, participants, pypi_downloads, pypi_url, repo_description, repo_forks, repo_url, repo_watchers, slug, title, usage, version".split(',')
+    values = "category, category_id, commit, commit_list, created, added_by, added_by_id, documentation_url, dpotw, grid, gridpackage, id, last_fetched, last_modified_by, last_modified_by_id, modified, packageexample, participants, pypi_downloads, pypi_url, repo_description, repo_forks, repo_url, repo_watchers, slug, title, usage, version".split(',')
     values = [x.strip() for x in values]
     if request.GET.get('sort') and request.GET.get('sort') not in values:
         # Some people have cached older versions of this view
