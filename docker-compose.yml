@@ -9,8 +9,8 @@ services:
   postgres:
     build: ./compose/postgres
     volumes:
-      - /data/djangopackages/postgres:/var/lib/postgresql/data
-      - /data/djangopackages/backups:/backups
+      - /home/deploy/Data/steemprojects.com/postgres:/var/lib/postgresql/data
+      - /home/deploy/Data/steemprojects.com/backups:/backups
     env_file: .env
 
   django-a:
