@@ -13,14 +13,14 @@ class PackageAdmin(VersionAdmin):
     save_on_top = True
     search_fields = ("title",)
     list_filter = ("category",)
-    list_display = ("title", "created", )
+    list_display = ("title", "created", "status")
     date_hierarchy = "created"
     inlines = [
         PackageExampleInline,
     ]
     fieldsets = (
         (None, {
-            "fields": ("title", "created_by", "slug", "category", "pypi_url", "repo_url", "usage", "added_by", "last_modified_by",)
+            "fields": ("title", "url", "description", "created_by", "status", "slug", "category", "pypi_url", "repo_url", "usage", "added_by", "last_modified_by",)
         }),
         ("Pulled data", {
             "classes": ("collapse",),

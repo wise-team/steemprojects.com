@@ -58,7 +58,6 @@ Representation:
 
     {
         "absolute_url": "/categories/apps/",
-        "show_pypi": true,
         "slug": "apps",
         "title_plural": "Apps",
         "created": "2010-08-14T22:47:52",

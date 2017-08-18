@@ -227,7 +227,7 @@ LOCAL_INSTALLED_APPS = []
 SUPPORTED_REPO = []
 
 ########################## Site specific stuff
-FRAMEWORK_TITLE = "Django"
+FRAMEWORK_TITLE = "Steem"
 SITE_TITLE = "Steem Projects"
 
 if LOCAL_INSTALLED_APPS:

@@ -9,7 +9,6 @@ def load():
     category, created = Category.objects.get_or_create(
         pk=2,
         description='Large efforts that combine many python modules or apps. Examples include Django, Pinax, and Satchmo. Most CMS falls into this category.',
-        show_pypi=True,
         title_plural='Frameworks',
         title='Framework',
         slug='frameworks',

@@ -13,11 +13,14 @@ def get_repo(repo_id):
 
 
 def get_repo_for_repo_url(repo_url):
+    from package.repos.unsupported import repo_handler as unsupported_handler
+    if not repo_url:
+        return unsupported_handler
+
     for handler in get_all_repos():
         if re.match(handler.repo_regex, repo_url):
             return handler
 
-    from package.repos.unsupported import repo_handler as unsupported_handler
     return unsupported_handler
 
 

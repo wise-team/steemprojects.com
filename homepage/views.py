@@ -41,7 +41,6 @@ def homepage(request, template_name="homepage.html"):
             "count": category.package_count,
             "slug": category.slug,
             "title_plural": category.title_plural,
-            "show_pypi": category.show_pypi,
         }
         categories.append(element)
 
@@ -102,6 +101,7 @@ def homepage(request, template_name="homepage.html"):
             "categories": categories,
             "package_count": package_count,
             "py3_compat": Project.objects.filter(version__supports_python3=True).select_related().distinct().count(),
+            "open_source_count": Project.objects.exclude(repo_url__isnull=True).exclude(repo_url="").count(),
             "latest_python3": Version.objects.filter(supports_python3=True).select_related("package").distinct().order_by("-created")[0:5]
         }
     )
