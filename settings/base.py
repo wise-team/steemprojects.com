@@ -21,7 +21,7 @@ INTERNAL_IPS = [
 ]
 
 ADMINS = [
-    ("Daniel Greenfeld", "pydanny@gmail.com"),
+    ("Krzysztof Szumny", "noisy.pl@gmail.com"),
 ]
 
 MANAGERS = ADMINS
@@ -185,9 +185,9 @@ SECRET_KEY = "CHANGEME"
 
 URCHIN_ID = ""
 
-DEFAULT_FROM_EMAIL = 'Django Packages <djangopackages-noreply@djangopackages.com>'
+DEFAULT_FROM_EMAIL = 'Steem Projects <steemprojects-noreply@steemprojects.com>'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_SUBJECT_PREFIX = '[Django Packages] '
+EMAIL_SUBJECT_PREFIX = '[Steem Projects] '
 try:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = 'smtp.sendgrid.net'
