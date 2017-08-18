@@ -28,7 +28,7 @@ ANYMAIL = {
     "MAILGUN_SENDER_DOMAIN": env('MAILGUN_SENDER_DOMAIN')
 }
 EMAIL_BACKEND = "anymail.backends.mailgun.MailgunBackend"
-EMAIL_SUBJECT_PREFIX = environ.get('EMAIL_SUBJECT_PREFIX', '[Django Packages] ')
+EMAIL_SUBJECT_PREFIX = environ.get('EMAIL_SUBJECT_PREFIX', '[Steem Projects] ')
 
 
 ########## SECRET
