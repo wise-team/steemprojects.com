@@ -38,6 +38,10 @@
 <div class="row">
   <div class="col-md-6">
     <p>
+        {% if package.url %}<strong>Project Website:</strong>&nbsp;<a href="{{ package.url }}">{{ package.url }}</a><br />{% endif %}
+        {% if package.announcement_post %}<strong>Announcement:</strong>&nbsp;<a href="{{ package.announcement_post }}">{{ package.announcement_post }}</a><br />{% endif %}
+    </p>
+    <p>
         {{ package.description }}
     </p>
 
@@ -151,6 +155,7 @@
     </div>
     <!-- end Documentation panel -->
 
+    {% if package.repo_url %}
     <!-- start Repo panel -->
     <div class="panel panel-default">
       <div class="panel-heading clearfix">
@@ -197,6 +202,7 @@
       </table>
     </div>
     <!-- end Repo panel -->
+    {% endif %}
 
     <!-- start Grids panel -->
     <div class="panel panel-default">
