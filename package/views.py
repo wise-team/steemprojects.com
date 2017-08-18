@@ -271,14 +271,13 @@ def python3_list(request, template_name="package/python3_list.html"):
 def package_list(request, template_name="package/package_list.html"):
 
     categories = []
-    for category in Category.objects.annotate(package_count=Count("package")):
+    for category in Category.objects.annotate(package_count=Count("project")):
         element = {
             "title": category.title,
             "description": category.description,
             "count": category.package_count,
             "slug": category.slug,
             "title_plural": category.title_plural,
-            "show_pypi": category.show_pypi,
             "packages": category.project_set.annotate(usage_count=Count("usage")).order_by("-pypi_downloads", "-repo_watchers", "title")[:9]
         }
         categories.append(element)

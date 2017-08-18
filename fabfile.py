@@ -34,12 +34,12 @@ def production():
     """
     Work on the production environment
     """
-    env.hosts = ["159.203.191.135"]  # list the ip addresses or domain names of your production boxes here
-    env.port = 56565  # ssh port
-    env.user = "root"  # remote user, see `env.run` if you don't log in as root
+    env.hosts = ["94.23.220.88"]  # list the ip addresses or domain names of your production boxes here
+    env.port = 22  # ssh port
+    env.user = "deploy"  # remote user, see `env.run` if you don't log in as root
 
     env.compose_file = "docker-compose.yml"
-    env.project_dir = "/code/djangopackages"  # this is the project dir where your code lives on this machine
+    env.project_dir = "/home/deploy/Deploy/steemprojects.com"  # this is the project dir where your code lives on this machine
 
     # if you don't use key authentication, add your password here
     # env.password = "foobar"
@@ -83,11 +83,11 @@ def deploy():
     Pulls the latest changes from master, rebuilt and restarts the stack
     """
 
-    lrun("git push origin master")
+    #lrun("git push origin master")
     copy_secrets()
     with env.cd(env.project_dir):
 
-        docker_compose("run postgres backup")
+        #docker_compose("run postgres backup")
 
         env.run("git pull origin master")
 

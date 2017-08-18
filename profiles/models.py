@@ -15,6 +15,7 @@ class Profile(BaseModel):
     #       bitbucket_url = 'pydanny'
     #       google_code_url = 'pydanny'
     steem_account = models.CharField(_("Steem account"), null=True, blank=True, max_length=40, unique=True)
+    steemit_chat_account = models.CharField(_("Steemit.chat account"), null=True, blank=True, max_length=40, unique=True)
     github_account = models.CharField(_("Github account"), null=True, blank=True, max_length=40)
     github_url = models.CharField(_("Github account"), null=True, blank=True, max_length=100, editable=False)
     bitbucket_url = models.CharField(_("Bitbucket account"), null=True, blank=True, max_length=100)

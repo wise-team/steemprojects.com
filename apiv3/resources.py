@@ -17,7 +17,6 @@ def category_resource(cat):
         {
             "description": cat.description,
             "resource_uri": reverse("apiv3:category_detail", kwargs={"slug": cat.slug}),
-            "show_pypi": cat.show_pypi,
             "title_plural": cat.title_plural
         }
     )

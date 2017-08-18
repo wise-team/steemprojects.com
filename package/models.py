@@ -34,7 +34,7 @@ class Category(BaseModel):
     slug = models.SlugField(_("slug"))
     description = models.TextField(_("description"), blank=True)
     title_plural = models.CharField(_("Title Plural"), max_length=50, blank=True)
-    show_pypi = models.BooleanField(_("Show pypi stats & version"), default=True)
+    show_github = models.BooleanField(_("Show Github stats"), default=False)
 
     class Meta:
         ordering = ['title']
@@ -50,13 +50,16 @@ class Category(BaseModel):
 
 class Project(BaseModel):
 
-    title = models.CharField(_("Title"), max_length=100)
+    title = models.CharField(_("Title"), max_length=100, unique=True)
+    url = models.URLField(_("Project URL"), blank=True, null=True, unique=True)
+    status = models.CharField(_("Status"), max_length=100, blank=True, null=True)
+    description = models.TextField(_("Description"), blank=True, null=True)
+    announcement_post = models.URLField(_("Announcement Post"), blank=True, null=True, help_text="Link to place, where project was announced for the first time")
     created_by = models.ForeignKey(Profile, blank=True, null=True, related_name="creator", on_delete=models.SET_NULL)
-
     slug = models.SlugField(_("Slug"), help_text="Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens. Values will be converted to lowercase.", unique=True)
     category = models.ForeignKey(Category, verbose_name="Installation")
     repo_description = models.TextField(_("Repo Description"), blank=True)
-    repo_url = models.URLField(_("repo URL"), help_text=repo_url_help_text, blank=True, unique=True)
+    repo_url = models.URLField(_("Source Code Repository URL"), help_text=repo_url_help_text, blank=True, null=True, unique=True)
     repo_watchers = models.IntegerField(_("Stars"), default=0)
     repo_forks = models.IntegerField(_("repo forks"), default=0)
     pypi_url = models.CharField(_("PyPI slug"), max_length=255, help_text=pypi_url_help_text, blank=True, default='')
