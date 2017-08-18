@@ -83,7 +83,7 @@ def deploy():
     Pulls the latest changes from master, rebuilt and restarts the stack
     """
 
-    #lrun("git push origin master")
+    lrun("git push origin master")
     copy_secrets()
     with env.cd(env.project_dir):
 

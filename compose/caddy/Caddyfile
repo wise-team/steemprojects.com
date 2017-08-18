@@ -1,8 +1,8 @@
-www.djangopackages.org {
-    redir https://djangopackages.org
+www.steemprojects.com {
+    redir https://steemprojects.com
 }
 
-djangopackages.org {
+steemprojects.com {
     proxy / django-a:5000 django-b:5000 {
         health_check /health_check/
         health_check_interval 1s
@@ -19,13 +19,13 @@ djangopackages.org {
     gzip
 }
 
-djangopackages.org/static {
+steemprojects.com/static {
     root /data/static
     header / Cache-Control "max-age=2592000"
     gzip
 }
 
-djangopackages.org/media {
+steemprojects.com/media {
     root /data/media
     header / Cache-Control "max-age=2592000"
     gzip
