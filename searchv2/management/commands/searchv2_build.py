@@ -1,7 +1,10 @@
 from sys import stdout
 from time import gmtime, strftime
 
-from django.core.management.base import NoArgsCommand
+try:
+    from django.core.management.base import NoArgsCommand
+except ImportError:
+    from django.core.management import BaseCommand as NoArgsCommand
 
 from searchv2.builders import build_1
 
