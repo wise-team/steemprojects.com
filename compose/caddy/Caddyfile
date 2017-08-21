@@ -1,8 +1,8 @@
-www.steemprojects.com {
-    redir https://steemprojects.com
+www.alpha.steemprojects.com {
+    redir https://alpha.steemprojects.com
 }
 
-steemprojects.com {
+alpha.steemprojects.com {
     proxy / django-a:5000 django-b:5000 {
         health_check /health_check/
         health_check_interval 1s
@@ -19,13 +19,13 @@ steemprojects.com {
     gzip
 }
 
-steemprojects.com/static {
+alpha.steemprojects.com/static {
     root /data/static
     header / Cache-Control "max-age=2592000"
     gzip
 }
 
-steemprojects.com/media {
+alpha.steemprojects.com/media {
     root /data/media
     header / Cache-Control "max-age=2592000"
     gzip
