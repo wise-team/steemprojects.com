@@ -10,5 +10,5 @@ def grouper(n, iterable, padvalue=None):
 
 def grid_headers(request):
     grid_headers = list(Grid.objects.filter(header=True))
-    grid_headers = grouper(3, grid_headers)
+    # grid_headers = grouper(3, grid_headers)
     return {'grid_headers': grid_headers}

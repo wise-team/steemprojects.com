@@ -4,6 +4,10 @@
    Site customizations
    ========================================================================== */
 
+* {
+    color: #3f505f;
+}
+
 /**
  * Use a container that's as large as will fit.
  */
@@ -28,7 +32,10 @@
  */
 
 .header {
-    border-top: 10px solid #75DFCA;
+}
+
+body{
+    background-color: #FFF;
 }
 
 /**
@@ -72,6 +79,7 @@
  */
 
 .navbar {
+    font-weight: 400;
     background-color: #fff;
     margin-bottom: 0;
     padding: 0;
