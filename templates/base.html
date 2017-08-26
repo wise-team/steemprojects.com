@@ -58,8 +58,7 @@
 
             <!-- Logo and title -->
             <a class="navbar-brand" href="{% url 'home' %}">
-                <img src="{{ STATIC_URL }}img/logo_squares.png" />
-                <h1>{{ SITE_TITLE }}</h1>
+                <img src="{{ STATIC_URL }}img/logo_steemprojects.svg" />
             </a>
 
             <!-- Main nav -->
@@ -90,6 +89,7 @@
     </div>
 </div>
 
+{% comment %}
 <div id="myrotatingnav" class="rotatingnav slide">
   <div class="rotatingnav-inner">
   {% for grid_chunk in grid_headers %}
@@ -114,8 +114,9 @@
 
   </div>
 </div>
+{% endcomment %}
 
-<span>
+<div>
     <div class="container" ng-hide="items">
 {#        <div class="sponsored">#}
 {#          <a href="https://pyup.io/safety/">#}
