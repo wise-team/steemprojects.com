@@ -57,7 +57,7 @@
         <div class="navbar">
 
             <!-- Logo and title -->
-            <a class="navbar-brand" href="{% url 'home' %}">
+            <a class="navbar-brand col-sm-2" href="{% url 'home' %}">
                 <img src="{{ STATIC_URL }}img/logo_steemprojects.svg" />
             </a>
 
@@ -76,12 +76,13 @@
                 {% else %}
                     <li><a href="{% url 'social:begin' 'github' %}{% if current_path %}?next={{ current_path }}{% endif %}">{% trans "Sign in with Github" %}</a></li>
                 {% endif %}
+                <li><a class="btn btn-default sp-btn" href="{% url 'add_package' %}">{% trans "Add project" %}</a></li>
             </ul>
 
             <!-- Search form -->
             <form action="{% url 'search' %}"  class="navbar-form pull-left hidden-xs">
-              <input type="text" name="q" class="col-12 form-control" style="width: 240px;" id="search-2" ng-model="model.q" ng-keyup="search(model, '{% url 'apiv4:searchv2-list' %}')" placeholder="Search" autocomplete="off">
-              <button type="submit" id="search_button" class="btn btn-default">Go</button>
+              <input id="search_input" type="text" name="q" class="col-12 form-control" style="width: 240px;" id="search-2" ng-model="model.q" ng-keyup="search(model, '{% url 'apiv4:searchv2-list' %}')" placeholder="Search for projects" autocomplete="off">
+              <button type="submit" id="search_button" class="material-icons">search</button>
             </form>
 
         </div>
@@ -180,19 +181,19 @@
 
 <!-- Start of footer -->
 <div class="footer">
-  <div class="container">
-      <div class="row">
-          <div class="col-12">
-              &copy; {% now "Y" %} <a href="https://steemit.com/@noisy">Krzysztof Szumny - @noisy</a>
-              - <a href="https://github.com/pydanny/djangopackages">Repo</a>
-              - <a href="{% url 'faq' %}">{% trans "FAQ" %}</a>
-              - <a href="{% url 'terms' %}">{% trans "Terms" %}</a>
-              - <a href="{% url 'contribute' %}">{% trans "Contribute" %}</a>
-              - <a href="https://djangopackages.readthedocs.io/en/latest/apiv3_docs.html">{% trans "API" %}</a>
-              - <a href="{% url 'syndication' %}">{% trans "RSS / Atom" %}</a>
-          </div>
-      </div>
-  </div>
+    <div class="container">
+        <div class="col-sm-1">
+            <a class="btn btn-default sp-btn" href="{% url 'contribute' %}">{% trans "Contribute" %}</a>
+        </div>
+        <div class="col-sm-11 footer-items">
+          <span class="footer-item">&copy; {% now "Y" %} <a href="https://steemit.com/@noisy">Krzysztof Szumny - @noisy</a></span>
+          <span class="footer-item"><a href="https://github.com/noisy/steemprojects.com">Repo</a></span>
+          <span class="footer-item"><a href="{% url 'faq' %}">{% trans "FAQ" %}</a></span>
+          <span class="footer-item"><a href="{% url 'terms' %}">{% trans "Terms" %}</a></span>
+          <span class="footer-item"><a href="https://djangopackages.readthedocs.io/en/latest/apiv3_docs.html">{% trans "API" %}</a></span>
+          <span class="footer-item"><a href="{% url 'syndication' %}">{% trans "RSS / Atom" %}</a></span>
+        </div>
+    </div>
 </div>
 <!-- End of footer -->
 

@@ -1,46 +1,52 @@
 {% load i18n %}
 
-<div class="container">
+<div class="homepage">
     <!-- GRIDs -->
-    <div class="col-sm-2">
-        <h2>Compare tools</h2>
+    <div class="col-sm-2 compare-tools">
+        <h1><i class="material-icons">swap_horiz</i>Compare tools</h1>
         <div class="list-group">
             {% for grid in grid_headers %}
-            <a class="list-group-item" href="{% url 'grid' grid.slug %}" title="{{ grid.description }}">
-                {{ grid.title|truncatechars:"17" }}
+            <a class="list-group-item compare-grid-item" href="{% url 'grid' grid.slug %}" title="{{ grid.description }}">
+                {{ grid.title|truncatechars:"30" }}
             </a>
             {% endfor %}
         </div>
     </div>
-    <div class="col-sm-4">
-        <h2>Categories</h2>
+    <div class="col-sm-4 categories">
+        <h1><i class="material-icons">format_list_bulleted</i>Categories</h1>
         <div class="list-group">
         <!-- start Categories panel -->
         {% for category in categories %}
-            <h3 class="list-group-item-heading">
-                <a href="{% url 'category' category.slug %}">{{ category.title_plural }}</a> ({{ category.count }})
-            </h3>
-            <p class="list-group-item-text">{{ category.description }}</p>
+            <a href="{% url 'category' category.slug %}" class="list-group-item">
+                <h4 class="list-group-item-heading">
+                    {{ category.title_plural }}<span class="category-count">{{ category.count }}</span>
+                </h4>
+                <p class="list-group-item-text">{{ category.description }}</p>
+            </a>
         {% endfor %}
         <!-- end Categories panel -->
         </div>
     </div>
-    <div class="col-sm-6">
-        <h2>Latest projects</h2>
+    <div class="col-sm-6 latest-projects">
+        <h1><i class="material-icons">notifications_none</i>Latest projects</h1>
         <div class="list-group">
         {% for package in latest_packages %}
             <a href="{{ package.get_absolute_url }}" class="list-group-item">
-                <h4 class="list-group-item-heading">{{ package.title }}</h4>
+                <div class="project-img"><img src="http://via.placeholder.com/123x71"></div>
+                <div class="project-details">
+                    <h3 class="list-group-item-heading">{{ package.title }}</h3>
 
-                <p class="list-group-item-text">
-                    {% with package.description|truncatewords:25 as short %}
-                        {% if package.description|length > short|length %}
-                            {{ short|slice:"-3" }}...
-                        {% else %}
-                            {{ short }}
-                        {% endif %}
-                    {% endwith %}
-                </p>
+                    <p class="list-group-item-text description">
+                        {% with package.description|truncatewords:25 as short %}
+                            {% if package.description|length > short|length %}
+                                {{ short|slice:"-3" }}...
+                            {% else %}
+                                {{ short }}
+                            {% endif %}
+                        {% endwith %}
+                    </p>
+                    <p class="list-group-item-text category"><i class="material-icons">format_list_bulleted</i> {{ package.category }}</p>
+                </div>
             </a>
         {% endfor %}
         </div>
@@ -54,6 +60,8 @@
     <p><b>{{ open_source_count}}</b> {% trans "projects are open source!" %}</p>
   </div>
   {% endcomment %}
+
+{% comment %}
 <div class="container">
   <div class="row">
     <div class="col-sm-4 col-lg-4">
@@ -151,3 +159,4 @@
     </div>
   </div>
 </div>
+{% endcomment %}
