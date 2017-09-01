@@ -37,7 +37,7 @@
                     <h3 class="list-group-item-heading">{{ package.title }}</h3>
 
                     <p class="list-group-item-text description">
-                        {% with package.description|truncatewords:25 as short %}
+                        {% with package.description|truncatewords:20 as short %}
                             {% if package.description|length > short|length %}
                                 {{ short|slice:"-3" }}...
                             {% else %}

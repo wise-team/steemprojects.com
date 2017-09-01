@@ -13,7 +13,7 @@ class PackageAdmin(VersionAdmin):
     save_on_top = True
     search_fields = ("title",)
     list_filter = ("category",)
-    list_display = ("title", "created", "status")
+    list_display = ("title", "created", "status", "slug")
     date_hierarchy = "created"
     inlines = [
         PackageExampleInline,

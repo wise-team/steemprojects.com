@@ -53,7 +53,7 @@ class Project(BaseModel):
     title = models.CharField(_("Title"), max_length=100, unique=True)
     url = models.URLField(_("Project URL"), blank=True, null=True, unique=True)
     status = models.CharField(_("Status"), max_length=100, blank=True, null=True)
-    description = models.TextField(_("Description"), blank=True, null=True)
+    description = models.TextField(_("Description"), blank=True, null=True, default="")
     announcement_post = models.URLField(_("Announcement Post"), blank=True, null=True, help_text="Link to place, where project was announced for the first time")
     created_by = models.ForeignKey(Profile, blank=True, null=True, related_name="creator", on_delete=models.SET_NULL)
     slug = models.SlugField(_("Slug"), help_text="Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens. Values will be converted to lowercase.", unique=True)
