@@ -109,8 +109,8 @@
                     <td>{% trans "Description" %}</td>
                     {% for grid_package in grid_packages %}
                         <td>
-                            {% with grid_package.package.repo_description|truncatewords:20 as short %}
-                                {% if grid_package.package.repo_description|length > short|length %}
+                            {% with grid_package.package.description|truncatewords:20 as short %}
+                                {% if grid_package.package.description|length > short|length %}
                                    {{ short|wordwrap:30|linebreaksbr|slice:"-3" }}<a href="{{ grid_package.package.get_absolute_url }}">...</a>
                                 {% else %}
                                     {{ short|wordwrap:30|linebreaksbr }}
@@ -125,6 +125,7 @@
                         <td>{{ grid_package.package.category }}</td>
                     {% endfor %}
                 </tr>
+                {% comment %}
                 <tr>
                     <td>{% trans "# Using This" %}</td>
                     {% for grid_package in grid_packages %}
@@ -136,13 +137,8 @@
                             {% endwith %}
                         </td>
                     {% endfor %}
-                </td>
-                <tr>
-                    <td>{% trans "Python 3?" %}</td>
-                    {% for grid_package in grid_packages %}
-                        <td>{% if grid_package.package.last_released.supports_python3 %}<span class="glyphicon glyphicon-ok"></span>{% else %}<span class="glyphicon glyphicon-remove"></span>{% endif %}</td>
-                    {% endfor %}
                 </tr>
+                {% endcomment %}
                 <tr>
                     <td>{% trans "Development Status" %}</td>
                     {% for grid_package in grid_packages %}
@@ -158,6 +154,7 @@
                         </td>
                     {% endfor %}
                 </tr>
+                {% comment %}
                 <tr>
                     <td>{% trans "Last updated" %}</td>
                     {% for grid_package in grid_packages %}
@@ -170,13 +167,7 @@
                         </td>
                     {% endfor %}
                 </tr>
-                <tr>
-                    <td>{% trans "Version" %}</td>
-                    {% for grid_package in grid_packages %}
-                        <td>{{ grid_package.package.pypi_version|default:"n/a" }}</td>
-                    {% endfor %}
-
-                </tr>
+                {% endcomment %}
                 <tr>
                     <td>{% trans "Repo" %}</td>
                     {% for grid_package in grid_packages %}
@@ -189,18 +180,14 @@
                         <td><img class="package-githubcommits" src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{ grid_package.package|commits_over_52 }}&chco=666666&chbh=1,1,1&chds=0,20" /></td>
                     {% endfor %}
                 </tr>
+                {% comment %}
                 <tr>
                     <td>{% trans "Stars" %}</td>
                     {% for grid_package in grid_packages %}
                         <td>{{ grid_package.package.repo_watchers|default:"n/a" }}</td>
                     {% endfor %}
                 </tr>
-                <tr>
-                    <td>{% trans "Repo Forks" %}</td>
-                    {% for grid_package in grid_packages %}
-                        <td>{{ grid_package.package.repo_forks|default:"n/a" }}</td>
-                    {% endfor %}
-                </tr>
+                {% endcomment %}
                 <tr>
                     <td>{% trans "Participants" %}</td>
                     {% for grid_package in grid_packages %}
@@ -216,20 +203,6 @@
                                     <a href="{% url 'package' grid_package.package.slug %}">{% trans "more..." %}</a>
                                 {% endif %}
                             {% endfor %}
-                        </td>
-                    {% endfor %}
-                </tr>
-                <tr>
-                    <td>{% trans "Documentation" %}</td>
-                    {% for grid_package in grid_packages %}
-                        <td>
-                            {% if grid_package.package.documentation_url.strip and grid_package.package.documentation_url.strip != None %}
-                                <a href="{{ grid_package.package.documentation_url }}">
-                                    <span class="glyphicon glyphicon-book"></span>
-                                </a>
-                            {% else %}
-                                N/A
-                            {% endif %}
                         </td>
                     {% endfor %}
                 </tr>
