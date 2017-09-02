@@ -8,6 +8,10 @@
 {% block extra_head %}
   <meta name="description" content="{{ package.repo_description }}" />
   <meta name="keywords" content="{{ package.grid_set.all|join:',' }}" />
+  <script src="//cdnjs.cloudflare.com/ajax/libs/vis/4.20.1/vis.min.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/vis/4.20.1/vis.min.css" type="text/css" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/package.css" type="text/css" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/timeline.css" type="text/css" />
   {{ block.super }}
 {% endblock %}
 
@@ -30,11 +34,88 @@
 {% endif %}
 {% endcomment %}
 
-<h2><a href="{% url 'home' %}">{% trans "home" %}</a> / <a href="{% url 'packages' %}">{% trans "projects" %}</a> / {{ package.title }}
-  <a href="{% url 'edit_package' package.slug %}"><span class="glyphicon glyphicon-pencil"></span></a>
-</h2>
+<div class="row">
+    <div class="col-md-12 title-row">
+        <h2>{{ package.title }}</h2>
+        <p class="category"><i class="material-icons">format_list_bulleted</i> {{ package.category }}</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="website">
+            <h3>Project Website</h3>
+            <p><a href="{{ package.url }}">{{ package.url }}</a></p>
+        </div>
+        {% if package.announcement_post %}
+        <div class="announcement">
+            <h3>Announcement</h3>
+            <p><a href="{{ package.announcement_post }}">{{ package.announcement_post|truncatechars:"60" }}</a></p>
+        </div>
+        {% endif %}
+        <div class="grids">
+            <h3>Comparision grids</h3>
+            <div>
+            {% for grid in package.grids %}
+                <a href="{% url 'grid' grid.slug %}" title="{{ grid.description }}">{{ grid }}</a> &nbsp;
+            {% endfor %}
+            </div>
+        </div>
+    </div>
 
+    <div class="col-md-4">
+        <div class="description">
+            <h3>Description</h3>
+            <p>{{ package.description }}</p>
+        </div>
+        {% if package.team_members.count %}
+        <div class="team clearfix">
+            <h3>Team</h3>
+            <div>
+                {% for membership in package.teammembership_set.all %}
+                    <div class="team-member">
+                        {% if membership.profile.steem_account %}
+                            <img class="img-circle" src="https://img.steemconnect.com/@{{ membership.profile.steem_account }}?s=30">
+                            <a class="name" href="{% url 'profile_detail' membership.profile.github_account %}">{{ membership.profile.steem_account }}</a> - {{ membership.role }}
+                        {% elif membership.profile.github_account %}
+                            <img class="img-circle" src="https://github.com/{{ membership.profile.github_account }}.png?size=30">
+                            <a class="name" href="{% url 'profile_detail' membership.profile.github_account %}">{{ membership.profile.github_account }}</a> - {{ membership.role }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if package.contributors.count %}
+        <div class="contributors clearfix">
+            <h3>Contributors</h3>
+            <div>
+                {% for contributor in not_team_contributors %}
+                    <div class="team-member">
+                        <img class="img-circle" src="https://github.com/{{ contributor.github_account }}.png?size=30">
+                        <a class="name" href="{% url 'profile_detail' contributor.github_account %}">{{ contributor.github_account }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
 
+        <div class="development clearfix">
+            <h3>Development Stats</h3>
+            {% if package.repo_url %}
+            <div>
+                <img src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{package.commits_over_52}}&chco=666666&chbh=1,1,1&chds=0,20" />
+            </div>
+            {% else %}
+            <div>No information :( This project is not open-source <sup><a href="https://www.youtube.com/watch?v=1ehpgbb3XD0" target="_blank"><i class="material-icons">info_outline</i></a></sup></div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <img class="main-screenshot" src="http://via.placeholder.com/800x600?text=4x3">
+    </div>
+</div>
+
+{% comment %}
 <div class="row">
   <div class="col-md-6">
     <p>
@@ -166,13 +247,13 @@
             Last fetched: {{ package.last_fetched|timesince }} ago
           {% endif %}
           <a class="btn btn-default btn-xs" href="{% url 'post_package_data' package.slug %}">{% trans "Fetch latest data" %}</a>
-          {% comment %}
+
             {% if repo.title != "Github" %}
               <a class="btn btn-default btn-xs" href="{% url 'fetch_package_data' package.slug %}">{% trans "Fetch latest data" %}</a>
             {% else %}{# if repo.title == "Github" #}
               <a class="btn btn-default btn-xs" href="#">{% trans "Fetch latest data" %}</a>
             {% endif %}
-          {% endcomment %}
+
         </div>
       </div>
 
@@ -261,6 +342,34 @@
 
   </div> <!-- end six column section -->
 </div>    <!-- end twelve_column section -->
+{% endcomment %}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Timeline</h2>
+        <div id="timeline" style=""></div>
+        <script type="text/javascript">
+            var container = document.getElementById('timeline');
+
+            var items = new vis.DataSet([
+            {% for event in package.events.all %}
+                {id: {{ forloop.counter }}, content: '<div class="event-date">{{ event.date}}</div><a href="{{ event.url}}">{{ event.name|safe}}</a>', start: '{{ event.date}}'},
+            {% endfor %}
+            ]);
+
+            var options = {
+                //align: 'left',
+                min: new Date(2016, 3, 1),
+                max: new Date(Date.now() + 1000*60*60*24*31), // next month
+                showCurrentTime: false
+            };
+
+            var timeline = new vis.Timeline(container, items, options);
+            container.addEventListener("mouseover", function(){timeline.redraw();});
+        </script>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block javascript %}

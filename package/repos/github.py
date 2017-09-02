@@ -6,6 +6,7 @@ from django.utils import timezone
 from github3 import GitHub, login
 import requests
 
+from profiles.models import Profile
 from .base_handler import BaseHandler
 from package.utils import uniquer
 
@@ -37,7 +38,6 @@ class GitHubHandler(BaseHandler):
             return None
         return self.github.repository(username, repo_name)
 
-
     def fetch_metadata(self, package):
         self.manage_ratelimit()
         repo = self._get_repo(package)
@@ -50,11 +50,12 @@ class GitHubHandler(BaseHandler):
 
         contributors = []
         for contributor in repo.iter_contributors():
-            contributors.append(contributor.login)
+            profile, created = Profile.objects.get_or_create(github_account=contributor.login)
+            contributors.append(profile)
             self.manage_ratelimit()
 
-        if contributors:
-            package.participants = ','.join(uniquer(contributors))
+        package.contributors.set(contributors)
+        package.save()
 
         return package
 

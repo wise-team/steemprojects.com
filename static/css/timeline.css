@@ -1,0 +1,68 @@
+#timeline {
+    min-height: 145px;
+}
+
+#timeline .event-date {
+    font-size: 18px;
+}
+
+#timeline a {
+    display: block;
+    font-size: 16px;
+    color: #4aa1f1;
+}
+
+#timeline a:hover {
+    text-decoration: none;
+}
+
+.vis-timeline {
+    border: none;
+}
+
+.vis-time-axis .vis-grid.vis-vertical {
+    border-left: none;
+}
+
+.vis-item.vis-dot {
+    display: none;
+}
+
+.vis-item.vis-box {
+    background-color: inherit;
+    border: none;
+}
+
+.vis-item.vis-line {
+    border-color: #3e4f5e;
+}
+.vis-panel.vis-center {
+    border-color: #3e4f5e;
+}
+
+.vis-panel.vis-bottom, .vis-panel.vis-center, .vis-panel.vis-top {
+    border-right: none;
+    border-left: none;
+}
+
+.vis-minor {
+    display: none;
+}
+
+.vis-timeline:hover .vis-minor {
+    display: block;
+}
+
+.vis-text.vis-major {
+    visibility: hidden;
+}
+
+.vis-timeline:hover .vis-text.vis-major {
+    visibility: visible;
+}
+
+.vis-text.vis-major.vis-measure {
+    color: white;
+    /*display: none;*/
+    /*visibility: hidden;*/
+}

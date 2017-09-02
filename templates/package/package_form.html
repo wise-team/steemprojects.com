@@ -19,7 +19,16 @@
         <input type="hidden" name="temp" id="temp" value="" />
         {% csrf_token %}
         <fieldset>
-            {{ form|crispy }}
+{#            {{ form|crispy }}#}
+            {% for field in form %}
+                <div class="fieldWrapper">
+                    {{ field.errors }}
+                    {{ field.label_tag }} {{ field }}
+                    {% if field.help_text %}
+                    <p class="help">{{ field.help_text|linebreaks|safe }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
         </fieldset>
 
         <input class="btn btn-default" type="submit" name="add" value="{{ action }} {% trans "package" %}">

@@ -321,7 +321,8 @@ def package_detail(request, slug, template_name="package/package.html"):
                 pypi_no_release=pypi_no_release,
                 warnings=warnings,
                 latest_version=package.last_released(),
-                repo=package.repo
+                repo=package.repo,
+                not_team_contributors=package.contributors.exclude(pk__in=package.team_members.all())
             )
         )
 

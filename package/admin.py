@@ -1,7 +1,7 @@
 from django.contrib import admin
 from reversion.admin import VersionAdmin
 
-from package.models import Category, Project, PackageExample, Commit, Version
+from package.models import Category, Project, TimelineEvent, TeamMembership, PackageExample, Commit, Version
 
 
 class PackageExampleInline(admin.TabularInline):
@@ -20,7 +20,7 @@ class PackageAdmin(VersionAdmin):
     ]
     fieldsets = (
         (None, {
-            "fields": ("title", "url", "description", "announcement_post", "created_by", "status", "slug", "category", "pypi_url", "repo_url", "usage", "added_by", "last_modified_by",)
+            "fields": ("title", "url", "description", "announcement_post", "created_by", "status", "slug", "category", "pypi_url", "repo_url", "contributors", "usage", "added_by", "last_modified_by",)
         }),
         ("Pulled data", {
             "classes": ("collapse",),
@@ -48,3 +48,5 @@ admin.site.register(Project, PackageAdmin)
 admin.site.register(Commit, CommitAdmin)
 admin.site.register(Version, VersionLocalAdmin)
 admin.site.register(PackageExample, PackageExampleAdmin)
+admin.site.register(TimelineEvent)
+admin.site.register(TeamMembership)
