@@ -18,6 +18,7 @@ from fabric.operations import local as lrun, run, sudo, put
 from fabric.api import *
 from fabric.colors import green, red, yellow, blue
 import time
+import datetime
 
 
 def local():
@@ -65,6 +66,10 @@ def copy_secrets():
             secret=secret, remote_path=remote_path, host=env.host
         )))
         put(secret, remote_path)
+
+        DEPLOYMENT_DATATIME = datetime.datetime.utcnow().isoformat()
+        with cd(env.project_dir):
+            run("echo 'DEPLOYMENT_DATATIME=%s' >> %s" % (DEPLOYMENT_DATATIME, secret))
 
 
 def rollback(commit="HEAD~1"):

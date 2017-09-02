@@ -109,6 +109,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # Your stuff: custom template context processors go here
                 "package.context_processors.used_packages_list",
+                "package.context_processors.deployment",
                 "grid.context_processors.grid_headers",
                 "core.context_processors.current_path",
                 "profiles.context_processors.lazy_profile",
@@ -417,3 +418,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20
 }
+
+import datetime
+DEPLOYMENT_DATATIME = environ.get('DEPLOYMENT_DATATIME', datetime.datetime.utcnow().isoformat())

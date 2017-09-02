@@ -1,4 +1,5 @@
 from django.core.cache import cache
+from django.conf import settings
 
 
 def used_packages_list(request):
@@ -13,3 +14,7 @@ def used_packages_list(request):
     if 'used_packages_list' not in context:
         context['used_packages_list'] = []
     return context
+
+
+def deployment(request):
+    return {'DEPLOYMENT_DATATIME': settings.DEPLOYMENT_DATATIME}
