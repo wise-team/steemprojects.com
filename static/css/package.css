@@ -26,6 +26,12 @@
 .team-member {
     float: left;
 }
+
+.team-member img {
+    /* github fetches large generated avatars even when '?size=' is specified */
+    height: 30px;
+    width: 30px;
+}
 .team-member a.name{
     padding: 0 10px;
     font-size: 16px;
