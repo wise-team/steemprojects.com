@@ -100,10 +100,25 @@
         {% endif %}
 
         <div class="development clearfix">
-            <h3>Development Stats</h3>
+            <h3>Development Stats
+                <a href="{% url 'fetch_package_data' package.slug %}" title="{% trans "Fetch latest data" %}">
+                    <i class="material-icons">sync</i>
+                </a>
+            </h3>
             {% if package.repo_url %}
             <div>
-                <img src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{package.commits_over_52}}&chco=666666&chbh=1,1,1&chds=0,20" />
+                {% if repo.title == "Github" %}
+                    <p>
+                        {% if package.last_fetched %}
+                            Last fetched: {{ package.last_fetched|timesince }} ago
+                        {% endif %}
+                    </p>
+                    <img src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{package.commits_over_52}}&chco=666666&chbh=1,1,1&chds=0,20" />
+                {% else %}
+                    <p>No detail information. Only github repositories are right now supported on SteemProjects</p>
+                {% endif %}
+
+
             </div>
             {% else %}
             <div>No information :( This project is not open-source <sup><a href="https://www.youtube.com/watch?v=1ehpgbb3XD0" target="_blank"><i class="material-icons">info_outline</i></a></sup></div>
