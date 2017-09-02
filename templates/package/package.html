@@ -10,8 +10,8 @@
   <meta name="keywords" content="{{ package.grid_set.all|join:',' }}" />
   <script src="//cdnjs.cloudflare.com/ajax/libs/vis/4.20.1/vis.min.js" type="text/javascript"></script>
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/vis/4.20.1/vis.min.css" type="text/css" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/package.css" type="text/css" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/timeline.css" type="text/css" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/package.css?deployment={{ DEPLOYMENT_DATATIME }}" type="text/css" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/timeline.css?deployment={{ DEPLOYMENT_DATATIME }}" type="text/css" />
   {{ block.super }}
 {% endblock %}
 
