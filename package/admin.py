@@ -43,10 +43,18 @@ class PackageExampleAdmin(admin.ModelAdmin):
     search_fields = ("title",)
 
 
+class TeamMembershipAdmin(admin.ModelAdmin):
+    list_display = ("profile", "project", "role")
+
+
+class TimelineEventAdmin(admin.ModelAdmin):
+    list_display = ("project", "date", "name", "url")
+
+
 admin.site.register(Category, VersionAdmin)
 admin.site.register(Project, PackageAdmin)
 admin.site.register(Commit, CommitAdmin)
 admin.site.register(Version, VersionLocalAdmin)
 admin.site.register(PackageExample, PackageExampleAdmin)
-admin.site.register(TimelineEvent)
-admin.site.register(TeamMembership)
+admin.site.register(TimelineEvent, TimelineEventAdmin)
+admin.site.register(TeamMembership, TeamMembershipAdmin)
