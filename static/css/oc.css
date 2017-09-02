@@ -419,3 +419,7 @@ h3, .h3 {
     border-color: #4aa1f1;
     color: #fff;
 }
+
+.img-circle {
+    border-radius: 50%;
+}

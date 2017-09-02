@@ -23,9 +23,13 @@ class Profile(BaseModel):
     email = models.EmailField(_("Email"), null=True, blank=True)
 
     def __str__(self):
-        if not self.steem_account:
-            return self.user.username
-        return self.steem_account
+        if self.steem_account:
+            return "steem:"+self.steem_account
+        if self.github_account:
+            return "github:"+self.github_account
+        if self.user.username:
+            return "username:"+self.user.username
+
 
     def save(self, **kwargs):
         """ Override save to always populate email changes to auth.user model

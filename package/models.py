@@ -49,12 +49,42 @@ class Category(BaseModel):
 
 
 class Project(BaseModel):
+    UNKNOWN = "UNKNOWN"
+    LIVE__RELEASED = "LIVE_RELEASED"
+    WORKING_PROTOTYPE__BETA = "WORKINGPROTOTYPE_BETA"
+    DEMO__ALPHA = "DEMO_ALPHA"
+    CONCEPT = "CONCEPT"
+    ABANDONED__BROKEN = "ABANDONED_BROKEN"
+    OUT_OF_DATE__RETIRED = "OUTOFDATE_RETIRED"
+
+    STATUS_CHOICES = (
+        (UNKNOWN, 'Unknown'),
+        (LIVE__RELEASED, 'Live/Released'),
+        (WORKING_PROTOTYPE__BETA, 'Working Prototype/Beta'),
+        (DEMO__ALPHA, 'Demo/Alpha'),
+        (CONCEPT, 'Concept'),
+        (ABANDONED__BROKEN, 'Abandoned/Broken'),
+        (OUT_OF_DATE__RETIRED, 'Out of Date/Retired'),
+    )
 
     title = models.CharField(_("Title"), max_length=100, unique=True)
     url = models.URLField(_("Project URL"), blank=True, null=True, unique=True)
-    status = models.CharField(_("Status"), max_length=100, blank=True, null=True)
+    status = models.CharField(
+        _("Status"),
+        max_length=100,
+        choices=STATUS_CHOICES,
+        default=UNKNOWN,
+        help_text="Live/Released - Project is ready to use\n"
+        "Working Prototype/Beta - Project is working however, it still can contain some bugs\n"
+        "Demo/Alpha - Project can be used by people which are not afraid of bugs and has very high pain threshold\n"
+        "Concept - Something that pretends to be a working project\n"
+        "Abandoned/Broken - Project is no longer available or it is completely broken\n"
+        "Out of Date/Retired - Project is no longer needed, because of changes in ecosystem"
+    )
     description = models.TextField(_("Description"), blank=True, null=True, default="")
     announcement_post = models.URLField(_("Announcement Post"), blank=True, null=True, help_text="Link to place, where project was announced for the first time")
+
+    # TODO: remove created_by
     created_by = models.ForeignKey(Profile, blank=True, null=True, related_name="creator", on_delete=models.SET_NULL)
     slug = models.SlugField(_("Slug"), help_text="Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens. Values will be converted to lowercase.", unique=True)
     category = models.ForeignKey(Category, verbose_name="Installation")
@@ -66,6 +96,8 @@ class Project(BaseModel):
     pypi_downloads = models.IntegerField(_("Pypi downloads"), default=0)
     participants = models.TextField(_("Participants"),
                         help_text="List of collaborats/participants on the project", blank=True)
+    team_members = models.ManyToManyField(Profile, through='TeamMembership', blank=True, related_name="team_member_of")
+    contributors = models.ManyToManyField(Profile, blank=True, related_name="contribiuted_to")
     usage = models.ManyToManyField(User, blank=True)
     added_by = models.ForeignKey(User, blank=True, null=True, related_name="added_by", on_delete=models.SET_NULL)
     last_modified_by = models.ForeignKey(User, blank=True, null=True, related_name="modifier", on_delete=models.SET_NULL)
@@ -299,6 +331,19 @@ class Project(BaseModel):
 
     def commits_over_52_listed(self):
         return [int(x) for x in self.commits_over_52().split(',')]
+
+
+class TimelineEvent(BaseModel):
+    name = models.CharField(_("Event Name"), max_length=100)
+    url = models.URLField(_("URL"), help_text="Link to place, where event is described.", blank=False, null=False)
+    date = models.DateField(blank=False, null=False, default=timezone.now)
+    project = models.ForeignKey(Project, related_name="events")
+
+
+class TeamMembership(BaseModel):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    role = models.CharField(max_length=64)
 
 
 class PackageExample(BaseModel):
