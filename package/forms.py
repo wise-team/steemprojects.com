@@ -1,7 +1,7 @@
 from floppyforms.__future__ import ModelForm, TextInput
 
 import itertools
-from package.models import Category, Project, PackageExample
+from package.models import Category, Project, PackageExample, TeamMembership
 from django.template.defaultfilters import slugify
 
 def package_help_text():
@@ -36,6 +36,10 @@ class PackageForm(ModelForm):
             instance.slug = '%s-%d' % (orig, x)
 
         instance.save()
+
+        if instance.created_by and instance.created_by not in instance.team_members.all():
+            team_membership = TeamMembership(project=instance, profile=instance.created_by, role="Creator")
+            team_membership.save()
 
         return instance
 
