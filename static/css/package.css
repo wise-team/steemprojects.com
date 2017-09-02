@@ -23,21 +23,44 @@
     width: 100%;
 }
 
-.team-member {
-    float: left;
+.contributors h3 sup i {
+    font-size: 14px;
+    cursor: help;
 }
 
-.team-member img {
+.contributor.team-member {
+    float: none;
+    padding: 5px;
+    font-size: 18px;
+}
+
+.contributor {
+    float: left;
+    padding: 3px 3px 3px 5px;
+}
+
+.contributor.team-member img {
+    /* github fetches large generated avatars even when '?size=' is specified */
+    height: 45px;
+    width: 45px;
+}
+.contributor img {
     /* github fetches large generated avatars even when '?size=' is specified */
     height: 30px;
     width: 30px;
 }
-.team-member a.name{
+
+.contributor a.name{
     padding: 0 10px;
     font-size: 16px;
     color: #4aa1f1;
 }
-.team-member a.name:hover{
+.contributor.team-member a.name{
+    padding: 0 0 0 10px;
+    font-size: 18px;
+}
+
+.contributor a.name:hover{
     text-decoration: none;
 }
 
