@@ -345,6 +345,9 @@ class TeamMembership(BaseModel):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     role = models.CharField(max_length=64)
 
+    class Meta:
+        unique_together = ("profile", "project")
+
 
 class PackageExample(BaseModel):
 
