@@ -55,3 +55,15 @@ $(".scrollable").scrollable();
 $(".topbar").topBar({
   slide: false
 });
+
+$(window).scroll(function(){
+
+	var wScroll = $(this).scrollTop();
+
+	if (wScroll > 0) {
+		$('body').addClass('scrolled');
+} else {
+		$('body').removeClass('scrolled');
+	}
+
+});
