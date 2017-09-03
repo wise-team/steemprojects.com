@@ -23,7 +23,7 @@ urlpatterns = [
     url(r"^500$", error_500_view, name="500"),
     url(settings.ADMIN_URL_BASE, include(admin.site.urls)),
     url(r"^profiles/", include("profiles.urls")),
-    url(r"^packages/", include("package.urls")),
+    url(r"^projects/", include("package.urls")),
     url(r"^grids/", include("grid.urls")),
     url(r"^feeds/", include("feeds.urls")),
 
