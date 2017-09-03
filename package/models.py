@@ -348,6 +348,9 @@ class TeamMembership(BaseModel):
     class Meta:
         unique_together = ("profile", "project")
 
+    def __str__(self):
+        return "{} in {} as {}".format(str(self.profile), self.project.title, self.role)
+
 
 class PackageExample(BaseModel):
 
