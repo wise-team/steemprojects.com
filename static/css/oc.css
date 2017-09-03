@@ -140,6 +140,14 @@ a:focus, a:hover  {
     color: #4aa1f1;
 }
 
+.latest-projects .project-links a i.heart:hover{
+    color: #bf2155;
+}
+
+.latest-projects .project-links a.link-color-reversed i.heart {
+    color: #bf2155;
+}
+
 .latest-projects .project-links a.link-color-reversed i:hover {
     color: #3f505f;
 }
