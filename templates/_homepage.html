@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load package_tags %}
 
 <div class="homepage">
     <!-- GRIDs -->
@@ -52,21 +53,18 @@
                 </a>
                 <div class="project-links">
                     <div class="project-link-icon">
-                        <a href=""><i class="icon-star"></i></a>
+                        {% fav_button %}
                     </div>
                     <div class="project-link-icon">
+                        {% if package.repo_url %}
                         <a href="{{ package.repo_url }}"><i class="icon-github"></i></a>
+                        {% endif %}
                     </div>
                     <div class="project-link-icon">
+                        {% if package.url %}
                         <a href="{{ package.url }}" class="link-color-reversed"><i class="icon-link"></i></a>
+                        {% endif %}
                     </div>
-{#                    #}
-{#                    {% if package.repo_url %}#}
-{#                        <a href="{{ package.repo_url }}"> <i class="icon-github"></i></a>#}
-{#                    {% endif %}#}
-{#                    {% if package.url %}#}
-{#                        <a href="{{ package.url }}"> <i class="icon-link"></i></a>#}
-{#                    {% endif %}#}
                 </div>
             </div>
         {% endfor %}

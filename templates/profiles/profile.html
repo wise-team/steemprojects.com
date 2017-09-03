@@ -79,7 +79,7 @@
 
     <div class="col-xs-5">
         <h3>{% trans "Favorite Projects" %}</h3>
-        <ul class="usage-list">
+
           <table class="table">
             <thead>
               <tr>
@@ -88,16 +88,14 @@
               </tr>
             </thead>
             <tbody>
-{#              {% for package in user|package_usage %}#}
-{#                <tr>#}
-{#                    <td>{{ forloop.counter }}</td>                        #}
-{#                    <td><a href="{{ package.get_absolute_url }}">{{ package.title }}</a></td>#}
-{#                    <td><a href="{{ package.repo_url }}">{{ package.repo.title }}</a></td>#}
-{#                </tr>#}
-{#              {% endfor %}#}
+              {% for package in user|package_usage %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="{{ package.get_absolute_url }}">{{ package.title }}</a></td>
+                </tr>
+              {% endfor %}
             </tbody>
           </table>
-        </ul>
       </div>
     </div>
   </div>

@@ -114,7 +114,8 @@ a:focus, a:hover  {
 }
 
 .latest-projects .project-link-icon {
-    padding: 6px 0;
+    margin: 12px 0;
+    height: 18px;
 }
 
 .latest-projects .project-link-icon:first-child {

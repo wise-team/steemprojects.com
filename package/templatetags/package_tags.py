@@ -48,3 +48,19 @@ def usage_button(context):
         response['usage_action'] = "add"
         response['image'] = "usage_triangle_hollow"
     return response
+
+
+@register.inclusion_tag('package/templatetags/_fav_button.html', takes_context=True)
+def fav_button(context):
+    response = used_packages_list(context['request'])
+    response['STATIC_URL'] = context['STATIC_URL']
+    response['package'] = context['package']
+    if context['package'].pk in response['used_packages_list']:
+        response['title'] = "Remove from favorites"
+        response['usage_action'] = "remove"
+        response['in_favorites'] = True
+    else:
+        response['title'] = "Add to favorites"
+        response['usage_action'] = "add"
+        response['in_favorites'] = False
+    return response
