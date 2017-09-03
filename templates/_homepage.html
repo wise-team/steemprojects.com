@@ -51,9 +51,22 @@
                     </div>
                 </a>
                 <div class="project-links">
-                    {% if package.repo_url %}
-                        <a href="{{ package.repo_url }}"> <img class="project-link-icon" src="{{ STATIC_URL }}img/github-32x32.png"/></a>
-                    {% endif %}
+                    <div class="project-link-icon">
+                        <a href=""><i class="icon-star"></i></a>
+                    </div>
+                    <div class="project-link-icon">
+                        <a href="{{ package.repo_url }}"><i class="icon-github"></i></a>
+                    </div>
+                    <div class="project-link-icon">
+                        <a href="{{ package.url }}" class="link-color-reversed"><i class="icon-link"></i></a>
+                    </div>
+{#                    #}
+{#                    {% if package.repo_url %}#}
+{#                        <a href="{{ package.repo_url }}"> <i class="icon-github"></i></a>#}
+{#                    {% endif %}#}
+{#                    {% if package.url %}#}
+{#                        <a href="{{ package.url }}"> <i class="icon-link"></i></a>#}
+{#                    {% endif %}#}
                 </div>
             </div>
         {% endfor %}
