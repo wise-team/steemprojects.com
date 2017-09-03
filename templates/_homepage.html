@@ -31,23 +31,31 @@
         <h1><i class="material-icons">notifications_none</i>Latest projects</h1>
         <div class="list-group">
         {% for package in latest_packages %}
-            <a href="{{ package.get_absolute_url }}" class="list-group-item">
-                <div class="project-img"><img src="http://via.placeholder.com/123x71"></div>
-                <div class="project-details">
-                    <h3 class="list-group-item-heading">{{ package.title }}</h3>
+            <div class="list-group-item">
+                <a href="{{ package.get_absolute_url }}">
+                    <div class="project-img"><img src="http://via.placeholder.com/123x71"></div>
+                    <div class="project-details">
+                        <h3 class="list-group-item-heading">{{ package.title }}</h3>
 
-                    <p class="list-group-item-text description">
-                        {% with package.description|truncatewords:20 as short %}
-                            {% if package.description|length > short|length %}
-                                {{ short|slice:"-3" }}...
-                            {% else %}
-                                {{ short }}
-                            {% endif %}
-                        {% endwith %}
-                    </p>
-                    <p class="list-group-item-text category"><i class="material-icons">format_list_bulleted</i> {{ package.category }}</p>
+                        <p class="list-group-item-text description">
+                            {% with package.description|truncatewords:20 as short %}
+                                {% if package.description|length > short|length %}
+                                    {{ short|slice:"-3" }}...
+                                {% else %}
+                                    {{ short }}
+                                {% endif %}
+                            {% endwith %}
+                        </p>
+                        <p class="list-group-item-text category"><i class="material-icons">format_list_bulleted</i> {{ package.category }}</p>
+
+                    </div>
+                </a>
+                <div class="project-links">
+                    {% if package.repo_url %}
+                        <a href="{{ package.repo_url }}"> <img class="project-link-icon" src="{{ STATIC_URL }}img/github-32x32.png"/></a>
+                    {% endif %}
                 </div>
-            </a>
+            </div>
         {% endfor %}
         </div>
     </div>

@@ -36,7 +36,8 @@ body {
 .list-group-item:hover {
     cursor: pointer;
 }
-a.list-group-item:hover, a.list-group-item:focus {
+
+.latest-projects .list-group-item:hover, .latest-projects .list-group-item:focus {
     background-color: #f0f4f7;
 }
 
@@ -102,11 +103,24 @@ a:focus, a:hover  {
 .latest-projects .project-details {
     float: left;
     padding-left: 30px;
-    width: calc(100% - 123px);
+    width: calc(100% - 123px - 32px)
 }
 
+.latest-projects .project-links {
+    width: 32px;
+    text-align: center;
+    float: right;
+    line-height: 1;
+}
+
+.latest-projects .project-links .project-link-icon {
+    height: 16px;
+    width: 16px;
+}
+
+
 .latest-projects .list-group .list-group-item {
-    padding: 15px;
+    padding: 15px 0 15px 15px;
     border-bottom: 1px solid #c2ccd2;
 }
 .latest-projects .list-group .list-group-item:last-child {
