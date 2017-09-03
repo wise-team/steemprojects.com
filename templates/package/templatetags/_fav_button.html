@@ -1,0 +1,7 @@
+<a class="fav-link {% if in_favorites %} link-color-reversed{% endif %}"
+   id="usage-link-{{ package.slug }}"
+   href="{% url 'usage' package.slug usage_action %}"
+   title="{{ title }}"
+>
+    <i class="icon-star"></i>
+</a>
