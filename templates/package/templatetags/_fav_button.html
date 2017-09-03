@@ -3,5 +3,5 @@
    href="{% url 'usage' package.slug usage_action %}"
    title="{{ title }}"
 >
-    <i class="icon-star"></i>
+    <i class="icon-favorite{% if not in_favorites %}_border{% endif %}"></i>
 </a>
