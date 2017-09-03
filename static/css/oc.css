@@ -113,18 +113,41 @@ a:focus, a:hover  {
     line-height: 1;
 }
 
-.latest-projects .project-links .project-link-icon {
-    height: 16px;
-    width: 16px;
+.latest-projects .project-link-icon {
+    padding: 6px 0;
 }
 
+.latest-projects .project-link-icon:first-child {
+    padding-top: 0;
+    margin-top: -5px
+}
+
+.latest-projects .project-link-icon:last-child {
+    padding-bottom: 0;
+    margin-bottom: -5px
+}
+
+.latest-projects .project-links i {
+    font-size: 18px;
+}
+
+.latest-projects .project-links a i:hover{
+    color: #4aa1f1;
+}
+
+.latest-projects .project-links a.link-color-reversed i {
+    color: #4aa1f1;
+}
+
+.latest-projects .project-links a.link-color-reversed i:hover {
+    color: #3f505f;
+}
 
 .latest-projects .list-group .list-group-item {
     padding: 15px 0 15px 15px;
     border-bottom: 1px solid #c2ccd2;
 }
 .latest-projects .list-group .list-group-item:last-child {
-    padding: 15px;
     border-bottom: none;
 }
 
@@ -151,6 +174,8 @@ a:focus, a:hover  {
     position: relative;
     top: -1px;
 }
+
+
 /**
  * Customize default TopBar to match the site colors.
  */
