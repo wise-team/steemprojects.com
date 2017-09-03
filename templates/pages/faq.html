@@ -9,37 +9,35 @@
   <div class="row">
     <div class="col-xs-10">
       <h2>Frequently Asked Questions</h2>
-      
-      <h3>Who maintains this site?</h3>
-      
-      <p>Daniel Greenfeld and Audrey Roy have put in countless hours maintaining Django Packages, Pyramid Packages, Plone Packages, and the Django Packages framework and continue to do so for the benefit of the community.</p>
 
-      <p>If you find it useful, tips via Gittip are appreciated. We are <a href="https://www.gittip.com/pydanny/">@pydanny</a> and <a href="https://www.gittip.com/audreyr/">@audreyr</a> on Gittip.</p>
+      <h3>Who maintains this site?</h3>
+
+        <p>This website was created and is maintained by <a href="https://steemit.com/@noisy" target="_blank">Krzysztof "noisy" Szumny</a>. In most cases, he is the one, who introduce new features, which are so good-looking only thanks to work of <a href="https://steemit.com/@andrejcibik" target="_blank">Andrej Cibík</a> - lead designer of this project.
+        </p>
+
+      <h3>How can I contribute?</h3>
+        <p>This website was prepared in a way, that it could be maintained mostly by the community. <a href="https://github.com/noisy/steemprojects.com/" target="_blank">This project is open-source</a>, what means that everyone can contribute, by creating a pull request. Even if you are not a programmer, you can still help by adding information about new projects, which should be listed on {{ SITE_TITLE }} or you can help by creating <a href="{% url 'grids' %}">Comparision Grids</a>.</p>
 
       <h3>What are grids?</h3>
 
-      <p><a href="/grids/">Grids</a> let you compare {{ FRAMEWORK_TITLE }} packages to each other. A grid comes with a number of default items compared,
-          but you can add more features in order to get a more specific comparison.</p>
-  
+      <p><a href="/grids/">Grids</a> let you compare {{ FRAMEWORK_TITLE }} projects to each other. A grid comes with a number of default items compared, but you can add more features in order to get a more specific comparison.</p>
       <p>For now, we are trying out {{ SITE_TITLE }} without the traditional tagging system, because we think that
           grids give us a lot more specificity.
       </p>
 
       <h3>What are categories?</h3>
 
-      <p>Categories are broad groups of {{ FRAMEWORK_TITLE }} packages into something more granular than Grids. A package can only have one category. Changing then requires backend work, and is not done lightly. This is intentional, done in order to make searching easier.</p>
+      <p>Categories are broad groups of {{ FRAMEWORK_TITLE }} projects into something more granular than Grids. A project can only have one category. Changing then requires backend work, and is not done lightly. This is intentional, done in order to make searching easier.</p>
 
       <h3>Which source control sites do you support?</h3>
 
       <p>Github and Bitbucket are supported.</p>
 
-      <h3>What about RSS & Atom Syndication?</h3>
+{#      <h3>What about RSS & Atom Syndication?</h3>#}
+{##}
+{#      <p>The <a href="{% url 'syndication' %}">Syndication page</a> has more details.</p>#}
 
-      <p>The <a href="{% url 'syndication' %}">Syndication page</a> has more details.</p>
 
-      <h3>How can I contribute?</h3>
-
-      <p>This is an open source project, and we appreciate <a href="{% url 'contribute' %}">all sorts of contributions</a>.</p>
     </div>
   </div>
 </div>
