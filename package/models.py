@@ -364,6 +364,21 @@ class ProjectImage(BaseModel):
     project = models.ForeignKey(Project)
     img = models.ImageField(upload_to=project_img_path, default='None/no-img.jpg')
 
+    def image_tag(self):
+        return u'<img src="%s" />' % self.img.url
+
+    image_tag.short_description = 'Image'
+    image_tag.allow_tags = True
+
+    def image_tag_thumb(self):
+        return u'<img src="%s" style="width:16vw; height: 9vw; object-fit: cover;" />' % self.img.url
+
+    image_tag_thumb.short_description = 'Thumbnail 16:9 (Cover)'
+    image_tag_thumb.allow_tags = True
+
+    def __str__(self):
+        return "Project: {}, Image: {}".format(self.project.title, self.img.name)
+
 
 class PackageExample(BaseModel):
 

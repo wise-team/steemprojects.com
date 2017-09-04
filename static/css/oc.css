@@ -111,6 +111,8 @@ a:focus, a:hover  {
 .latest-projects .project-img {
     float: left;
     width: 123px;
+    height: 71px;
+    object-fit: cover;
 }
 
 .latest-projects .project-details {

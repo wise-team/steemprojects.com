@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from grid.models import Grid
 from homepage.models import Dpotw, Gotw
 from package.forms import PackageForm, PackageExampleForm, DocumentationForm
-from package.models import Category, Project, PackageExample
+from package.models import Category, Project, PackageExample, ProjectImage
 from package.repos import get_all_repos
 
 from .utils import quote_plus
@@ -313,9 +313,17 @@ def package_detail(request, slug, template_name="package/package.html"):
     if request.GET.get("message"):
         messages.add_message(request, messages.INFO, request.GET.get("message"))
 
+    proj_imgs = []
+    if package.main_img:
+        proj_imgs.append(package.main_img)
+        proj_imgs.extend(ProjectImage.objects.exclude(pk=package.main_img.pk).filter(project=package))
+    else:
+        proj_imgs.extend(ProjectImage.objects.filter(project=package))
+
     return render(request, template_name,
             dict(
                 package=package,
+                project_imgs=[pi.img for pi in proj_imgs],
                 pypi_ancient=pypi_ancient,
                 no_development=no_development,
                 pypi_no_release=pypi_no_release,

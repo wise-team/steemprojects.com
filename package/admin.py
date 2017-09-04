@@ -52,6 +52,12 @@ class TimelineEventAdmin(admin.ModelAdmin):
     list_display = ("project", "date", "name", "url")
 
 
+class ProjectImageAdmin(admin.ModelAdmin):
+    fields = ('project', 'img', 'image_tag_thumb', 'image_tag',)
+    readonly_fields = ('image_tag_thumb', 'image_tag',)
+    list_display = ("project", "img", "image_tag_thumb")
+
+
 admin.site.register(Category, VersionAdmin)
 admin.site.register(Project, PackageAdmin)
 admin.site.register(Commit, CommitAdmin)
@@ -59,4 +65,4 @@ admin.site.register(Version, VersionLocalAdmin)
 admin.site.register(PackageExample, PackageExampleAdmin)
 admin.site.register(TimelineEvent, TimelineEventAdmin)
 admin.site.register(TeamMembership, TeamMembershipAdmin)
-admin.site.register(ProjectImage)
+admin.site.register(ProjectImage, ProjectImageAdmin)
