@@ -30,6 +30,7 @@ requests==2.11.1
 shortuuid==0.4.3
 six==1.10.0
 whitenoise==3.2.2
+Pillow==4.2.1
 
 # Redis support
 django-redis==4.6.0
