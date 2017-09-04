@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/vis/4.20.1/vis.min.css" type="text/css" />
   <link rel="stylesheet" href="{{ STATIC_URL }}css/package.css?deployment={{ DEPLOYMENT_DATATIME }}" type="text/css" />
   <link rel="stylesheet" href="{{ STATIC_URL }}css/timeline.css?deployment={{ DEPLOYMENT_DATATIME }}" type="text/css" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/lightslider.css?deployment={{ DEPLOYMENT_DATATIME }}" type="text/css"/>
   {{ block.super }}
 {% endblock %}
 
@@ -118,6 +119,15 @@
         </div>
     </div>
     <div class="col-md-4">
+        <div class="clearfix" style="width: calc(33vw - 60px)">
+            <ul id="image-gallery" class="gallery list-unstyled cS-hidden">
+                {% for img in project_imgs %}
+                    <li data-thumb="{{ img.url }}">
+                        <img class="slide-sp" src="{{ img.url }}"/>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
 
@@ -156,7 +166,55 @@
 {% endblock %}
 
 {% block extra_body %}
-
+<script src="{{ STATIC_URL }}js/lightslider.js"></script>
+<style>
+    ul{
+        list-style: none outside none;
+        padding-left: 0;
+        margin: 0;
+    }
+    .content-slider li{
+        background-color: #ed3020;
+        text-align: center;
+        color: #FFF;
+    }
+    .content-slider h3 {
+        margin: 0;
+        padding: 70px 0;
+    }
+    ul.lSPager.lSGallery img {
+        width: 3.2vw !important;
+        height: 1.8vw !important;
+        object-fit: cover;
+    }
+    img.slide-sp {
+        width:calc(33vw - 60px);
+        height: calc((33vw - 60px)*(9/16));
+        object-fit: cover;
+    }
+</style>
+<script>
+     $(document).ready(function() {
+        $("#content-slider").lightSlider({
+            loop:true,
+            keyPress:true
+        });
+        $('#image-gallery').lightSlider({
+            gallery:true,
+            item:1,
+            thumbItem:9,
+            slideMargin: 0,
+            speed:500,
+            auto:false,
+            loop:true,
+            adaptiveHeight: true,
+            verticalHeight: 200,
+            onSliderLoad: function() {
+                $('#image-gallery').removeClass('cS-hidden');
+            }
+        });
+    });
+</script>
 <script type="text/javascript">
     $(function() {
 
