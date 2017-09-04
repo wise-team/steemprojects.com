@@ -143,14 +143,7 @@
                     <td>{% trans "Development Status" %}</td>
                     {% for grid_package in grid_packages %}
                         <td>
-                            {% with pretty_status=grid_package.package.last_released.pretty_status %}
-                            {% if pretty_status %}
-                                {{ pretty_status|default:"n/a" }}
-                            {% else %}
-                                n/a
-                            {% endif %}
-                            {% endwith %}
-
+                            {{ grid_package.package.get_status_display }}
                         </td>
                     {% endfor %}
                 </tr>

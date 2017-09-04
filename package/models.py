@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 import json
 import re
+import os
+import time
 
 from django.core.cache import cache
 from django.conf import settings
@@ -105,6 +107,7 @@ class Project(BaseModel):
     documentation_url = models.URLField(_("Documentation URL"), blank=True, null=True, default="")
 
     commit_list = models.TextField(_("Commit List"), blank=True)
+    main_img = models.ForeignKey('ProjectImage', null=True, blank=True, related_name='main_img_proj')
 
     @property
     def pypi_name(self):
@@ -350,6 +353,16 @@ class TeamMembership(BaseModel):
 
     def __str__(self):
         return "{} in {} as {}".format(str(self.profile), self.project.title, self.role)
+
+
+def project_img_path(instance, filename):
+    _, ext = os.path.splitext(filename)
+    return 'imgs/{}/{}.{}'.format(instance.project.pk, int(round(time.time()*1000)), ext)
+
+
+class ProjectImage(BaseModel):
+    project = models.ForeignKey(Project)
+    img = models.ImageField(upload_to=project_img_path, default='None/no-img.jpg')
 
 
 class PackageExample(BaseModel):

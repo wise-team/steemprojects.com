@@ -9,14 +9,19 @@ class GridPackageInline(admin.TabularInline):
 
 
 class GridAdmin(VersionAdmin):
-    list_display_links = ('title',)
+    list_display_links = ('title', )
     list_display = ('title', 'header',)
     list_editable = ('header',)
     inlines = [
         GridPackageInline,
     ]
 
+
+class GridPackageAdmin(admin.ModelAdmin):
+    list_display = ('grid', 'package',)
+
+
 admin.site.register(Element, VersionAdmin)
 admin.site.register(Feature, VersionAdmin)
 admin.site.register(Grid, GridAdmin)
-admin.site.register(GridPackage, VersionAdmin)
+admin.site.register(GridPackage, GridPackageAdmin)
