@@ -412,7 +412,14 @@ h3, .h3 {
  * Glyphicon colors
  */
 
-.glyphicon-pencil { color: #CA8813; }
+.glyphicon-pencil {
+    display: none;
+}
+.row:hover .glyphicon-pencil {
+    display: inline;
+    color: #4aa1f1;
+    font-size: 15px;
+}
 .glyphicon-trash { color: #8B876E; }
 .glyphicon-plus { color: #39bd6e; }
 .glyphicon-repeat { color: #70ddc7; }

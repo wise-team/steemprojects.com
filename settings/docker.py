@@ -45,8 +45,8 @@ FRAMEWORK_TITLE = environ.get('FRAMEWORK_TITLE')
 
 
 ########### Permissions
-RESTRICT_PACKAGE_EDITORS = False
-RESTRICT_GRID_EDITORS = False
+RESTRICT_PACKAGE_EDITORS = True
+RESTRICT_GRID_EDITORS = True
 
 # Sentry Configuration
 INSTALLED_APPS += ('raven.contrib.django.raven_compat', )

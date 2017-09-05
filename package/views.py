@@ -63,11 +63,10 @@ def add_package(request, template_name="package/package_form.html"):
 
 @login_required
 def edit_package(request, slug, template_name="package/package_form.html"):
-
-    if not request.user.profile.can_edit_package:
+    package = get_object_or_404(Project, slug=slug)
+    if not request.user.profile.can_edit_package(package):
         return HttpResponseForbidden("permission denied")
 
-    package = get_object_or_404(Project, slug=slug)
     form = PackageForm(request.POST or None, instance=package)
 
     if form.is_valid():
@@ -82,7 +81,7 @@ def edit_package(request, slug, template_name="package/package_form.html"):
         "package": package,
         "repo_data": repo_data_for_js(),
         "action": "edit",
-        })
+    })
 
 
 @login_required

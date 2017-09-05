@@ -21,6 +21,7 @@ class Profile(BaseModel):
     bitbucket_url = models.CharField(_("Bitbucket account"), null=True, blank=True, max_length=100)
     google_code_url = models.CharField(_("Google Code account"), null=True, blank=True, max_length=100)
     email = models.EmailField(_("Email"), null=True, blank=True)
+    verified_by = models.ForeignKey("Profile", blank=True, null=True, default=None, related_name="verifier_of")
 
     def __str__(self):
         if self.steem_account:
@@ -29,7 +30,6 @@ class Profile(BaseModel):
             return "github:"+self.github_account
         if self.user.username:
             return "username:"+self.user.username
-
 
     def save(self, **kwargs):
         """ Override save to always populate email changes to auth.user model
@@ -75,69 +75,71 @@ class Profile(BaseModel):
 
     # define permission properties as properties so we can access in templates
 
-    @property
+    def _is_staff_or_verified(self):
+        return self.user.is_staff or (
+            self.verified_by and  # verified by other profile
+            self.verified_by.user and  # this other profile has account attached
+            self.verified_by.user.is_active  # which is active
+        )
+
+    # fallback for manually assigned permission
+
     def can_add_package(self):
         if getattr(settings, 'RESTRICT_PACKAGE_EDITORS', False):
-            return self.user.has_perm('package.add_package')
+            return self._is_staff_or_verified() or self.user.has_perm('package.add_package')
+
         # anyone can add
         return True
 
-    @property
-    def can_edit_package(self):
+    def can_edit_package(self, project):
         if getattr(settings, 'RESTRICT_PACKAGE_EDITORS', False):
-            # this is inconsistent, fix later?
-            return self.user.has_perm('package.change_package')
+            return self._is_staff_or_verified() or \
+                   self in project.team_members.all() or \
+                   self.user.has_perm('package.change_package')
+
         # anyone can edit
         return True
 
     # Grids
-    @property
     def can_edit_grid(self):
         if getattr(settings, 'RESTRICT_GRID_EDITORS', False):
-            return self.user.has_perm('grid.change_grid')
+                return self._is_staff_or_verified() or self.user.has_perm('grid.change_grid')
         return True
 
-    @property
     def can_add_grid(self):
         if getattr(settings, 'RESTRICT_GRID_EDITORS', False):
-            return self.user.has_perm('grid.add_grid')
+            return self._is_staff_or_verified() or self.user.has_perm('grid.add_grid')
         return True
 
     # Grid Features
-    @property
     def can_add_grid_feature(self):
         if getattr(settings, 'RESTRICT_GRID_EDITORS', False):
-            return self.user.has_perm('grid.add_feature')
+            return self._is_staff_or_verified() or self.user.has_perm('grid.add_feature')
         return True
 
-    @property
     def can_edit_grid_feature(self):
         if getattr(settings, 'RESTRICT_GRID_EDITORS', False):
-            return self.user.has_perm('grid.change_feature')
+            return self._is_staff_or_verified() or self.user.has_perm('grid.change_feature')
         return True
 
-    @property
     def can_delete_grid_feature(self):
         if getattr(settings, 'RESTRICT_GRID_EDITORS', False):
-            return self.user.has_perm('grid.delete_feature')
+            return self._is_staff_or_verified() or self.user.has_perm('grid.delete_feature')
         return True
 
     # Grid Packages
-    @property
     def can_add_grid_package(self):
         if getattr(settings, 'RESTRICT_GRID_EDITORS', False):
-            return self.user.has_perm('grid.add_gridpackage')
+            return self._is_staff_or_verified() or self.user.has_perm('grid.add_gridpackage')
         return True
 
-    @property
     def can_delete_grid_package(self):
         if getattr(settings, 'RESTRICT_GRID_EDITORS', False):
-            return self.user.has_perm('grid.delete_gridpackage')
+            return self._is_staff_or_verified() or self.user.has_perm('grid.delete_gridpackage')
         return True
 
     # Grid Element (cells in grid)
-    @property
     def can_edit_grid_element(self):
         if getattr(settings, 'RESTRICT_GRID_EDITORS', False):
-            return self.user.has_perm('grid.change_element')
+            return self._is_staff_or_verified() or self.user.has_perm('grid.change_element')
         return True
