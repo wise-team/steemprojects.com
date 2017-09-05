@@ -62,9 +62,20 @@ def github_user_update(sender, **kwargs):
         user = kwargs['request'].user
     except (KeyError, AttributeError):
         user = kwargs.get('user')
-    profile_instance, created = Profile.objects.get_or_create(user=user)
-    profile_instance.github_account = user.username
-    profile_instance.email = user.email
+
+    try:
+        profile_instance = Profile.objects.get(user=user)
+        profile_instance.github_account = user.username
+        profile_instance.email = user.email
+    except Profile.DoesNotExist:
+        try:
+            # try to merge profile, which was created by fetching data, with account of user which logged in.
+            profile_instance = Profile.objects.get(github_account=user.username)
+            profile_instance.user = user
+            profile_instance.email = user.email
+        except Profile.DoesNotExist:
+            profile_instance = Profile.objects.create(user=user, github_account=user.username, email=user.email)
+
     profile_instance.save()
     return True
 
