@@ -26,10 +26,12 @@
 </div>
 <div class="row">
     <div class="col-md-4">
+        {% if package.url %}
         <div class="website">
             <h3>Project Website</h3>
             <p><a href="{{ package.url }}" target="_blank">{{ package.url }}</a></p>
         </div>
+        {% endif %}
         {% if package.announcement_post %}
         <div class="announcement">
             <h3>Announcement</h3>
