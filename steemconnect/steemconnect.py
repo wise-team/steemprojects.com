@@ -30,7 +30,7 @@ class SteemConnectOAuth2(BaseOAuth2):
         """Return user details from GitHub account"""
 
         account = response['account']
-        metadata = json.loads(account.get("json_metadata", "{}"))
+        metadata = json.loads(account.get("json_metadata") or "{}")
 
         return {
             'username': account["name"],
