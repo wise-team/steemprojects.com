@@ -129,7 +129,8 @@ PROJECT_APPS = [
     "profiles",
     "feeds",
     "searchv2",
-    "apiv3"
+    "apiv3",
+    "steemconnect",
 ]
 
 PREREQ_APPS = [
@@ -294,13 +295,15 @@ SOCIAL_AUTH_PIPELINE = (
     # Checks if the current social-account is already associated in the site.
     'social_core.pipeline.social_auth.social_user',
 
+    # CUSTOM PIPELINE
+    'steemconnect.pipeline.require_email',
+
     # Make up a username for this person, appends a random string at the end if
     # there's any collision.
     'social_core.pipeline.user.get_username',
 
     # Send a validation email to the user to verify its email address.
-    # Disabled by default.
-    # 'social_core.pipeline.mail.mail_validation',
+    'social_core.pipeline.mail.mail_validation',
 
     # Associates the current social details with another user account with
     # a similar email address. Disabled by default.
@@ -319,6 +322,11 @@ SOCIAL_AUTH_PIPELINE = (
     # Update the user record with any changed info from the auth service.
     'social_core.pipeline.user.user_details',
 )
+
+SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = 'steemconnect.mail.send_validation'
+SOCIAL_AUTH_EMAIL_VALIDATION_URL = '/steemconnect/email-sent/'
+SOCIAL_AUTH_STEEMCONNECT_FORCE_EMAIL_VALIDATION = True
+VALIDATION_EMAIL_SENDER = environ.get('VALIDATION_EMAIL_SENDER')
 
 LOGIN_REDIRECT_URL = '/'
 

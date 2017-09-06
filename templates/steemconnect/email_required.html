@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load i18n static %}
+
+{% block head_title %}{% trans "Email Required" %}{% endblock %}
+
+{% block body %}
+
+    <h1>Email Required</h1>
+
+    {% if validation_sent %}
+        <p>Email was sent. Please open an email, and click a link inside it.</p>
+    {% endif %}
+    {% if partial_backend_name %}
+    <form action="{% url 'social:complete' backend=partial_backend_name %}" method="post" role="form">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <input type="hidden" name="partial_token" value="{{ partial_token }}">
+        <div>
+            <p>An email address is required.</p>
+        <div>
+            <label for="email">Email address:</label>
+            <input id="email" type="email" name="email" value="" autofocus required/>
+            </div>
+        </div>
+        <button type="submit">Continue</button>
+    </form>
+    {% endif %}
+{% endblock %}
+
