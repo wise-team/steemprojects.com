@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.core.urlresolvers import reverse
 
 
@@ -10,10 +11,11 @@ def send_validation(strategy, backend, code, partial_token):
         partial_token
     )
     url = strategy.request.build_absolute_uri(url)
-    send_mail(
+    msg = EmailMultiAlternatives(
         subject='{0} Validate your account'.format(settings.EMAIL_SUBJECT_PREFIX),
-        message='Validate your account {0}'.format(url),
+        body='Validate your account {0}'.format(url),
         from_email=settings.VALIDATION_EMAIL_SENDER,
-        recipient_list=[code.email],
-        fail_silently=False
+        to=[code.email],
     )
+    msg.esp_extra = {"sender_domain": settings.EMAIL_SENDER_DOMAIN}
+    msg.send()
