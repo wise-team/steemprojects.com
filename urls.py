@@ -4,6 +4,9 @@ from django.conf.urls.static import static
 from django.views.generic.base import TemplateView, RedirectView
 
 from django.contrib import admin
+
+from steemconnect.views import require_email, validation_sent
+
 admin.autodiscover()
 
 from apiv4.viewsets import router
@@ -16,6 +19,8 @@ urlpatterns = [
 
     # url(r'^login/\{\{item\.absolute_url\}\}/', RedirectView.as_view(url="/login/github/")),
     url('^auth/', include('social_django.urls', namespace='social')),
+    url(r'^steemconnect/email/$', require_email, name='require_email'),
+    url(r'^steemconnect/email-sent/', validation_sent, name='validation_sent'),
     # url('', include('social_auth.urls')),
     url(r"^$", homepage, name="home"),
     url(r"^health_check/$", health_check_view, name="health_check"),
