@@ -17,7 +17,7 @@ class SteemConnectOAuth2(BaseOAuth2):
     RESPONSE_TYPE = None
     REDIRECT_STATE = False
     STATE_PARAMETER = False
-    SEND_USER_AGENT = True
+    SEND_USER_AGENT = False
 
     ID_KEY = 'user'
     SCOPE_SEPARATOR = ','
