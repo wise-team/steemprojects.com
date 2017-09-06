@@ -223,6 +223,12 @@ RESTRICT_GRID_EDITORS = True
 LOCAL_INSTALLED_APPS = []
 SUPPORTED_REPO = []
 
+########## GITHUB
+GITHUB_API_SECRET = environ.get('GITHUB_API_SECRET')
+GITHUB_APP_ID = environ.get('GITHUB_APP_ID')
+GITHUB_TOKEN = environ.get('GITHUB_TOKEN')
+GITHUB_USERNAME = environ.get('GITHUB_USERNAME')
+
 ########################## Site specific stuff
 FRAMEWORK_TITLE = "Steem"
 SITE_TITLE = "Steem Projects"
@@ -238,23 +244,24 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
-GITHUB_API_SECRET = environ.get('GITHUB_API_SECRET')
-GITHUB_APP_ID = environ.get('GITHUB_APP_ID')
-GITHUB_USERNAME = environ.get('GITHUB_USERNAME')
+
 SOCIAL_AUTH_GITHUB_KEY = GITHUB_APP_ID
 SOCIAL_AUTH_GITHUB_SECRET = GITHUB_API_SECRET
+SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 
 FACEBOOK_APP_ID = environ.get('FACEBOOK_APP_ID')
 FACEBOOK_APP_SECRET = environ.get('FACEBOOK_APP_SECRET')
 SOCIAL_AUTH_FACEBOOK_KEY = FACEBOOK_APP_ID
 SOCIAL_AUTH_FACEBOOK_SECRET = FACEBOOK_APP_SECRET
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id, email'
+}
 
 SOCIAL_AUTH_ENABLED_BACKENDS = ('github', 'facebook')
 SOCIAL_AUTH_COMPLETE_URL_NAME = 'socialauth_complete'
 SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'associate_complete'
 SOCIAL_AUTH_DEFAULT_USERNAME = lambda u: slugify(u)
-SOCIAL_AUTH_GITHUB_EXTRA_DATA = []
 SOCIAL_AUTH_CHANGE_SIGNAL_ONLY = True
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'email']
@@ -405,12 +412,6 @@ License :: Other/Proprietary License
 License :: Public Domain
 License :: Repoze Public License""".splitlines()
 ########### End LICENSES from PyPI
-
-
-########## GITHUB
-GITHUB_API_SECRET = environ.get('GITHUB_API_SECRET')
-GITHUB_APP_ID = environ.get('GITHUB_APP_ID')
-GITHUB_TOKEN = environ.get('GITHUB_TOKEN')
 
 ########### SEKURITY
 ALLOWED_HOSTS = ["*"]
