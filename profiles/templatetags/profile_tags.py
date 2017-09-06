@@ -5,4 +5,4 @@ register = template.Library()
 
 @register.filter
 def package_usage(user):
-    return user.project_set.all()
+    return user.project_set.all() if user else []

@@ -24,12 +24,20 @@ class Profile(BaseModel):
     verified_by = models.ForeignKey("Profile", blank=True, null=True, default=None, related_name="verifier_of")
 
     def __str__(self):
+        return "id:{}, steem:{}, github:{}".format(
+            self.user.pk if self.user else '-',
+            self.steem_account if self.steem_account else '-',
+            self.github_account if self.github_account else '-',
+        )
+
+    @property
+    def username(self):
         if self.steem_account:
-            return "steem:"+self.steem_account
+            return self.steem_account
         if self.github_account:
-            return "github:"+self.github_account
+            return self.github_account
         if self.user.username:
-            return "username:"+self.user.username
+            return self.user.username
 
     def save(self, **kwargs):
         """ Override save to always populate email changes to auth.user model
@@ -71,7 +79,12 @@ class Profile(BaseModel):
 
     @models.permalink
     def get_absolute_url(self):
-        return ("profile_detail", [self.github_account])
+        if self.steem_account:
+            return "steem_profile_detail", [self.steem_account]
+        if self.github_account:
+            return "github_profile_detail", [self.github_account]
+        if self.user.username:
+            return "id_profile_detail", [self.user.pk]
 
     # define permission properties as properties so we can access in templates
 

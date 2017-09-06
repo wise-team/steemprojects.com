@@ -39,11 +39,7 @@
                 {% with user.profile as profile %}
                 <tr>
                     <td>
-
-                        {% if profile.github_account %}<a href="{% url 'profile_detail' profile.github_account %}">{{ profile.github_account }}</a>
-                        {% else %}
-                        {{ user.username }}
-                        {% endif %}
+                        <a href="{{ profile.get_absolute_url }}">{{ profile.username }}</a>
                     </td>
                     <td><span class="hide">{{ user.date_joined|date:"YmdHis" }}</span>{{ user.date_joined|timesince }}</td>
                     <td>
