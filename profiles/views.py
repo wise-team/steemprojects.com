@@ -56,30 +56,30 @@ class ProfileEditUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponseRedirect(reverse("profile_detail", kwargs={"github_account": self.get_object()}))
 
 
-def github_user_update(sender, **kwargs):
-    # import ipdb; ipdb.set_trace()
-    try:
-        user = kwargs['request'].user
-    except (KeyError, AttributeError):
-        user = kwargs.get('user')
-
-    try:
-        profile_instance = Profile.objects.get(user=user)
-        profile_instance.github_account = user.username
-        profile_instance.email = user.email
-    except Profile.DoesNotExist:
-        try:
-            # try to merge profile, which was created by fetching data, with account of user which logged in.
-            profile_instance = Profile.objects.get(github_account=user.username)
-            profile_instance.user = user
-            profile_instance.email = user.email
-        except Profile.DoesNotExist:
-            profile_instance = Profile.objects.create(user=user, github_account=user.username, email=user.email)
-
-    profile_instance.save()
-    return True
-
-user_logged_in.connect(github_user_update)
+# def github_user_update(sender, **kwargs):
+#     # import ipdb; ipdb.set_trace()
+#     try:
+#         user = kwargs['request'].user
+#     except (KeyError, AttributeError):
+#         user = kwargs.get('user')
+#
+#     try:
+#         profile_instance = Profile.objects.get(user=user)
+#         profile_instance.github_account = user.username
+#         profile_instance.email = user.email
+#     except Profile.DoesNotExist:
+#         try:
+#             # try to merge profile, which was created by fetching data, with account of user which logged in.
+#             profile_instance = Profile.objects.get(github_account=user.username)
+#             profile_instance.user = user
+#             profile_instance.email = user.email
+#         except Profile.DoesNotExist:
+#             profile_instance = Profile.objects.create(user=user, github_account=user.username, email=user.email)
+#
+#     profile_instance.save()
+#     return True
+#
+# user_logged_in.connect(github_user_update)
 
 
 from rest_framework.response import Response
