@@ -201,6 +201,8 @@ except Exception as e:
 
 EMAIL_SUBJECT_PREFIX = '[Cartwheel Web]'
 
+EMAIL_SENDER_DOMAIN = env('MAILGUN_SENDER_DOMAIN')
+
 DEBUG_TOOLBAR_CONFIG = {
     "INTERCEPT_REDIRECTS": False,
 }
