@@ -11,6 +11,9 @@ def require_email(strategy, details, user=None, is_new=False, *args, **kwargs):
             details['email'] = email
         else:
             current_partial = kwargs.get('current_partial')
+
+            import time
+            time.sleep(5)
             return strategy.redirect(
                 '/steemconnect/email?partial_token={0}'.format(current_partial.token)
             )
