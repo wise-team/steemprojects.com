@@ -61,10 +61,10 @@
                     <div class="contributor team-member">
                         {% if membership.profile.steem_account %}
                             <img class="img-circle" src="https://img.steemconnect.com/@{{ membership.profile.steem_account }}?s=45">
-                            <a class="name" href="{% url 'profile_detail' membership.profile.github_account %}">{{ membership.profile.steem_account }}</a> - {{ membership.role }}
+                            <a class="name" href="{% url 'steem_profile_detail' membership.profile.steem_account %}">{{ membership.profile.steem_account }}</a> - {{ membership.role }}
                         {% elif membership.profile.github_account %}
                             <img class="img-circle" src="https://github.com/{{ membership.profile.github_account }}.png?size=45">
-                            <a class="name" href="{% url 'profile_detail' membership.profile.github_account %}">{{ membership.profile.github_account }}</a> - {{ membership.role }}
+                            <a class="name" href="{% url 'github_profile_detail' membership.profile.github_account %}">{{ membership.profile.github_account }}</a> - {{ membership.role }}
                         {% endif %}
                     </div>
                 {% endfor %}
@@ -83,10 +83,10 @@
                     <div class="contributor">
                         {% if contributor.steem_account %}
                             <img class="img-circle" src="https://img.steemconnect.com/@{{ contributor.steem_account }}?s=30">
-                            <a class="name" href="{% url 'profile_detail' contributor.github_account %}">{{ contributor.steem_account }}</a>
+                            <a class="name" href="{% url 'steem_profile_detail' contributor.steem_account %}">{{ contributor.steem_account }}</a>
                         {% elif contributor.github_account %}
                             <img class="img-circle" src="https://github.com/{{ contributor.github_account }}.png?size=30">
-                            <a class="name" href="{% url 'profile_detail' contributor.github_account %}">{{ contributor.github_account }}</a>
+                            <a class="name" href="{% url 'github_profile_detail' contributor.github_account %}">{{ contributor.github_account }}</a>
                         {% endif %}
                     </div>
                 {% endfor %}
