@@ -31,7 +31,7 @@ urlpatterns = [
     url(r"^categories/$", homepage, name="categories"),
     url(r"^python3/$", python3_list, name="py3_compat"),
 
-    # url(regex=r'^login/$', view=TemplateView.as_view(template_name='pages/login.html'), name='login',),
+    url(regex=r'^login/$', view=TemplateView.as_view(template_name='pages/login.html'), name='login',),
     url(r'^logout/$', contrib_logout_view, {'next_page': '/'}, 'logout',),
 
     # static pages
