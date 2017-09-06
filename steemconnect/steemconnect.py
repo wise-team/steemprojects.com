@@ -9,7 +9,7 @@ class SteemConnectOAuth2(BaseOAuth2):
 
     BASE_URL = 'https://v2.steemconnect.com'
     AUTHORIZATION_URL = BASE_URL + '/oauth2/authorize'
-    ACCESS_TOKEN_URL = AUTHORIZATION_URL
+    ACCESS_TOKEN_URL = BASE_URL + '/oauth2/token'
     ACCESS_TOKEN_METHOD = 'GET'
     USER_INFO_URL = BASE_URL + '/api/me'
 
@@ -28,7 +28,7 @@ class SteemConnectOAuth2(BaseOAuth2):
         """Return user details from GitHub account"""
 
         account = response['account']
-        metadata = json.loads(account["metadata"])
+        metadata = json.loads(account["json_metadata"])
 
         return {
             'username': account["name"],
@@ -38,8 +38,11 @@ class SteemConnectOAuth2(BaseOAuth2):
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
 
-        return self.get_json(self.USER_INFO_URL, params={
+        return self.get_json(self.USER_INFO_URL, method="POST", headers={
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json',
             'Authorization': access_token
         })
+
+    def request_access_token(self, *args, **kwargs):
+        return self.strategy.request_data()
