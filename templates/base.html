@@ -75,7 +75,7 @@
                     {% endif %}
                     <li><a href="{% url 'logout' %}">{% trans "Log out" %}</a></li>
                 {% else %}
-                    <li><a href="{% url 'social:begin' 'github' %}{% if current_path %}?next={{ current_path }}{% endif %}">{% trans "Sign in with Github" %}</a></li>
+                    <li><a href="{% url 'login' %}{% if current_path %}?next={{ current_path }}{% endif %}">{% trans "Log in" %}</a></li>
                 {% endif %}
                 <li><a class="btn btn-default sp-btn" href="{% url 'add_package' %}">{% trans "Add project" %}</a></li>
             </ul>

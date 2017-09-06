@@ -11,32 +11,18 @@
 
 <body class="{% block body_class %}account{% endblock %}">
 {% block body %}
-
-    <p>
-        <a href="{% url 'social:begin' 'github' %}">
-            <img class="social-button" src="{{ STATIC_URL }}img/github-48x48.png"/>
-        </a>
-        <a class="social-sign-in" href="{% url 'social:begin' 'github' %}">Sign Up / Login with Github</a>
-    </p>
-    <p>
-        <a href="{% url 'social:begin' 'facebook' %}">
-            <img class="social-button" src="{{ STATIC_URL }}img/github-48x48.png"/>
-        </a>
-        <a class="social-sign-in" href="{% url 'social:begin' 'facebook' %}">Sign Up / Login with Facebook</a>
-    </p>
-    <p>
-        <a href="{% url 'social:begin' 'steemconnect' %}">
-            <img class="social-button" src="{{ STATIC_URL }}img/github-48x48.png"/>
-        </a>
-        <a class="social-sign-in" href="{% url 'social:begin' 'steemconnect' %}">Sign Up / Login with SteemConnect</a>
-    </p>
-
-    <h2>Why Github for OAUTH?</h2>
-
-    <p>Github is the place for developers these days. Using them takes a lot of weight off the {{ SITE_TITLE }} team.</p>
-
-    <p>
-        {% blocktrans %}If you have any problems, please <a href="http://github.com/opencomparison/opencomparison/issues">submit an issue</a>.{% endblocktrans %}
-    </p>
+    <div class="container">
+        <div class="row">
+            <p>
+                <a class="social-sign-in" href="{% url 'social:begin' 'github' %}">Login with Github</a>
+            </p>
+            <p>
+                <a class="social-sign-in" href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
+            </p>
+            <p>
+                <a class="social-sign-in" href="{% url 'social:begin' 'steemconnect' %}">Login with SteemConnect</a>
+            </p>
+        </div>
+    </div>
 {% endblock %}
 
