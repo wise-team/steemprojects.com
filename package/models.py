@@ -11,6 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 
 from distutils.version import LooseVersion as versioner
 import requests
@@ -76,20 +77,26 @@ class Project(BaseModel):
         max_length=100,
         choices=STATUS_CHOICES,
         default=UNKNOWN,
-        help_text="Live/Released - Project is ready to use\n"
-        "Working Prototype/Beta - Project is working however, it still can contain some bugs\n"
-        "Demo/Alpha - Project can be used by people which are not afraid of bugs and has very high pain threshold\n"
-        "Concept - Something that pretends to be a working project\n"
-        "Abandoned/Broken - Project is no longer available or it is completely broken\n"
-        "Out of Date/Retired - Project is no longer needed, because of changes in ecosystem"
-    )
+        help_text=mark_safe(
+            """
+            <ul>
+                <li>Live/Released - Project is ready to use</li>
+                <li>Working Prototype/Beta - Project is working however, it still can contain some bugs</li>
+                <li>Demo/Alpha - Project can be used by people which are not afraid of bugs and has very high pain threshold</li>
+                <li>Concept - Something that pretends to be a working project</li>
+                <li>Abandoned/Broken - Project is no longer available or it is completely broken</li>
+                <li>Out of Date/Retired - Project is no longer needed, because of changes in ecosystem</li>
+            </ul>
+            """
+            )
+        )
     description = models.TextField(_("Description"), blank=True, null=True, default="")
     announcement_post = models.URLField(_("Announcement Post"), blank=True, null=True, help_text="Link to place, where project was announced for the first time")
 
     # TODO: remove created_by
     created_by = models.ForeignKey(Profile, blank=True, null=True, related_name="creator", on_delete=models.SET_NULL)
     slug = models.SlugField(_("Slug"), help_text="Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens. Values will be converted to lowercase.", unique=True)
-    category = models.ForeignKey(Category, verbose_name="Installation")
+    category = models.ForeignKey(Category, verbose_name="Category")
     repo_description = models.TextField(_("Repo Description"), blank=True)
     repo_url = models.URLField(_("Source Code Repository URL"), help_text=repo_url_help_text, blank=True, null=True, unique=True)
     repo_watchers = models.IntegerField(_("Stars"), default=0)

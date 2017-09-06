@@ -121,10 +121,6 @@ TEMPLATES = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-]
-
 PROJECT_APPS = [
     "grid",
     'core',
@@ -239,6 +235,7 @@ SUPPORTED_REPO.extend(["bitbucket", "github"])
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 GITHUB_API_SECRET = environ.get('GITHUB_API_SECRET')
@@ -246,7 +243,14 @@ GITHUB_APP_ID = environ.get('GITHUB_APP_ID')
 GITHUB_USERNAME = environ.get('GITHUB_USERNAME')
 SOCIAL_AUTH_GITHUB_KEY = GITHUB_APP_ID
 SOCIAL_AUTH_GITHUB_SECRET = GITHUB_API_SECRET
-SOCIAL_AUTH_ENABLED_BACKENDS = ('github', )
+
+FACEBOOK_APP_ID = environ.get('FACEBOOK_APP_ID')
+FACEBOOK_APP_SECRET = environ.get('FACEBOOK_APP_SECRET')
+SOCIAL_AUTH_FACEBOOK_KEY = FACEBOOK_APP_ID
+SOCIAL_AUTH_FACEBOOK_SECRET = FACEBOOK_APP_SECRET
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+
+SOCIAL_AUTH_ENABLED_BACKENDS = ('github', 'facebook')
 SOCIAL_AUTH_COMPLETE_URL_NAME = 'socialauth_complete'
 SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'associate_complete'
 SOCIAL_AUTH_DEFAULT_USERNAME = lambda u: slugify(u)
@@ -255,9 +259,6 @@ SOCIAL_AUTH_CHANGE_SIGNAL_ONLY = True
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'email']
 LOGIN_REDIRECT_URL = '/'
-
-# associate user via email
-#SOCIAL_AUTH_ASSOCIATE_BY_MAIL = True
 
 DATABASES = {
 
