@@ -1,4 +1,5 @@
 import json
+import sys
 from social_core.backends.oauth import BaseOAuth2
 
 
@@ -46,3 +47,16 @@ class SteemConnectOAuth2(BaseOAuth2):
 
     def request_access_token(self, *args, **kwargs):
         return self.strategy.request_data()
+
+    def request(self, url, method='GET', *args, **kwargs):
+        """
+        override request so User-Agent does not get lumpeds
+        (results in "429 Too Many Requests")
+        http://stackoverflow.com/questions/13213048/urllib2-http-error-429
+        """
+        ua = 'python-social-auth-' + sys.modules['social_core'].__version__
+        if 'headers' not in kwargs:
+            kwargs.set('headers', {})
+        if 'User-Agent' not in kwargs['headers']:
+            kwargs['headers']['User-Agent'] = ua
+        return super(SteemConnectOAuth2, self).request(url, method, *args, **kwargs)
