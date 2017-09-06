@@ -229,6 +229,10 @@ GITHUB_APP_ID = environ.get('GITHUB_APP_ID')
 GITHUB_TOKEN = environ.get('GITHUB_TOKEN')
 GITHUB_USERNAME = environ.get('GITHUB_USERNAME')
 
+########## STEEMCONNECT
+STEEMCONNECT_APP_ID = environ.get('STEEMCONNECT_APP_ID')
+
+
 ########################## Site specific stuff
 FRAMEWORK_TITLE = "Steem"
 SITE_TITLE = "Steem Projects"
@@ -242,6 +246,7 @@ SUPPORTED_REPO.extend(["bitbucket", "github"])
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
+    'steemconnect.steemconnect.SteemConnectOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -257,8 +262,10 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id, name, email'
 }
+SOCIAL_AUTH_STEEMCONNECT_KEY = STEEMCONNECT_APP_ID
+SOCIAL_AUTH_STEEMCONNECT_SCOPE = ['vote', 'comment']
 
-SOCIAL_AUTH_ENABLED_BACKENDS = ('github', 'facebook')
+SOCIAL_AUTH_ENABLED_BACKENDS = ('github', 'facebook', 'steemconnect')
 SOCIAL_AUTH_COMPLETE_URL_NAME = 'socialauth_complete'
 SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'associate_complete'
 SOCIAL_AUTH_DEFAULT_USERNAME = lambda u: slugify(u)

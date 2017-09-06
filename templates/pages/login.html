@@ -24,6 +24,12 @@
         </a>
         <a class="social-sign-in" href="{% url 'social:begin' 'facebook' %}">Sign Up / Login with Facebook</a>
     </p>
+    <p>
+        <a href="{% url 'social:begin' 'steemconnect' %}">
+            <img class="social-button" src="{{ STATIC_URL }}img/github-48x48.png"/>
+        </a>
+        <a class="social-sign-in" href="{% url 'social:begin' 'steemconnect' %}">Sign Up / Login with SteemConnect</a>
+    </p>
 
     <h2>Why Github for OAUTH?</h2>
 
