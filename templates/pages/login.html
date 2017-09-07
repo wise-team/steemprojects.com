@@ -1,28 +1,21 @@
 {% extends "base.html" %}
 
-{% load i18n profile_tags %}
+{% load i18n profile_tags static %}
 
 {% block head_title %}{% trans "Login" %}{% endblock %}
 
+{% block body_class %}login{% endblock %}
+
 {% block extra_head %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/account.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/login.css" />
 {% endblock %}
 
-
-<body class="{% block body_class %}account{% endblock %}">
 {% block body %}
-    <div class="container">
-        <div class="row">
-            <p>
-                <a class="social-sign-in" href="{% url 'social:begin' 'github' %}">Login with Github</a>
-            </p>
-            <p>
-                <a class="social-sign-in" href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
-            </p>
-            <p>
-                <a class="social-sign-in" href="{% url 'social:begin' 'steemconnect' %}">Login with SteemConnect</a>
-            </p>
-        </div>
+    <div class="jumbotron">
+        <h1>Login</h1>
+        <a class="login-btn login-github" href="{% url 'social:begin' 'github' %}"><i class="icon-github"></i>Github</a>
+        <a class="login-btn login-facebook" href="{% url 'social:begin' 'facebook' %}"><i class="icon-facebook"></i>Facebook</a>
+        <a class="login-btn login-steemconnect" href="{% url 'social:begin' 'steemconnect' %}"><img src="{{ STATIC_URL }}img/steem-logo_white.svg" class="icon-steem">SteemConnect</a>
     </div>
 {% endblock %}
 
