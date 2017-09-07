@@ -308,8 +308,11 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.mail.mail_validation',
 
     # Associates the current social details with another user account with
-    # a similar email address. Disabled by default.
+    # a similar email address.
     'social_core.pipeline.social_auth.associate_by_email',
+
+    # Associate current auth with a user with the same Profile in the DB.
+    'profiles.views.associate_by_profile_with_github_and_steemconnect',
 
     # Create a user account if we haven't found one yet.
     'social_core.pipeline.user.create_user',
