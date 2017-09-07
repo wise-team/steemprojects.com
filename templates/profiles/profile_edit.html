@@ -7,6 +7,10 @@
 
 {% block body %}
 
-    {% crispy form %}
+    <p class="not-sufficient-perm">
+        You don't have sufficient permissions to {{ action }}. It can be granted to you, by any user which already have it. To make decision easier, please fill as many fields in your profile as possible.
+    </p>
+
+    {{ form.as_p }}
 
 {% endblock body %}
