@@ -78,11 +78,11 @@ def associate_by_profile_with_github_and_steemconnect(backend, details, user=Non
         return None
 
 
-def save_profile_pipeline(backend, user, response, *args, **kwargs):
-    # profile could be created for a user which previously logged in
-    # with another backend, but with the same email, because of
-    # 'social_core.pipeline.social_auth.associate_by_email'
+def save_profile_pipeline(backend, user, response, details, *args, **kwargs):
     try:
+        # profile could be created for a user which previously logged in
+        # with another backend, but with the same email, because of
+        # 'social_core.pipeline.social_auth.associate_by_email'
         profile = Profile.objects.get(user=user)
     except Profile.DoesNotExist:
         profile = None
@@ -94,7 +94,7 @@ def save_profile_pipeline(backend, user, response, *args, **kwargs):
             pass  # because we do not want to store FB data in profile
 
     elif backend.name == 'github':
-        github_account = kwargs['details']['username']
+        github_account = details['username']
         if profile is None:
             # There was a possibility, that profile with github account was pre-fetched or setup by teammember
             try:
@@ -105,7 +105,7 @@ def save_profile_pipeline(backend, user, response, *args, **kwargs):
             profile.github_account = github_account
 
     elif backend.name == 'steemconnect':
-        steem_account = kwargs['details']['username']
+        steem_account = details['username']
         if profile is None:
             # There was a possibility that profile with steem account was setup by teammember
             try:
@@ -117,40 +117,9 @@ def save_profile_pipeline(backend, user, response, *args, **kwargs):
 
     if not profile.user:
         # pre-fetched or pre-populated users
-        profile.user = profile.user
-    else:
-        # TODO: a pre-fetched Profile of a user with different
-        # email address provided during login via steemconnect and github
-        # could create a situation, where there are 2 users with 1 correct Profile
-        pass
+        profile.user = user
 
     profile.save()
-
-
-# def github_user_update(sender, **kwargs):
-#     # import ipdb; ipdb.set_trace()
-#     try:
-#         user = kwargs['request'].user
-#     except (KeyError, AttributeError):
-#         user = kwargs.get('user')
-#
-#     try:
-#         profile_instance = Profile.objects.get(user=user)
-#         profile_instance.github_account = user.username
-#         profile_instance.email = user.email
-#     except Profile.DoesNotExist:
-#         try:
-#             # try to merge profile, which was created by fetching data, with account of user which logged in.
-#             profile_instance = Profile.objects.get(github_account=user.username)
-#             profile_instance.user = user
-#             profile_instance.email = user.email
-#         except Profile.DoesNotExist:
-#             profile_instance = Profile.objects.create(user=user, github_account=user.username, email=user.email)
-#
-#     profile_instance.save()
-#     return True
-#
-# user_logged_in.connect(github_user_update)
 
 
 from rest_framework.response import Response
