@@ -4,26 +4,28 @@
 
 {% block head_title %}{% trans "Email Required" %}{% endblock %}
 
+{% block body_class %}email_required{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/email_required.css" />
+{% endblock %}
+
 {% block body %}
-
+<div class="jumbotron">
     <h1>Email Required</h1>
-
     {% if validation_sent %}
-        <p>Email was sent. Please open an email, and click a link inside it.</p>
+        <p>{% trans "Please check your email and confirm your email address." %}</p>
     {% endif %}
     {% if partial_backend_name %}
-    <form action="{% url 'social:complete' backend=partial_backend_name %}" method="post" role="form">
+    <form action="" method="post" role="form" class="text-center">
         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
         <input type="hidden" name="partial_token" value="{{ partial_token }}">
         <div>
-            <p>An email address is required.</p>
-        <div>
-            <label for="email">Email address:</label>
-            <input id="email" type="email" name="email" value="" autofocus required/>
-            </div>
+            <input id="email" type="email" name="email" value="" placeholder="Enter your email address" autofocus required/>
         </div>
-        <button type="submit">Continue</button>
+        <button class="btn btn-default sp-btn" type="submit">Continue</button>
     </form>
     {% endif %}
+</div>
 {% endblock %}
 
