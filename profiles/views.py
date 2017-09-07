@@ -93,6 +93,15 @@ def save_profile_pipeline(backend, user, response, *args, **kwargs):
         else:
             profile.steem_account = steem_account
 
+    if not profile.user:
+        # pre-fetched or pre-populated users
+        profile.user = profile.user
+    else:
+        # TODO: a pre-fetched Profile of a user with different
+        # email address provided during login via steemconnect and github
+        # could create a situation, where there are 2 users with 1 correct Profile
+        pass
+
     profile.save()
 
 
