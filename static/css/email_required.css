@@ -1,0 +1,9 @@
+.email_required input {
+    font-size: 14px;
+    height: 40px;
+    margin: 0;
+    margin-bottom: 7px;
+    min-height: 0;
+    padding: 7px;
+    width: 211px;
+}

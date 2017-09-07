@@ -1,17 +1,3 @@
-body.login .container .jumbotron {
-    position: absolute;
-    top: 40%;
-    left:50%;
-    transform: translate(-50%,-50%);
-    box-shadow: none;
-    -webkit-box-shadow: none;
-}
-
-body.login h1 {
-    font-size: 22px;
-    text-align: center;
-}
-
 body.login .login-btn {
     display: block;
     background-color: red;

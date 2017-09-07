@@ -484,10 +484,11 @@ h3, .h3 {
     font-weight: normal;
     text-decoration: none;
     text-transform: none;
-    border: solid 1px #3e4f5e;
+    border: solid 1px #4aa1f1;
     border-radius: 20px;
     line-height: 40px;
 }
+
 .scrolled .btn.btn-default.sp-btn {
     margin: 9px 0;
     line-height: 40px;
@@ -504,7 +505,9 @@ h3, .h3 {
 
 .footer .btn.btn-default.sp-btn {
     margin: 0;
+    border-color: #3e4f5e;
 }
+
 .footer .btn.btn-default.sp-btn:hover {
     background-color: #4aa1f1;
     border-color: #4aa1f1;
@@ -545,7 +548,8 @@ h3, .h3 {
 
 .navbar .navbar-form .form-control,
 .navbar .navbar-form .form-group .form-control {
-	height: 40px;
+    height: 40px;
+    padding: 7px;
 }
 
 .navbar .navbar-form {
@@ -675,4 +679,21 @@ textarea:-moz-placeholder {
 input:-ms-input-placeholder,
 textarea:-moz-placeholder {
 	color: #7e93a0;
+}
+
+body .container .jumbotron {
+    position: absolute;
+    top: 40%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+body .container .jumbotron h1 {
+    font-size: 22px;
+    text-align: center;
+}
+body .container .jumbotron h2 {
+    font-size: 16px;
+    text-align: center;
 }
