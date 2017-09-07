@@ -41,7 +41,7 @@
     <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico" />
     {% block extra_head %}{% endblock %}
 </head>
-<body ng-controller="SearchCtrl" ng-init="init_search('{{ request.GET.q }}', '{% url 'apiv4:searchv2-list' %}', {{ MAX_WEIGHT }})">
+<body class="{% block body_class %}{% endblock %}" ng-controller="SearchCtrl" ng-init="init_search('{{ request.GET.q }}', '{% url 'apiv4:searchv2-list' %}', {{ MAX_WEIGHT }})">
 
 {% for message in messages %}
   <div class="topbar topbar-default{% if message.tags %} {{ message.tags }}{% endif %}" id="message_{{ forloop.counter }}">
@@ -118,12 +118,6 @@
 
 <div>
     <div class="container" ng-hide="items">
-{#        <div class="sponsored">#}
-{#          <a href="https://pyup.io/safety/">#}
-{#            <span class="badge">AD</span> Safety checks your installed dependencies for known security vulnerabilities. <span class="link">Learn more</span>#}
-{#          </a>#}
-{#        </div>#}
-
         {% block body %}
         {% endblock %}
     </div>
@@ -134,11 +128,8 @@
               <thead>
                 <tr>
                   <th>{% trans "Search Weight" %}</th>
-                  <th>{% trans "Package" %}</th>
+                  <th>{% trans "Project" %}</th>
                   <th>{% trans "Description" %}</th>
-                  <th>{% trans "Last PyPI release:" %}</th>
-                  <th>{% trans "Repo Forks" %}</th>
-                  <th>{% trans "Stars" %}</th>
                 </tr>
               </thead>
               <tbody>

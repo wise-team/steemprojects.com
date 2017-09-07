@@ -1,0 +1,52 @@
+body.login .container .jumbotron {
+    position: absolute;
+    top: 40%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+body.login h1 {
+    font-size: 22px;
+    text-align: center;
+}
+
+body.login .login-btn {
+    display: block;
+    background-color: red;
+    height: 50px;
+    border-radius: 25px;
+    line-height: 50px;
+    text-align: center;
+    width: 190px;
+    margin: 10px;
+    color: #FFF;
+    font-size: 16px;
+}
+
+body.login .login-btn i {
+    color: #FFF;
+    font-size: 16px;
+    padding-right: 10px;
+    margin-left: -5px;
+    position: relative;
+    top: 1px;
+}
+
+body.login .login-btn.login-github {
+    background-color: #5e2a7f;
+}
+body.login .login-btn.login-facebook {
+    background-color: #3c579a;
+}
+body.login .login-btn.login-steemconnect {
+    background-color: #4ba2f2;
+}
+body.login .login-btn.login-steemconnect img{
+    height: 18px;
+    width: 18px;
+    position: relative;
+    top: -2px;
+    margin-right: 10px;
+}
