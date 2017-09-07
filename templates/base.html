@@ -116,39 +116,37 @@
 </div>
 {% endcomment %}
 
-<div>
-    <div class="container" ng-hide="items">
-        {% block body %}
-        {% endblock %}
-    </div>
-    <div class="container" ng-show="items">
-      <div class="row">
-        <div class="col-12">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>{% trans "Search Weight" %}</th>
-                  <th>{% trans "Project" %}</th>
-                  <th>{% trans "Description" %}</th>
+<div class="container" ng-hide="items">
+    {% block body %}
+    {% endblock %}
+</div>
+<div class="container" ng-show="items">
+  <div class="row">
+    <div class="col-12">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{% trans "Search Weight" %}</th>
+              <th>{% trans "Project" %}</th>
+              <th>{% trans "Description" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+                {% verbatim %}
+                <tr ng-repeat="item in items">
+                  <td>{{ item.weight / max_weight * 100 | number:0 }}%</td>
+                  <td>
+                      <a ng-href="{{ item.absolute_url }}">{{ item.title }}</a>
+                  </td>
+                  <td>
+                    <strong ng-if="item.item_type=='grid'">Grid:</strong>
+                    {{ item.description }}
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                    {% verbatim %}
-                    <tr ng-repeat="item in items">
-                      <td>{{ item.weight / max_weight * 100 | number:0 }}%</td>
-                      <td>
-                          <a ng-href="{{ item.absolute_url }}">{{ item.title }}</a>
-                      </td>
-                      <td>
-                        <strong ng-if="item.item_type=='grid'">Grid:</strong>
-                        {{ item.description }}
-                      </td>
-                    </tr>
-                    {% endverbatim %}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                {% endverbatim %}
+          </tbody>
+        </table>
+      </div>
     </div>
 </div>
 

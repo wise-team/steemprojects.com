@@ -56,6 +56,28 @@ class ProfileEditUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponseRedirect(reverse("profile_detail", kwargs={"github_account": self.get_object()}))
 
 
+def associate_by_profile_with_github_and_steemconnect(backend, details, user=None, *args, **kwargs):
+    """
+    Associate current auth with a user with the same Profile in the DB.
+    """
+    if user:
+        return None
+
+    try:
+        if backend.name == 'github':
+            profile = Profile.objects.get(github_account=details['username'])
+        elif backend.name == 'steemconnect':
+            profile = Profile.objects.get(steem_account=details['username'])
+        else:
+            return None
+
+        if profile.user:
+            return {'user': profile.user, 'is_new': False}
+
+    except Profile.DoesNotExist:
+        return None
+
+
 def save_profile_pipeline(backend, user, response, *args, **kwargs):
     # profile could be created for a user which previously logged in
     # with another backend, but with the same email, because of
