@@ -132,6 +132,9 @@ SECURE_SSL_REDIRECT = False
 
 ########## end django-secure
 
+########## SOCIAL_AUTH
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
+########## END SOCIAL_AUTH
 
 ########## templates
 TEMPLATES[0]['OPTIONS']['loaders'] = [
@@ -157,3 +160,11 @@ MIDDLEWARE = ['opbeat.contrib.django.middleware.OpbeatAPMMiddleware'] + MIDDLEWA
 # ------------------------
 MEDIA_ROOT = "/data/media"
 STATIC_ROOT = "/data/static"
+
+# SECURITY
+
+ALLOWED_HOSTS = [
+    env.str("ALLOWED_HOST", "steemprojects.com"),
+]
+
+# END SECURITY
