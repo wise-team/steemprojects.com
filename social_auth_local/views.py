@@ -2,7 +2,7 @@ from social_django.utils import load_strategy
 from .decorators import render_to
 
 
-@render_to('steemconnect/email_required.html')
+@render_to('social_auth_local/email_required.html')
 def require_email(request):
     """Email required page"""
     strategy = load_strategy()
@@ -15,7 +15,7 @@ def require_email(request):
     }
 
 
-@render_to('steemconnect/email_required.html')
+@render_to('social_auth_local/email_required.html')
 def validation_sent(request):
     """Email validation sent confirmation page"""
     return {

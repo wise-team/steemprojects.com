@@ -130,7 +130,7 @@ PROJECT_APPS = [
     "feeds",
     "searchv2",
     "apiv3",
-    "steemconnect",
+    "social_auth_local",
 ]
 
 PREREQ_APPS = [
@@ -249,7 +249,7 @@ SUPPORTED_REPO.extend(["bitbucket", "github"])
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
-    'steemconnect.steemconnect.SteemConnectOAuth2',
+    'steemconnect.backends.SteemConnectOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -298,7 +298,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_user',
 
     # CUSTOM PIPELINE
-    'steemconnect.pipeline.require_email',
+    'social_auth_local.pipeline.require_email',
 
     # Make up a username for this person, appends a random string at the end if
     # there's any collision.
@@ -330,8 +330,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.user_details',
 )
 
-SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = 'steemconnect.mail.send_validation'
-SOCIAL_AUTH_EMAIL_VALIDATION_URL = '/steemconnect/email-sent/'
+SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = 'social_auth_local.mail.send_validation'
+SOCIAL_AUTH_EMAIL_VALIDATION_URL = '/auth/email-sent/'
 SOCIAL_AUTH_STEEMCONNECT_FORCE_EMAIL_VALIDATION = True
 VALIDATION_EMAIL_SENDER = environ.get('VALIDATION_EMAIL_SENDER')
 

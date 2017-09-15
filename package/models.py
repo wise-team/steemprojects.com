@@ -364,7 +364,7 @@ class TeamMembership(BaseModel):
 
 def project_img_path(instance, filename):
     _, ext = os.path.splitext(filename)
-    return 'imgs/{}/{}.{}'.format(instance.project.pk, int(round(time.time()*1000)), ext)
+    return 'imgs/{}/{}{}'.format(instance.project.pk, int(round(time.time()*1000)), ext)
 
 
 class ProjectImage(BaseModel):
