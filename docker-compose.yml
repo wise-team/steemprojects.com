@@ -1,5 +1,9 @@
 version: '2'
 
+networks:
+  gallifrey:
+    external: true
+
 volumes:
   static: {}
   caddy: {}
@@ -12,6 +16,8 @@ services:
       - /home/deploy/Data/steemprojects.com/postgres:/var/lib/postgresql/data
       - /home/deploy/Data/steemprojects.com/backups:/backups
     env_file: .env
+    networks:
+      - gallifrey
 
   django-a:
     build:
@@ -21,11 +27,15 @@ services:
     depends_on:
       - postgres
       - redis
+    ports:
+      - "5000"
     volumes:
       - static:/data/static
       - media:/data/media
     command: /start.sh
     env_file: .env
+    networks:
+      - gallifrey
 
   django-b:
     build:
@@ -35,25 +45,17 @@ services:
     depends_on:
       - postgres
       - redis
+    ports:
+      - "5000"
     volumes:
       - static:/data/static
       - media:/data/media
     command: /start.sh
     env_file: .env
-
-  caddy:
-    build: ./compose/caddy
-    depends_on:
-      - django-a
-      - django-b
-    volumes:
-      - static:/data/static
-      - media:/data/media
-      - caddy:/root/.caddy
-    ports:
-      - "80:80"
-      - "443:443"
-    env_file: .env
+    networks:
+      - gallifrey
 
   redis:
     build: ./compose/redis
+    networks:
+      - gallifrey
