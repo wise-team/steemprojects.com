@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -89,14 +90,13 @@ class Profile(BaseModel):
         packages.sort(key=lambda a: a.name)
         return packages
 
-    @models.permalink
     def get_absolute_url(self):
         if self.steem_account:
-            return "steem_profile_detail", [self.steem_account]
+            return reverse('steem_profile_detail', args=(self.steem_account,))
         if self.github_account:
-            return "github_profile_detail", [self.github_account]
+            return reverse('github_profile_detail', args=(self.github_account,))
         if self.user.username:
-            return "id_profile_detail", [self.user.pk]
+            return reverse('id_profile_detail', args=(self.user.pk,))
 
     # define permission properties as properties so we can access in templates
 
