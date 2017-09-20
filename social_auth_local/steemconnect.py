@@ -1,5 +1,4 @@
 import json
-import sys
 from social_core.backends.oauth import BaseOAuth2
 
 

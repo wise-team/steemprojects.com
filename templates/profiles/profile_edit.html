@@ -5,12 +5,81 @@
 
 {% block head_title %}Profile form for {{ profile.user.username }}{% endblock %}
 
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/login.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/os.css" />
+{% endblock %}
+
 {% block body %}
 
-    <p class="not-sufficient-perm">
-        You don't have sufficient permissions to {{ action }}. It can be granted to you, by any user which already have it. To make decision easier, please fill as many fields in your profile as possible.
-    </p>
+{#    <p class="not-sufficient-perm">#}
+{#        You don't have sufficient permissions to {{ action }}. It can be granted to you, by any user which already have it. To make decision easier, please fill as many fields in your profile as possible.#}
+{#    </p>#}
 
-    {{ form.as_p }}
+{#    {% crispy form %}#}
+
+    <div>
+        <h2>Integrations</h2>
+
+{#        <p>#}
+{#            Your profile was partially filled in by contributors of SteemProjects.#}
+{#        </p>#}
+
+        {% for name, association in associations.items %}
+            {% if association %}
+                {% if association.confirmed %}
+                    <div>
+                        Disconnect <span style="display: inline-block; margin: 0 10px"><img class="img-circle" src="https://img.steemconnect.com/@{{ association.data.user.username }}?s=30"><a class="name" href="#">{{ association.data.user.username }}</a></span> account: <a href="{% url 'social:begin' name %}" class="login-btn login-{{ name }}" title="Log in with {{ name }}" style="display: inline-block;"> Disconnect {{ name }} </a>
+
+{#                        Disconnect {{ association.data.user.username }} account <a href="{% url 'social:begin' name %}" class="login-btn login-{{ name }}" title="Log in with {{ name }}" style="display: inline-block;"> {{ name }} </a>#}
+                    </div>
+                {% else %}
+
+{#                    <div class="contributor">#}
+{#                        {% if contributor.steem_account %}#}
+{#                            <img class="img-circle" src="https://img.steemconnect.com/@{{ contributor.steem_account }}?s=30">#}
+{#                            <a class="name" href="{% url 'steem_profile_detail' contributor.steem_account %}">{{ contributor.steem_account }}</a>#}
+{#                        {% elif contributor.github_account %}#}
+{#                            <img class="img-circle" src="https://github.com/{{ contributor.github_account }}.png?size=30">#}
+{#                            <a class="name" href="{% url 'github_profile_detail' contributor.github_account %}">{{ contributor.github_account }}</a>#}
+{#                        {% endif %}#}
+{#                    </div>#}
+
+                <div class="contributor ">
+                    Does account <span style="display: inline-block; margin: 0 10px">
+                        <img class="img-circle" src="https://img.steemconnect.com/@{{ association.data.user.username }}?s=30">
+                        <a class="name" href="#">{{ association.data.user.username }}</a>
+                    </span> belongs to you? Confirm with <a href="{% url 'social:begin' name %}" class="login-btn login-{{ name }}" title="Log in with {{ name }}" style="display: inline-block;"> {{ name }} </a> or <a href="#" class="login-btn" title="Deny" style="display: inline-block;"> Deny </a>
+                </div>
+
+                {% endif %}
+{#                <form id="{{ name }}-disconnect"#}
+{#                    class="disconnect-form col-md-2"#}
+{#                    action="{% url 'social:disconnect_individual' association.provider association.id %}"#}
+{#                    method="post">#}
+{##}
+{#                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">#}
+{#    #}
+{#                    <button type="submit" class="login-btn button_standard button-{{ name|icon_name }}" title="Disconnect {{ backend|backend_name }}" name="{{ backend|backend_class }}" href="#">#}
+{#                        <span class="icon icon-{{ name|icon_name }}"></span>#}
+{#                        Disconnect {{ name }}#}
+{#                        </button>#}
+{#                </form>#}
+            {% else %}
+
+                <div>
+                    Connect your account with <a href="{% url 'social:begin' name %}" class="login-btn login-{{ name }}" title="Log in with {{ name }}" style="display: inline-block;"> {{ name }} </a>
+                </div>
+
+
+            {% endif %}
+        {% endfor %}
+
+        <h2>Your projects & roles</h2>
+
+        {% for membership in memberships %}
+            <p>{{ membership.role }} at {{ membership.project }} - <button class="login-btn btn-confirm" style="display: inline-block">Confirm</button> or <button class="login-btn" style="display: inline-block">Deny!</button></p>
+        {% endfor %}
+    </div>
 
 {% endblock body %}

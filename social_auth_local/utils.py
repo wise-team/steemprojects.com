@@ -1,5 +1,5 @@
-from social_core.backends.google import GooglePlusAuth
 from social_core.backends.utils import load_backends
+from social_django.utils import load_strategy
 
 
 def is_authenticated(user):
@@ -16,20 +16,47 @@ def associations(user, strategy):
     return list(user_associations)
 
 
-def common_context(authentication_backends, strategy, user=None, plus_id=None, **extra):
+def common_context(authentication_backends, user=None, **extra):
     """Common view context"""
+
+    backends = load_backends(authentication_backends)
     context = {
         'user': user,
-        'available_backends': load_backends(authentication_backends),
-        'associated': {}
+        'available_backends': backends,
+        'associations': dict((name, None) for name in backends.keys())
     }
 
+    strategy = load_strategy()
+
     if user and is_authenticated(user):
-        context['associated'] = dict((association.provider, association)
-                                     for association in associations(user, strategy))
-    #
-    # if plus_id:
-    #     context['plus_id'] = plus_id
-    #     context['plus_scope'] = ' '.join(GooglePlusAuth.DEFAULT_SCOPE)
+
+        if user.profile.github_account:
+            context['associations']['github'] = {
+                'confirmed': False,
+                'data': {'user': {'username': user.profile.github_account}},
+            }
+
+        if user.profile.steem_account:
+            context['associations']['steemconnect'] = {
+                'confirmed': False,
+                'data': {'user': {'username': user.profile.steem_account}},
+            }
+
+        # if user.profile.facebook:
+        #     context['associations']['facebook'] = {
+        #         'confirmed': False,
+        #         'data': {'user': {'username': 'Facebook placeholder name'}},
+        #     }
+
+        context['associations'].update(dict(
+            (
+                association.provider,
+                {
+                    'confirmed': True,
+                    'data': association
+                }
+            )
+            for association in associations(user, strategy)
+        ))
 
     return dict(context, **extra)

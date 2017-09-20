@@ -1,19 +1,24 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.edit import UpdateView
-from django.core.exceptions import MultipleObjectsReturned
+from social_core.pipeline.partial import partial
 from braces.views import LoginRequiredMixin
 
 from django.contrib.auth.signals import user_logged_in
 
 # from social_auth.signals import pre_update
 # from social_auth.backends.contrib.github import GithubBackend
-
+from package.models import TeamMembership
 from profiles.forms import ProfileForm
 from profiles.models import Profile
+
+from social_core.backends.utils import load_backends
+
+from social_auth_local.utils import common_context
 
 
 def profile_detail(request, template_name="profiles/profile.html", github_account=None, steem_account=None, id=None):
@@ -47,6 +52,33 @@ class ProfileEditUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ProfileForm
     template_name = "profiles/profile_edit.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(ProfileEditUpdateView, self).get_context_data(**kwargs)
+        # context['available_backends'] = load_backends()
+
+        context.update(common_context(
+            authentication_backends=settings.AUTHENTICATION_BACKENDS,
+            user=self.request.user
+        ))
+
+        context['memberships'] = TeamMembership.objects.filter(profile=self.request.user.profile)
+
+        return context
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile
+
+    def form_valid(self, form):
+        form.save()
+        messages.add_message(self.request, messages.INFO, "Profile Saved")
+        return HttpResponseRedirect(reverse("profile_detail", kwargs={"github_account": self.get_object()}))
+
+
+class ProfileConfirmView(UpdateView):
+    model = Profile
+    form_class = ProfileForm
+    template_name = "profiles/profile_edit.html"
+
     def get_object(self):
         return self.request.user.profile
 
@@ -54,6 +86,7 @@ class ProfileEditUpdateView(LoginRequiredMixin, UpdateView):
         form.save()
         messages.add_message(self.request, messages.INFO, "Profile Saved")
         return HttpResponseRedirect(reverse("profile_detail", kwargs={"github_account": self.get_object()}))
+
 
 
 def associate_by_profile_with_github_and_steemconnect(backend, details, user=None, *args, **kwargs):
@@ -120,6 +153,41 @@ def save_profile_pipeline(backend, user, response, details, *args, **kwargs):
         profile.user = user
 
     profile.save()
+
+
+@partial
+def confirm_profile(backend, user, response, details, *args, **kwargs):
+    current_partial = kwargs.get('current_partial')
+
+    try:
+        profile = Profile.objects.get(user=user)
+    except Profile.DoesNotExist:
+        return None
+
+    import time
+    time.sleep(5)
+    return backend.redirect(
+        '{0}?partial_token={1}'.format(reverse('profile_edit'), current_partial.token)
+    )
+
+
+@partial
+def require_email(strategy, details, user=None, is_new=False, *args, **kwargs):
+    if kwargs.get('ajax') or user and user.email:
+        return
+    elif is_new and not details.get('email'):
+        email = strategy.request_data().get('email')
+        if email:
+            details['email'] = email
+        else:
+            current_partial = kwargs.get('current_partial')
+
+            import time
+            time.sleep(5)
+            return strategy.redirect(
+                '/steemconnect/email?partial_token={0}'.format(current_partial.token)
+            )
+
 
 
 from rest_framework.response import Response
