@@ -133,7 +133,7 @@ SECURE_SSL_REDIRECT = False
 ########## end django-secure
 
 ########## SOCIAL_AUTH
-SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 ########## END SOCIAL_AUTH
 
 ########## templates
