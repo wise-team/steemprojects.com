@@ -16,8 +16,10 @@ from django.views.decorators.csrf import csrf_exempt
 from grid.models import Grid
 from homepage.models import Dpotw, Gotw
 from package.forms import PackageForm, PackageExampleForm, DocumentationForm
-from package.models import Category, Project, PackageExample, ProjectImage
+from package.models import Category, Project, PackageExample, ProjectImage, TeamMembership
 from package.repos import get_all_repos
+from package.forms import TeamMembersFormSet
+from profiles.models import Profile
 
 from .utils import quote_plus
 
@@ -43,8 +45,9 @@ def add_package(request, template_name="package/package_form.html"):
 
     new_package = Project()
     form = PackageForm(request.POST or None, instance=new_package)
+    formset = TeamMembersFormSet(request.POST or None)
 
-    if form.is_valid():
+    if form.is_valid() and formset.is_valid():
         new_package = form.save()
         new_package.added_by = request.user
         new_package.last_modified_by = request.user
@@ -52,10 +55,19 @@ def add_package(request, template_name="package/package_form.html"):
         #new_package.fetch_metadata()
         #new_package.fetch_commits()
 
+        for inlineform in formset:
+            data = inlineform.cleaned_data
+            account = '{}_account'.format(data['account_type'].lower())
+            profile, created = Profile.objects.get_or_create(**{account: data['account_name']})
+
+            membership = TeamMembership.objects.create(profile=profile, project=new_package, role=data['role'])
+            membership.save()
+
         return HttpResponseRedirect(reverse("package", kwargs={"slug": new_package.slug}))
 
     return render(request, template_name, {
         "form": form,
+        "formset": formset,
         "repo_data": repo_data_for_js(),
         "action": "add",
         })
@@ -69,18 +81,50 @@ def edit_package(request, slug, template_name="package/package_form.html"):
 
     form = PackageForm(request.POST or None, instance=package)
 
-    if form.is_valid():
+    initial = [
+        {
+            'role': tm.role,
+            'account_name': tm.profile.steem_account or tm.profile.github_account,
+            'account_type': 'STEEM' if tm.profile.steem_account else 'GITHUB',
+            'initialized': True,
+        }
+        for tm in package.teammembership_set.all()
+    ]
+    if request.POST:
+        formset = TeamMembersFormSet(request.POST)
+    else:
+        formset = TeamMembersFormSet(initial=initial)
+
+    if form.is_valid() and formset.is_valid():
         modified_package = form.save()
         modified_package.last_modified_by = request.user
         modified_package.save()
+
+        for inlineform in formset:
+            if hasattr(inlineform, 'cleaned_data') and inlineform.cleaned_data:
+                data = inlineform.cleaned_data
+                account = '{}_account'.format(data['account_type'].lower())
+
+                if data['DELETE']:
+                    profile = Profile.objects.get(**{account: data['account_name']})
+                    membership = TeamMembership.objects.get(profile=profile, project=modified_package)
+                    membership.delete()
+                else:
+                    profile, __ = Profile.objects.get_or_create(**{account: data['account_name']})
+
+                    membership, __ = TeamMembership.objects.get_or_create(profile=profile, project=modified_package)
+                    membership.role = data['role']
+                    membership.save()
+
         messages.add_message(request, messages.INFO, 'Project updated successfully')
         return HttpResponseRedirect(reverse("package", kwargs={"slug": modified_package.slug}))
 
     return render(request, template_name, {
         "form": form,
+        "formset": formset,
         "package": package,
         "repo_data": repo_data_for_js(),
-        "action": "edit",
+        "action": "Save",
     })
 
 

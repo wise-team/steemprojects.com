@@ -71,3 +71,9 @@ def normalize_license(license):
     if len(license.strip()) > 20:
         return "Custom"
     return license.strip()
+
+
+def account_exists(account_name, account_type):
+    print(account_name)
+    print(account_type)
+    return True

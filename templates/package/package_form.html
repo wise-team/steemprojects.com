@@ -5,6 +5,11 @@
 
 {% block head_title %}{{ action|title }} {% trans "package" %}{% endblock %}
 
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/add_project.css?deployment={{ DEPLOYMENT_DATATIME }}" type="text/css"/>
+  {{ block.super }}
+{% endblock %}
+
 {% block body %}
 
     <h2><a href="{% url 'home' %}">{% trans "home" %}</a> / <a href="{% url 'packages' %}">{% trans "projects" %}</a> / {{ action|title }} {% trans "project" %}</h2>
@@ -31,8 +36,43 @@
             {% endfor %}
         </fieldset>
 
+
+        <h3>Team Members <div id="add-tm-form">Add New Team Member</div></h3>
+
+        {{ formset.management_form }}
+        <div id="tm-forms">
+            {% for form in formset %}
+                <div class="tm-form">
+                    {% if form.is_initialized %}
+                        <div style="display: none">
+                            {{ form }}
+                        </div>
+                        <div class="contributor team-member entry">
+                            {% if form.account_type.value == 'STEEM' %}
+                                <img class="img-circle" src="https://img.steemconnect.com/@{{ form.account_name.value }}?s=30">
+                            {% elif form.account_type.value == 'GITHUB' %}
+                                <img class="img-circle" src="https://github.com/{{ form.account_name.value }}.png?size=30">
+                            {% endif %}
+                                {{ form.account_name.value }} - {{ form.role.value }} <span class="rm-btn tm-entry icon-close"></span>
+                        </div>
+                    {% else %}
+                        <div class="contributor team-member form">
+                            {{ form }} <span class="rm-btn tm-form icon-close"></span>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
         <input class="btn btn-default" type="submit" name="add" value="{{ action }} {% trans "package" %}">
     </form>
+    <div id="empty-form" style="display:none;">
+        <div class="tm-form">
+            <div class="contributor team-member form">
+                {{ formset.empty_form }} <span class="rm-btn tm-form icon-close"></span>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 
@@ -40,9 +80,38 @@
 <script src="{{ STATIC_URL }}js/urlify.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}js/package_form.js" type="text/javascript"></script>
 <script type="text/javascript">
-    $(function() {
-        package_form(eval({{ repo_data|safe }}));
+{#    $(function() {#}
+{#        package_form(eval({{ repo_data|safe }}));#}
+{#    });#}
+
+    $(function(){
+
+        var rmEntry = function(event) {
+            //TODO: at least one TM should left
+            var tm = $(event.target).closest('.tm-form');
+            tm.find('input[type=checkbox]').prop('checked', true);
+            tm.find('.team-member.entry').remove();
+            //var total_forms = $('#id_form-TOTAL_FORMS');
+            //var form_idx = total_forms.val();
+            //total_forms.val(parseInt(form_idx) - 1);
+        };
+
+        var rmForm = function(event) {
+            $(event.target).closest('.team-member.form').remove();
+        };
+
+        $('.rm-btn.tm-entry').click(rmEntry);
+        $('.rm-btn.tm-form').click(rmForm);
+
+        $('#add-tm-form').click(function (event) {
+            var total_forms = $('#id_form-TOTAL_FORMS');
+            var form_idx = total_forms.val();
+            $('#tm-forms').append($('#empty-form').html().replace(/__prefix__/g, form_idx));
+            $('.rm-btn.tm-form').click(rmForm);
+            total_forms.val(parseInt(form_idx) + 1);
+        });
     });
+
 </script>
 
 {% endblock %}

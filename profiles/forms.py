@@ -1,5 +1,4 @@
 from django import forms
-
 from profiles.models import Profile
 
 from crispy_forms.helper import FormHelper
