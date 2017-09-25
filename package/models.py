@@ -354,6 +354,7 @@ class TeamMembership(BaseModel):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     role = models.CharField(max_length=64)
+    role_confirmed = models.BooleanField(_("Role confirmed by team mate"), blank=True, null=False, default=False)
 
     class Meta:
         unique_together = ("profile", "project")
