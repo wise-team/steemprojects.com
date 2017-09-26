@@ -143,7 +143,7 @@
 
             var items = new vis.DataSet([
             {% for event in package.events.all %}
-                {id: {{ forloop.counter }}, content: '<div class="event-date">{{ event.date}}</div><a href="{{ event.url}}">{{ event.name|safe}}</a>', start: '{{ event.date}}'},
+                {id: {{ forloop.counter }}, content: '<div class="event-date">{{ event.date}}</div><a href="{{ event.url}}" target="_blank">{{ event.name|safe}}</a>', start: '{{ event.date}}'},
             {% endfor %}
             ]);
 
