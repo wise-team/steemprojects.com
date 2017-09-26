@@ -1,0 +1,28 @@
+label[for^="id_form-"][for$="-DELETE"],
+input[id^="id_form-"][id$="-DELETE"] {
+    display: none;
+}
+.rm-btn {
+    position: relative;
+    top: -5px;
+    font-size: 12px;
+}
+.rm-btn:hover {
+    background: darkgray;
+    color: white;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+#formset-add-new-form-btn {
+    height: 30px;
+    border-radius: 15px;
+    line-height: 28px;
+    padding: 0 10px;
+    margin: 10px;
+    font-size: 14px;
+}
+
+#formset-add-new-form-btn:hover {
+    cursor: pointer;
+}
