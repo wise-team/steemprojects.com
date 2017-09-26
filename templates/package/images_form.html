@@ -21,8 +21,10 @@
             {% for form in formset %}
                 <div class="img-form" style="float: left; margin: 10px;">
                     <span class="rm-btn te-entry icon-close" title="Delete"></span>
-                    <img src="{{ form.img.value.url }}" style="width:16vw; height: 9vw; object-fit: cover;" />
-                    <div style="display: none">
+                    {% if not form.errors %}
+                        <img src="{{ form.img.value.url }}" style="width:16vw; height: 9vw; object-fit: cover;" />
+                    {% endif %}
+                    <div style="display: {% if form.errors %}block{% else %}none{% endif %}">
                         {{ form }}
                     </div>
                 </div>
