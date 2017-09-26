@@ -19,7 +19,7 @@
         {% csrf_token %}
         {{ formset.management_form }}
         <div id="event-forms">
-            {% for form in formset %}
+            {% for form in formset reversed %}
                 <div class="event-form">
                     {{ form }} <span class="rm-btn te-entry icon-close"></span>
                 </div>
@@ -65,7 +65,7 @@
             total_forms.val(parseInt(form_idx) + 1);
 
             var new_form = $($('#empty-form').html().replace(/__prefix__/g, form_idx));
-            $('#event-forms').append(new_form);
+            $('#event-forms').prepend(new_form);
             new_form.click(rmForm);
         });
     });
