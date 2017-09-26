@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from grid.models import Grid
 from homepage.models import Dpotw, Gotw
-from package.forms import PackageForm, PackageExampleForm, DocumentationForm, TimelineEventFormSet
+from package.forms import PackageForm, PackageExampleForm, DocumentationForm, TimelineEventFormSet, ProjectImagesFormSet
 from package.models import Category, Project, PackageExample, ProjectImage, TeamMembership, TimelineEvent
 from package.repos import get_all_repos
 from package.forms import TeamMembersFormSet
@@ -150,6 +150,30 @@ def edit_timeline(request, slug, template_name="package/timeline_form.html"):
         formset = TimelineEventFormSet(data=request.POST, project=project,)
     else:
         formset = TimelineEventFormSet(project=project, queryset=TimelineEvent.objects.filter(project=project))
+
+    if formset.is_valid():
+        formset.save()
+
+        messages.add_message(request, messages.INFO, 'Project updated successfully')
+        return HttpResponseRedirect(reverse("package", kwargs={"slug": project.slug}))
+
+    return render(request, template_name, {
+        "formset": formset,
+        "package": project,
+        "action": "Save",
+    })
+
+
+@login_required
+def edit_images(request, slug, template_name="package/images_form.html"):
+    project = get_object_or_404(Project, slug=slug)
+    if not request.user.profile.can_edit_package(project):
+        return HttpResponseForbidden("permission denied")
+
+    if request.POST:
+        formset = ProjectImagesFormSet(data=request.POST, files=request.FILES, project=project,)
+    else:
+        formset = ProjectImagesFormSet(project=project, queryset=ProjectImage.objects.filter(project=project))
 
     if formset.is_valid():
         formset.save()

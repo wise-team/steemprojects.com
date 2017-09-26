@@ -81,3 +81,7 @@
     top: 1px;
     font-size: 12px;
 }
+
+#edit-images {
+    float: right;
+}

@@ -16,6 +16,7 @@ from package.views import (
     edit_documentation,
     github_webhook,
     edit_timeline,
+    edit_images,
 )
 
 urlpatterns = [
@@ -51,6 +52,12 @@ urlpatterns = [
         regex="^(?P<slug>[-\w]+)/timeline/edit/$",
         view=edit_timeline,
         name="edit_timeline",
+    ),
+
+    url(
+        regex="^(?P<slug>[-\w]+)/images/edit/$",
+        view=edit_images,
+        name="edit_images",
     ),
 
     url(

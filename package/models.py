@@ -117,6 +117,15 @@ class Project(BaseModel):
     main_img = models.ForeignKey('ProjectImage', null=True, blank=True, related_name='main_img_proj')
 
     @property
+    def img(self):
+        if self.main_img:
+            return self.main_img.img
+        elif self.images.count():
+            return self.images.order_by("id").first().img
+        else:
+            return None
+
+    @property
     def pypi_name(self):
         """ return the pypi name of a package"""
 
@@ -374,7 +383,7 @@ def project_img_path(instance, filename):
 
 
 class ProjectImage(BaseModel):
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, related_name="images")
     img = models.ImageField(upload_to=project_img_path, default='None/no-img.jpg')
 
     def image_tag(self):

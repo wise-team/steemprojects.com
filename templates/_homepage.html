@@ -34,7 +34,7 @@
         {% for package in latest_packages %}
             <div class="list-group-item">
                 <a href="{{ package.get_absolute_url }}">
-                    <img class="project-img" src="{% if package.main_img %}{{ package.main_img.img.url }}{% else %}http://via.placeholder.com/123x71{% endif %}">
+                    <img class="project-img" src="{% if package.img %}{{ package.img.url }}{% else %}http://via.placeholder.com/123x71?text=No Image :({% endif %}">
                     <div class="project-details">
                         <h3 class="list-group-item-heading">{{ package.title }}</h3>
 
