@@ -7,17 +7,17 @@
 
 {% block extra_head %}
   <link rel="stylesheet" href="{{ STATIC_URL }}css/add_project.css?deployment={{ DEPLOYMENT_DATATIME }}" type="text/css"/>
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/edit_form.css?deployment={{ DEPLOYMENT_DATATIME }}" type="text/css"/>
   {{ block.super }}
 {% endblock %}
 
 {% block body %}
 
-    <h2><a href="{% url 'home' %}">{% trans "home" %}</a> / <a href="{% url 'packages' %}">{% trans "projects" %}</a> / {{ action|title }} {% trans "project" %}</h2>
-    <p id="instructions">{% blocktrans %}The easiest way to use this form is to simply enter the
-         package repo URL into the repo URL field. {{ SITE_TITLE }} then does it's best to figure out the title,
-         slug, and then fills in the appropriate fields for you.{% endblocktrans %}
-    </p>
-
+    {% if package %}
+        <h2>Editing {{ package.title }}</h2>
+    {% else %}
+        <h2>New project</h2>
+    {% endif %}
     <p id="package-form-message"></p>
     <form action="{{ request.path }}" method="post" id="package-form">
         {{ form.errors }}
@@ -37,7 +37,7 @@
         </fieldset>
 
 
-        <h3>Team Members <div id="add-tm-form">Add New Team Member</div></h3>
+        <h3>Team Members <div id="formset-add-new-form-btn" class="btn btn-default sp-btn">Add New Team Member</div></h3>
 
         {{ formset.management_form }}
         <div id="tm-forms">
@@ -64,7 +64,7 @@
             {% endfor %}
         </div>
 
-        <input class="btn btn-default" type="submit" name="add" value="{{ action }} {% trans "package" %}">
+        <input class="btn btn-default sp-btn" type="submit" name="add" value="Save project">
     </form>
     <div id="empty-form" style="display:none;">
         <div class="tm-form">
@@ -97,17 +97,21 @@
         };
 
         var rmForm = function(event) {
+            var total_forms = $('#id_form-TOTAL_FORMS');
+            var form_idx = total_forms.val();
+            total_forms.val(parseInt(form_idx) - 1);
             $(event.target).closest('.team-member.form').remove();
         };
 
         $('.rm-btn.tm-entry').click(rmEntry);
         $('.rm-btn.tm-form').click(rmForm);
 
-        $('#add-tm-form').click(function (event) {
+        $('#formset-add-new-form-btn').click(function (event) {
             var total_forms = $('#id_form-TOTAL_FORMS');
             var form_idx = total_forms.val();
-            $('#tm-forms').append($('#empty-form').html().replace(/__prefix__/g, form_idx));
-            $('.rm-btn.tm-form').click(rmForm);
+            var new_form = $($('#empty-form').html().replace(/__prefix__/g, form_idx));
+            $('#tm-forms').append(new_form);
+            new_form.click(rmForm);
             total_forms.val(parseInt(form_idx) + 1);
         });
     });

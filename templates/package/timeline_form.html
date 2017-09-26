@@ -1,0 +1,75 @@
+{% extends "package/base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{{ action|title }} {% trans "package" %}{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/edit_form.css?deployment={{ DEPLOYMENT_DATATIME }}" type="text/css"/>
+  {{ block.super }}
+{% endblock %}
+
+{% block body %}
+    <h2>{{ package.title }}'s Timeline</h2>
+
+    <p id="package-form-message"></p>
+    <h3>Timeline Events <div id="formset-add-new-form-btn" class="btn btn-default sp-btn">Add New Event</div></h3>
+    <form action="{{ request.path }}" method="post" id="package-form">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <div id="event-forms">
+            {% for form in formset %}
+                <div class="event-form">
+                    {{ form }} <span class="rm-btn te-entry icon-close"></span>
+                </div>
+            {% endfor %}
+        </div>
+        <input class="btn btn-default sp-btn" type="submit" name="add" value="{{ action }} {% trans "timeline" %}">
+    </form>
+
+    <div id="empty-form" style="display:none;">
+        <div class="event-form">
+            {{ formset.empty_form }} <span class="rm-btn te-form icon-close"></span>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_body %}
+<script src="{{ STATIC_URL }}js/urlify.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}js/package_form.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function(){
+
+        var rmEntry = function(event) {
+            var eventForm = $(event.target).closest('.event-form');
+            eventForm.find('input[type=checkbox]').prop('checked', true);
+            eventForm.hide();
+        };
+
+        var rmForm = function(event) {
+            var total_forms = $('#id_form-TOTAL_FORMS');
+            var form_idx = total_forms.val();
+            total_forms.val(parseInt(form_idx) - 1);
+
+            $(event.target).closest('.event-form').remove();
+        };
+
+        $('.rm-btn.te-entry').click(rmEntry);
+        $('.rm-btn.te-form').click(rmForm);
+
+        $('#formset-add-new-form-btn').click(function (event) {
+            var total_forms = $('#id_form-TOTAL_FORMS');
+            var form_idx = total_forms.val();
+            total_forms.val(parseInt(form_idx) + 1);
+
+            var new_form = $($('#empty-form').html().replace(/__prefix__/g, form_idx));
+            $('#event-forms').append(new_form);
+            new_form.click(rmForm);
+        });
+    });
+
+</script>
+
+{% endblock %}

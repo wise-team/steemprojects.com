@@ -3,19 +3,20 @@ from django.views.generic.dates import ArchiveIndexView
 
 from package.models import Project
 from package.views import (
-                            add_example,
-                            add_package,
-                            ajax_package_list,
-                            edit_package,
-                            edit_example,
-                            update_package,
-                            usage,
-                            package_list,
-                            package_detail,
-                            post_data,
-                            edit_documentation,
-                            github_webhook
-                            )
+    add_example,
+    add_package,
+    ajax_package_list,
+    edit_package,
+    edit_example,
+    update_package,
+    usage,
+    package_list,
+    package_detail,
+    post_data,
+    edit_documentation,
+    github_webhook,
+    edit_timeline,
+)
 
 urlpatterns = [
 
@@ -44,6 +45,12 @@ urlpatterns = [
         regex="^(?P<slug>[-\w]+)/edit/$",
         view=edit_package,
         name="edit_package",
+    ),
+
+    url(
+        regex="^(?P<slug>[-\w]+)/timeline/edit/$",
+        view=edit_timeline,
+        name="edit_timeline",
     ),
 
     url(

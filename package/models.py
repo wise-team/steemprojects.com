@@ -345,7 +345,12 @@ class Project(BaseModel):
 
 class TimelineEvent(BaseModel):
     name = models.CharField(_("Event Name"), max_length=100)
-    url = models.URLField(_("URL"), help_text="Link to place, where event is described.", blank=False, null=False)
+    url = models.URLField(
+        _("URL"),
+        # help_text="Link to place, where event is described.",
+        blank=False,
+        null=False
+    )
     date = models.DateField(blank=False, null=False, default=timezone.now)
     project = models.ForeignKey(Project, related_name="events")
 
