@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.forms.models import modelformset_factory
 from floppyforms.__future__ import ModelForm, TextInput
 import itertools
-from package.models import Category, Project, PackageExample, TeamMembership, TimelineEvent
+from package.models import Category, Project, PackageExample, TeamMembership, TimelineEvent, ProjectImage
 from django.template.defaultfilters import slugify
 from django.forms.formsets import formset_factory
 from django import forms
@@ -184,4 +184,36 @@ class TimelineEventFormSet(BaseTimelineEventFormSet):
         form_kwargs.update({
             "project": self.project,
         })
+        return form_kwargs
+
+
+class ProjectImageForm(forms.ModelForm):
+    model = ProjectImage
+    fields = ["img", "project"]
+
+    def __init__(self, project, *args, **kwargs):
+        super(ProjectImageForm, self).__init__(*args, **kwargs)
+        self.fields["project"].widget = forms.HiddenInput()
+        self.fields["project"].initial = project.id
+
+
+BaseProjectImagesFormSet = modelformset_factory(
+    ProjectImage,
+    fields=["img", "project"],
+    form=ProjectImageForm,
+    can_delete=True,
+    extra=0,
+)
+
+
+class ProjectImagesFormSet(BaseProjectImagesFormSet):
+
+    def __init__(self, project, queryset=None, *args, **kwargs):
+        self.project = project
+
+        super(ProjectImagesFormSet, self).__init__(queryset=queryset, *args, **kwargs)
+
+    def get_form_kwargs(self, *args, **kwargs):
+        form_kwargs = super(ProjectImagesFormSet, self).get_form_kwargs(*args, **kwargs)
+        form_kwargs.update({"project": self.project})
         return form_kwargs

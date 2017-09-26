@@ -26,3 +26,18 @@ input[id^="id_form-"][id$="-DELETE"] {
 #formset-add-new-form-btn:hover {
     cursor: pointer;
 }
+
+input[type="file"] {
+    display: inline-block;
+    border: none;
+}
+
+#img-entries .img-form .rm-btn {
+    display: block;
+    position: relative;
+    top: 0;
+    float: right;
+    font-size: 20px;
+    border-radius: 10px;
+    margin: 0 2px;
+}
