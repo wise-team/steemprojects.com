@@ -16,6 +16,7 @@ from django.utils.safestring import mark_safe
 from distutils.version import LooseVersion as versioner
 import requests
 
+from core.fields import SizeAndContentTypeRestrictedImageField
 from core.utils import STATUS_CHOICES, status_choices_switch
 from core.models import BaseModel
 from package.repos import get_repo_for_repo_url
@@ -384,7 +385,12 @@ def project_img_path(instance, filename):
 
 class ProjectImage(BaseModel):
     project = models.ForeignKey(Project, related_name="images")
-    img = models.ImageField(upload_to=project_img_path, default='None/no-img.jpg')
+    img = SizeAndContentTypeRestrictedImageField(
+        upload_to=project_img_path,
+        default='None/no-img.jpg',
+        content_types=['image/png', 'image/jpeg'],
+        max_upload_size=1024*1024*5,
+    )
 
     def image_tag(self):
         return u'<img src="%s" />' % self.img.url
