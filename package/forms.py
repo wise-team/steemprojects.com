@@ -157,6 +157,7 @@ class TimelineEventForm(forms.ModelForm):
         super(TimelineEventForm, self).__init__(*args, **kwargs)
         self.fields["project"].widget = forms.HiddenInput()
         self.fields["project"].initial = project.id
+        self.fields["date"].widget.attrs = {"placeholder": "YYYY-MM-DD"}
 
 
 BaseTimelineEventFormSet = modelformset_factory(
