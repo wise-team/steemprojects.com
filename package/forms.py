@@ -174,7 +174,7 @@ class TimelineEventFormSet(BaseTimelineEventFormSet):
         self.project = project
 
         if queryset:
-            queryset = queryset.order_by("-date")
+            queryset = queryset.order_by("date")
 
         super(TimelineEventFormSet, self).__init__(queryset=queryset, *args, **kwargs)
 
