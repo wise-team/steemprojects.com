@@ -56,12 +56,13 @@ def add_package(request, template_name="package/package_form.html"):
         #new_package.fetch_commits()
 
         for inlineform in formset:
-            data = inlineform.cleaned_data
-            account = '{}_account'.format(data['account_type'].lower())
-            profile, created = Profile.objects.get_or_create(**{account: data['account_name']})
+            if hasattr(inlineform, 'cleaned_data') and inlineform.cleaned_data:
+                data = inlineform.cleaned_data
+                account = '{}_account'.format(data['account_type'].lower())
+                profile, created = Profile.objects.get_or_create(**{account: data['account_name']})
 
-            membership = TeamMembership.objects.create(profile=profile, project=new_package, role=data['role'])
-            membership.save()
+                membership = TeamMembership.objects.create(profile=profile, project=new_package, role=data['role'])
+                membership.save()
 
         return HttpResponseRedirect(reverse("package", kwargs={"slug": new_package.slug}))
 
