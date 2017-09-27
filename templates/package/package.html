@@ -71,7 +71,7 @@
             </div>
         </div>
         {% endif %}
-        {% if package.contributors.count %}
+        {% if not_team_contributors|length %}
         <div class="contributors clearfix">
             <h3>Contributors
                 <sup>
