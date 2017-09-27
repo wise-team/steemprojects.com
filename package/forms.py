@@ -33,18 +33,16 @@ class PackageForm(ModelForm):
     def save(self):
         instance = super(PackageForm, self).save(commit=False)
 
-        instance.slug = orig = slugify(instance.title)
+        if not instance.slug:
+            slug = title_slug = slugify(instance.title)
 
-        for x in itertools.count(1):
-            if not Project.objects.filter(slug=instance.slug).exists():
-                break
-            instance.slug = '%s-%d' % (orig, x)
-
-        instance.save()
-
-        # if instance.created_by and instance.created_by not in instance.team_members.all():
-        #     team_membership = TeamMembership(project=instance, profile=instance.created_by, role="Creator")
-        #     team_membership.save()
+            for x in itertools.count(2):
+                if Project.objects.filter(slug=slug).exists():
+                    slug = '{}-{}'.format(title_slug, x)
+                else:
+                    instance.slug = slug
+                    instance.save()
+                    break
 
         return instance
 
