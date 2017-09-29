@@ -83,12 +83,12 @@ class Project(BaseModel):
         help_text=mark_safe(
             """
             <ul>
-                <li>Live/Released - Project is ready to use</li>
-                <li>Working Prototype/Beta - Project is working however, it still can contain some bugs</li>
-                <li>Demo/Alpha - Project can be used by people which are not afraid of bugs and has very high pain threshold</li>
-                <li>Concept - Something that pretends to be a working project</li>
-                <li>Abandoned/Broken - Project is no longer available or it is completely broken</li>
-                <li>Out of Date/Retired - Project is no longer needed, because of changes in ecosystem</li>
+                <li><strong>Live/Released</strong> - Project is ready to use</li>
+                <li><strong>Working Prototype/Beta</strong> - Project is working however, it still can contain some bugs</li>
+                <li><strong>Demo/Alpha</strong> - Project can be used by people which are not afraid of bugs and has very high pain threshold</li>
+                <li><strong>Concept</strong> - Something that pretends to be a working project</li>
+                <li><strong>Abandoned/Broken</strong> - Project is no longer available or it is completely broken</li>
+                <li><strong>Out of Date/Retired</strong> - Project is no longer needed, because of changes in ecosystem</li>
             </ul>
             """
             )

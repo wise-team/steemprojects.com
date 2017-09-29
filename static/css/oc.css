@@ -494,7 +494,9 @@ h3, .h3 {
     line-height: 40px;
 }
 
-.btn.btn-default.sp-btn:hover {
+.btn.btn-default.sp-btn-action,
+.btn.btn-default.sp-btn:hover
+{
     background-color: #4aa1f1;
     color: #fff;
 }
@@ -696,4 +698,8 @@ body .container .jumbotron h1 {
 body .container .jumbotron h2 {
     font-size: 16px;
     text-align: center;
+}
+
+.main-container {
+    margin-bottom: 150px;
 }

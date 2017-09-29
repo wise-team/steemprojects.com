@@ -6,7 +6,8 @@
 .project-form .field-label {
     text-align: right;
     float: right;
-    height: 50px;
+    height: 40px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     line-height: 1.1;
@@ -27,7 +28,7 @@
     width: 100%;
     background-color: #FFF;
     height: 40px;
-    margin: 5px 0;
+    margin-bottom: 20px;
 }
 .project-form .field textarea
 {
@@ -60,4 +61,31 @@
 }
 .project-form .team-member.form .field.role input {
     width: 235px;
+}
+
+.project-form .team-member.entry .rm-btn.tm-entry {
+    top: 0;
+}
+.project-form .team-member.form .rm-btn.tm-form {
+    top: -3px;
+}
+
+.required {
+    position: absolute;
+    right: 7px;
+}
+
+.project-form .team-member.form .col-sm-11 .required {
+    position: inherit;
+    right: inherit;
+    margin-left: 2px;
+}
+.project-form .team-member.form .required {
+    color: #7e93a0;
+}
+
+ul {
+    padding-left: 0;
+    margin-left: 15px;
+    margin-top: -10px;
 }
