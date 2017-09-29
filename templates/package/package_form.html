@@ -16,7 +16,7 @@
 {% block body %}
 
     {% if package %}
-        <h2>Editing {{ package.title }}</h2>
+        <h2>Editing {{ package.name }}</h2>
     {% else %}
         <h2>Add new project</h2>
     {% endif %}
@@ -30,12 +30,12 @@
                 {% csrf_token %}
             </div>
             <div class="col-sm-1">
-                <div class="field-label">{{ form.title.label }}<span class="required">*</span></div>
+                <div class="field-label">{{ form.name.label }}<span class="required">*</span></div>
                 <div class="field-label">{{ form.announcement_post.label }}</div>
                 <div class="field-label">{{ form.description.label }}</div>
             </div>
             <div class="col-sm-3">
-                <div class="field">{{ form.title }}</div>
+                <div class="field">{{ form.name }}</div>
                 <div class="field">{{ form.announcement_post }}</div>
                 <div class="field">{{ form.description }}</div>
             </div>

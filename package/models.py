@@ -73,7 +73,7 @@ class Project(BaseModel):
         (OUT_OF_DATE__RETIRED, 'Out of Date/Retired'),
     )
 
-    title = models.CharField(_("Title"), max_length=100, unique=True)
+    name = models.CharField(_("Name"), max_length=100, unique=True)
     url = models.URLField(_("Project URL"), blank=True, null=True, unique=True)
     status = models.CharField(
         _("Status"),
@@ -337,11 +337,11 @@ class Project(BaseModel):
         return None
 
     class Meta:
-        ordering = ['title']
+        ordering = ['name']
         get_latest_by = 'id'
 
     def __str__(self):
-        return self.title
+        return self.name
 
     @models.permalink
     def get_absolute_url(self):
@@ -377,7 +377,7 @@ class TeamMembership(BaseModel):
         unique_together = ("profile", "project")
 
     def __str__(self):
-        return "{} in {} as {}".format(str(self.profile), self.project.title, self.role)
+        return "{} in {} as {}".format(str(self.profile), self.project.name, self.role)
 
 
 def project_img_path(instance, filename):
@@ -407,7 +407,7 @@ class ProjectImage(BaseModel):
     image_tag_thumb.allow_tags = True
 
     def __str__(self):
-        return "Project: {}, Image: {}".format(self.project.title, self.img.name)
+        return "Project: {}, Image: {}".format(self.project.name, self.img.name)
 
 
 class PackageExample(BaseModel):
@@ -441,7 +441,7 @@ class Commit(BaseModel):
         get_latest_by = 'commit_date'
 
     def __str__(self):
-        return "Commit for '%s' on %s" % (self.package.title, str(self.commit_date))
+        return "Commit for '%s' on %s" % (self.package.name, str(self.commit_date))
 
     def save(self, *args, **kwargs):
         # reset the last_updated and commits_over_52 caches on the package
@@ -516,4 +516,4 @@ class Version(BaseModel):
         super(Version, self).save(*args, **kwargs)
 
     def __str__(self):
-        return "%s: %s" % (self.package.title, self.number)
+        return "%s: %s" % (self.package.name, self.number)

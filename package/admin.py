@@ -12,16 +12,16 @@ class PackageExampleInline(admin.TabularInline):
 class PackageAdmin(VersionAdmin):
 
     save_on_top = True
-    search_fields = ("title",)
+    search_fields = ("name",)
     list_filter = ("category",)
-    list_display = ("title", "created", "status", "slug")
+    list_display = ("name", "created", "status", "slug")
     date_hierarchy = "created"
     inlines = [
         PackageExampleInline,
     ]
     fieldsets = (
         (None, {
-            "fields": ("title", "url", "description", "announcement_post", "main_img", "created_by", "status", "slug", "category", "pypi_url", "repo_url", "contributors", "usage", "added_by", "last_modified_by",)
+            "fields": ("name", "url", "description", "announcement_post", "main_img", "created_by", "status", "slug", "category", "pypi_url", "repo_url", "contributors", "usage", "added_by", "last_modified_by",)
         }),
         ("Pulled data", {
             "classes": ("collapse",),
@@ -35,7 +35,7 @@ class CommitAdmin(admin.ModelAdmin):
 
 
 class VersionLocalAdmin(admin.ModelAdmin):
-    search_fields = ("package__title",)
+    search_fields = ("package__name",)
 
 
 class PackageExampleAdmin(admin.ModelAdmin):

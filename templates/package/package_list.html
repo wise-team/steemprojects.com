@@ -30,7 +30,7 @@
                   {% usage_button %}
                   <span class="usage-count">{{ package.usage_count }}</span>
                 </td>
-                <td><a href="{% url 'package' package.slug %}">{{ package.title }}</a></td>
+                <td><a href="{% url 'package' package.slug %}">{{ package.name }}</a></td>
                 <td>{{ package.description }}</td>
                 <td><img src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{package|commits_over_52}}&chco=666666&chbh=1,1,1&chds=0,20" /></td>
                 <td>{{ package.repo_watchers|default:"n/a" }}</td>
@@ -50,20 +50,20 @@
 
 {% block extra_body %}
 <script type="text/javascript">
-    $(function() {          
+    $(function() {
         $('input#id_q_p').click(function() {
             $("input#id_q_p").val('');
-        });                        
-    });    
+        });
+    });
 
     $('#id_q_p').autocomplete({
       source: '{% url 'search_packages_autocomplete' %}',
       minLength: 1,
-      open: function(event, ui) { 
-        ac_top = $('.ui-autocomplete').css('top'); 
-        $('.ui-autocomplete').css({'width': '250px', 'top': ac_top + 10 }); 
+      open: function(event, ui) {
+        ac_top = $('.ui-autocomplete').css('top');
+        $('.ui-autocomplete').css({'width': '250px', 'top': ac_top + 10 });
       }
     });
-    
-</script>      
-{% endblock %}      
+
+</script>
+{% endblock %}

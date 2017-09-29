@@ -36,7 +36,7 @@
                 <a href="{{ package.get_absolute_url }}">
                     <img class="project-img" src="{% if package.img %}{{ package.img.url }}{% else %}http://via.placeholder.com/123x71?text=No Image :({% endif %}">
                     <div class="project-details">
-                        <h3 class="list-group-item-heading">{{ package.title }}</h3>
+                        <h3 class="list-group-item-heading">{{ package.name }}</h3>
 
                         <p class="list-group-item-text description">
                             {% with package.description|truncatewords:20 as short %}
@@ -109,7 +109,7 @@
           <div class="list-group">
             {% for package in latest_packages %}
               <a href="{{ package.get_absolute_url }}" class="list-group-item">
-                <h4 class="list-group-item-heading">{{ package.title }}</h4>
+                <h4 class="list-group-item-heading">{{ package.name }}</h4>
 
                 <p class="list-group-item-text">
                   {% with package.description|truncatewords:25 as short %}
@@ -134,7 +134,7 @@
           <div class="list-group">
             {% for package in random_packages %}
               <a href="{{ package.get_absolute_url }}" class="list-group-item">
-                <h4 class="list-group-item-heading">{{ package.title }}</h4>
+                <h4 class="list-group-item-heading">{{ package.name }}</h4>
 
                 <p class="list-group-item-text">
                   {% with package.description|truncatewords:25 as short %}

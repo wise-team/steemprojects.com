@@ -4,7 +4,7 @@
     {% for grid_package in grid_packages %}
         <th>
           <a href="{% url 'package' grid_package.package.slug %}">
-            {{ grid_package.package.title }}
+            {{ grid_package.package.name }}
           </a>
         </th>
     {% endfor %}
