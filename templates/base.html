@@ -75,7 +75,7 @@
                 {% else %}
                     <li><a href="{% url 'login' %}{% if current_path %}?next={{ current_path }}{% endif %}">{% trans "Log in" %}</a></li>
                 {% endif %}
-                <li><a class="btn btn-default sp-btn" href="{% url 'add_package' %}">{% trans "Add project" %}</a></li>
+                <li><a class="btn btn-default sp-btn sp-btn-normal" href="{% url 'add_package' %}">{% trans "Add project" %}</a></li>
             </ul>
 
             <!-- Search form -->
@@ -154,7 +154,7 @@
 <div class="footer">
     <div class="container">
         <div class="col-sm-2">
-            <a class="btn btn-default sp-btn" href="{% url 'contribute' %}">{% trans "Contribute" %}</a>
+            <a class="btn btn-default sp-btn sp-btn-normal" href="{% url 'contribute' %}">{% trans "Contribute" %}</a>
         </div>
         <div class="col-sm-10 footer-items">
           <span class="footer-item">&copy; {% now "Y" %} <a href="https://steemit.com/@noisy">Krzysztof Szumny - @noisy</a></span>
