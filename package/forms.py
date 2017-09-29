@@ -14,7 +14,7 @@ from package.utils import account_exists
 def package_help_text():
     help_text = ""
     for category in Category.objects.all():
-        help_text += """<li><strong>{title_plural}</strong> {description}</li>""".format(
+        help_text += """<li><strong>{title_plural}</strong> - {description}</li>""".format(
                         title_plural=category.title_plural,
                         description=category.description
                         )
@@ -99,7 +99,7 @@ class InlineTeamMemberForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(InlineTeamMemberForm, self).__init__(*args, **kwargs)
         for field in ('role', 'account_type', 'account_name'):
-            self.fields[field].widget.attrs['required'] = 'required'
+            self.fields[field].widget.attrs['required'] = True
 
     @property
     def is_initialized(self):
