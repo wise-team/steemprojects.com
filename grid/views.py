@@ -264,7 +264,7 @@ def add_grid_package(request, grid_slug, template_name="grid/add_grid_package.ht
         package = get_object_or_404(Project, id=request.POST['package'])
         try:
             GridPackage.objects.get(grid=grid, package=package)
-            message = "Sorry, but '%s' is already in this grid." % package.title
+            message = "Sorry, but '%s' is already in this grid." % package.name
             messages.add_message(request, messages.ERROR, message)
         except GridPackage.DoesNotExist:
             grid_package = GridPackage(

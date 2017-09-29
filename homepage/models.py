@@ -30,7 +30,7 @@ class Dpotw(BaseModel):
         verbose_name_plural = "Django Packages of the Week"
 
     def __str__(self):
-        return '%s : %s - %s' % (self.package.title, self.start_date, self.end_date)
+        return '%s : %s - %s' % (self.package.name, self.start_date, self.end_date)
 
     @models.permalink
     def get_absolute_url(self):

@@ -57,7 +57,7 @@
                 &nbsp;
                 <span class="usage-count">{{ package.usage_count }}</span>
             </td>
-            <td><a href="{% url 'package' package.slug %}">{{ package.title }}</a></td>
+            <td><a href="{% url 'package' package.slug %}">{{ package.name }}</a></td>
             <td>{{ package.description }}</td>
             <td><img class="package-githubcommits" src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{package.commits_over_52}}&chco=666666&chbh=1,1,1&chds=0,20" /></td>
             <td>{{ package.pypi_version }}</td>

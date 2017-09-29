@@ -69,7 +69,7 @@
           {% for package in local_profile.my_packages %}
             <tr>
               <td>{{ forloop.counter }}</td>
-              <td><a href="{{ package.get_absolute_url }}">{{ package.title }}</a></td>
+              <td><a href="{{ package.get_absolute_url }}">{{ package.name }}</a></td>
             </tr>
           {% endfor %}
           </tbody>
@@ -91,7 +91,7 @@
               {% for package in user|package_usage %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td><a href="{{ package.get_absolute_url }}">{{ package.title }}</a></td>
+                    <td><a href="{{ package.get_absolute_url }}">{{ package.name }}</a></td>
                 </tr>
               {% endfor %}
             </tbody>

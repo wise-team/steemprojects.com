@@ -52,7 +52,7 @@ class PackageForm(ModelForm):
 
     class Meta:
         model = Project
-        fields = ['title', 'url', 'announcement_post', 'description', 'status', 'repo_url', 'repo_url', 'category']
+        fields = ["name", 'url', 'announcement_post', 'description', 'status', 'repo_url', 'repo_url', 'category']
 
 
 class PackageExampleForm(ModelForm):

@@ -17,7 +17,7 @@ class GridForm(ModelForm):
 
     class Meta:
         model = Grid
-        fields = ['title', 'slug', 'description']
+        fields = ["title", 'slug', 'description']
 
 
 class ElementForm(ModelForm):
