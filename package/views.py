@@ -96,6 +96,8 @@ def edit_package(request, slug, template_name="package/package_form.html"):
     else:
         formset = TeamMembersFormSet(initial=initial)
 
+    formset.extra = 0
+
     if form.is_valid() and formset.is_valid():
         modified_package = form.save()
         modified_package.last_modified_by = request.user
