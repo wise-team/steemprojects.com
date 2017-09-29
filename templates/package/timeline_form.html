@@ -14,7 +14,7 @@
     <h2>{{ package.title }}'s Timeline</h2>
 
     <p id="package-form-message"></p>
-    <h3>Timeline Events <div id="formset-add-new-form-btn" class="btn btn-default sp-btn">Add New Event</div></h3>
+    <h3>Timeline Events <div id="formset-add-new-form-btn" class="btn btn-default sp-btn sp-btn-normal">Add New Event</div></h3>
     <form action="{{ request.path }}" method="post" id="package-form">
         {% csrf_token %}
         {{ formset.management_form }}
@@ -25,7 +25,7 @@
                 </div>
             {% endfor %}
         </div>
-        <input class="btn btn-default sp-btn" type="submit" name="add" value="{{ action }} {% trans "timeline" %}">
+        <input class="btn btn-default sp-btn sp-btn-normal" type="submit" name="add" value="{{ action }} {% trans "timeline" %}">
     </form>
 
     <div id="empty-form" style="display:none;">
