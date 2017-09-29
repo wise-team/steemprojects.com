@@ -53,6 +53,7 @@ class Category(BaseModel):
 
 
 class Project(BaseModel):
+    NONE_STATUS = ""
     UNKNOWN = "UNKNOWN"
     LIVE__RELEASED = "LIVE_RELEASED"
     WORKING_PROTOTYPE__BETA = "WORKINGPROTOTYPE_BETA"
@@ -62,6 +63,7 @@ class Project(BaseModel):
     OUT_OF_DATE__RETIRED = "OUTOFDATE_RETIRED"
 
     STATUS_CHOICES = (
+        (NONE_STATUS, '----'),
         (UNKNOWN, 'Unknown'),
         (LIVE__RELEASED, 'Live/Released'),
         (WORKING_PROTOTYPE__BETA, 'Working Prototype/Beta'),
@@ -77,7 +79,7 @@ class Project(BaseModel):
         _("Status"),
         max_length=100,
         choices=STATUS_CHOICES,
-        default=UNKNOWN,
+        default=NONE_STATUS,
         help_text=mark_safe(
             """
             <ul>
@@ -99,7 +101,7 @@ class Project(BaseModel):
     slug = models.SlugField(_("Slug"), help_text="Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens. Values will be converted to lowercase.", unique=True)
     category = models.ForeignKey(Category, verbose_name="Category")
     repo_description = models.TextField(_("Repo Description"), blank=True)
-    repo_url = models.URLField(_("Source Code Repository URL"), help_text=repo_url_help_text, blank=True, null=True, unique=True)
+    repo_url = models.URLField(_("Repository URL"), help_text=repo_url_help_text, blank=True, null=True, unique=True)
     repo_watchers = models.IntegerField(_("Stars"), default=0)
     repo_forks = models.IntegerField(_("repo forks"), default=0)
     pypi_url = models.CharField(_("PyPI slug"), max_length=255, help_text=pypi_url_help_text, blank=True, default='')

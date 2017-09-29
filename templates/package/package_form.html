@@ -5,6 +5,8 @@
 
 {% block head_title %}{{ action|title }} {% trans "package" %}{% endblock %}
 
+{% block body_class %}project-form{% endblock %}
+
 {% block extra_head %}
   <link rel="stylesheet" href="{{ STATIC_URL }}css/add_project.css?deployment={{ DEPLOYMENT_DATATIME }}" type="text/css"/>
   <link rel="stylesheet" href="{{ STATIC_URL }}css/edit_form.css?deployment={{ DEPLOYMENT_DATATIME }}" type="text/css"/>
@@ -16,60 +18,178 @@
     {% if package %}
         <h2>Editing {{ package.title }}</h2>
     {% else %}
-        <h2>New project</h2>
+        <h2>Add new project</h2>
     {% endif %}
     <p id="package-form-message"></p>
+
     <form action="{{ request.path }}" method="post" id="package-form">
-        {{ form.errors }}
-        <input type="hidden" name="temp" id="temp" value="" />
-        {% csrf_token %}
-        <fieldset>
-{#            {{ form|crispy }}#}
-            {% for field in form %}
-                <div class="fieldWrapper">
-                    {{ field.errors }}
-                    {{ field.label_tag }} {{ field }}
-                    {% if field.help_text %}
-                    <p class="help">{{ field.help_text|safe }}</p>
-                    {% endif %}
+        <div class="row">
+            <div class="col-sm-12">
+                {{ form.errors }}
+                <input type="hidden" name="temp" id="temp" value="" />
+                {% csrf_token %}
+            </div>
+            <div class="col-sm-1">
+                <div class="field-label">{{ form.title.label }}:</div>
+                <div class="field-label">{{ form.announcement_post.label }}:</div>
+                <div class="field-label">{{ form.description.label }}:</div>
+            </div>
+            <div class="col-sm-3">
+                <div class="field">{{ form.title }}</div>
+                <div class="field">{{ form.announcement_post }}</div>
+                <div class="field">{{ form.description }}</div>
+            </div>
+            <div class="col-sm-1">
+                <div class="field-label">{{ form.url.label }}:</div>
+                <div class="field-label">{{ form.repo_url.label }}:</div>
+            </div>
+            <div class="col-sm-3">
+                <div class="field">{{ form.url }}</div>
+                <div class="field">{{ form.repo_url }}</div>
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+
+        <div class="row">
+            {{ formset.management_form }}
+            <div class="col-sm-1">
+                <div class="field-label">
+                    Team Members:
                 </div>
-            {% endfor %}
-        </fieldset>
+            </div>
+            <div class="col-sm-11"></div>
+        </div>
 
-
-        <h3>Team Members <div id="formset-add-new-form-btn" class="btn btn-default sp-btn">Add New Team Member</div></h3>
-
-        {{ formset.management_form }}
         <div id="tm-forms">
-            {% for form in formset %}
-                <div class="tm-form">
-                    {% if form.is_initialized %}
-                        <div style="display: none">
-                            {{ form }}
-                        </div>
-                        <div class="contributor team-member entry">
+        {% for form in formset %}
+            <div class="tm-form">
+                {% if form.is_initialized %}
+                    <div style="display: none">
+                        {{ form }}
+                    </div>
+                    <div class="row contributor team-member entry">
+                        <div class="col-sm-3 col-sm-offset-1">
                             {% if form.account_type.value == 'STEEM' %}
                                 <img class="img-circle" src="https://img.steemconnect.com/@{{ form.account_name.value }}?s=30">
                             {% elif form.account_type.value == 'GITHUB' %}
                                 <img class="img-circle" src="https://github.com/{{ form.account_name.value }}.png?size=30">
                             {% endif %}
-                                {{ form.account_name.value }} - {{ form.role.value }} <span class="rm-btn tm-entry icon-close"></span>
+                                {{ form.account_name.value }} - {{ form.role.value }} <span class="rm-btn tm-entry"><i class="icon-close"></i>Remove</span>
                         </div>
-                    {% else %}
-                        <div class="contributor team-member form">
-                            {{ form }} <span class="rm-btn tm-form icon-close"></span>
+                    </div>
+                {% else %}
+                    <div class="row contributor team-member form">
+
+                        <div class="col-sm-1">
+                            <span class="field-label">{{ form.account_name.label }}:</span>
                         </div>
-                    {% endif %}
-                </div>
-            {% endfor %}
+                        <div class="col-sm-7">
+                            <span class="field account-name">{{ form.account_name }}</span>
+                            <span class="field-label">{{ form.account_type.label }}:</span>
+                            <span class="field account-type">{{ form.account_type }}</span>
+                            <span class="field-label">{{ form.role.label }}:</span>
+                            <span class="field role">{{ form.role }}</span>
+                            <span class="rm-btn tm-form"><i class="icon-close"></i>Remove</span>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
         </div>
 
-        <input class="btn btn-default sp-btn" type="submit" name="add" value="Save project">
+
+        <div class="row">
+            <div class="col-sm-1 col-sm-offset-1">
+                <div id="formset-add-new-form-btn" class="btn btn-default sp-btn">Add new member</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-1">
+                <div class="field-label">{{ form.status.label }}:</div>
+            </div>
+            <div class="col-sm-2">
+                <div class="field">{{ form.status }}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-1">
+                <div class="field-label">{{ form.category.label }}:</div>
+            </div>
+            <div class="col-sm-2">
+                <div class="field">{{ form.category }}</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-1 col-sm-offset-1">
+                    <input class="btn btn-default sp-btn" type="submit" name="add" value="Save & publish the project">
+            </div>
+        </div>
     </form>
-    <div id="empty-form" style="display:none;">
+
+
+{#    #}
+{#    <form action="{{ request.path }}" method="post" id="package-form">#}
+{#        {{ form.errors }}#}
+{#        <input type="hidden" name="temp" id="temp" value="" />#}
+{#        {% csrf_token %}#}
+{#        <fieldset>#}
+{#            {% for field in form %}#}
+{#                <div class="fieldWrapper">#}
+{#                    {{ field.errors }}#}
+{#                    {{ field.label_tag }} {{ field }}#}
+{#                    {% if field.help_text %}#}
+{#                    <p class="help">{{ field.help_text|safe }}</p>#}
+{#                    {% endif %}#}
+{#                </div>#}
+{#            {% endfor %}#}
+{#        </fieldset>#}
+{##}
+{##}
+{#        <h3>Team Members</h3>#}
+{##}
+{#        {{ formset.management_form }}#}
+{#        <div id="tm-forms">#}
+{#            {% for form in formset %}#}
+{#                <div class="tm-form">#}
+{#                    {% if form.is_initialized %}#}
+{#                        <div style="display: none">#}
+{#                            {{ form }}#}
+{#                        </div>#}
+{#                        <div class="contributor team-member entry">#}
+{#                            {% if form.account_type.value == 'STEEM' %}#}
+{#                                <img class="img-circle" src="https://img.steemconnect.com/@{{ form.account_name.value }}?s=30">#}
+{#                            {% elif form.account_type.value == 'GITHUB' %}#}
+{#                                <img class="img-circle" src="https://github.com/{{ form.account_name.value }}.png?size=30">#}
+{#                            {% endif %}#}
+{#                                {{ form.account_name.value }} - {{ form.role.value }} <span class="rm-btn tm-entry icon-close"></span>#}
+{#                        </div>#}
+{#                    {% else %}#}
+{#                        <div class="contributor team-member form">#}
+{#                            {{ form }} <span class="rm-btn tm-form icon-close"></span>#}
+{#                        </div>#}
+{#                    {% endif %}#}
+{#                </div>#}
+{#            {% endfor %}#}
+{#        </div>#}
+
+{#        <input class="btn btn-default sp-btn" type="submit" name="add" value="Save project">#}
+{#    </form>#}
+    <div id="empty-form" style="display: none;">
         <div class="tm-form">
-            <div class="contributor team-member form">
-                {{ formset.empty_form }} <span class="rm-btn tm-form icon-close"></span>
+            <div class="row contributor team-member form">
+                <div class="col-sm-1">
+                    <span class="field-label">{{ formset.empty_form.account_name.label }}:</span>
+                </div>
+                <div class="col-sm-7">
+                    <span class="field account-name">{{ formset.empty_form.account_name }}</span>
+                    <span class="field-label">{{ formset.empty_form.account_type.label }}:</span>
+                    <span class="field account-type">{{ formset.empty_form.account_type }}</span>
+                    <span class="field-label">{{ formset.empty_form.role.label }}:</span>
+                    <span class="field role">{{ formset.empty_form.role }}</span>
+                    <span class="rm-btn tm-form"><i class="icon-close"></i>Remove</span>
+                </div>
             </div>
         </div>
     </div>
@@ -80,10 +200,6 @@
 <script src="{{ STATIC_URL }}js/urlify.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}js/package_form.js" type="text/javascript"></script>
 <script type="text/javascript">
-{#    $(function() {#}
-{#        package_form(eval({{ repo_data|safe }}));#}
-{#    });#}
-
     $(function(){
 
         var rmEntry = function(event) {
@@ -91,9 +207,6 @@
             var tm = $(event.target).closest('.tm-form');
             tm.find('input[type=checkbox]').prop('checked', true);
             tm.find('.team-member.entry').remove();
-            //var total_forms = $('#id_form-TOTAL_FORMS');
-            //var form_idx = total_forms.val();
-            //total_forms.val(parseInt(form_idx) - 1);
         };
 
         var rmForm = function(event) {
@@ -111,7 +224,7 @@
             var form_idx = total_forms.val();
             var new_form = $($('#empty-form').html().replace(/__prefix__/g, form_idx));
             $('#tm-forms').append(new_form);
-            new_form.click(rmForm);
+            new_form.find('.rm-btn.tm-form').click(rmForm);
             total_forms.val(parseInt(form_idx) + 1);
         });
     });

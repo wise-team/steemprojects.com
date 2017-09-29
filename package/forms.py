@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.forms.models import modelformset_factory
-from floppyforms.__future__ import ModelForm, TextInput
+from django.forms.widgets import Textarea, TextInput
+from floppyforms.__future__ import ModelForm
 import itertools
 from package.models import Category, Project, PackageExample, TeamMembership, TimelineEvent, ProjectImage
 from django.template.defaultfilters import slugify
@@ -24,11 +25,14 @@ def package_help_text():
 class PackageForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
-            super(PackageForm, self).__init__(*args, **kwargs)
-            self.fields['category'].help_text = package_help_text()
-            self.fields['repo_url'].widget = TextInput(attrs={
-                'placeholder': 'ex: https://github.com/steemit/steem'
-            })
+        super(PackageForm, self).__init__(*args, **kwargs)
+        self.fields['category'].help_text = package_help_text()
+        self.fields['repo_url'].widget = TextInput(attrs={
+            'placeholder': 'ex: https://github.com/steemit/steem'
+        })
+        self.fields['description'].widget = Textarea(attrs={
+            "placeholder": "Write few sentences about this projects. What problem does it solve? Who is it for?"
+        })
 
     def save(self):
         instance = super(PackageForm, self).save(commit=False)
@@ -80,16 +84,22 @@ ACCOUNT_TYPE_CHOICES = (
 
 
 class InlineTeamMemberForm(forms.Form):
-    account_name = forms.CharField(max_length=40, required=True)
+    account_name = forms.CharField(
+        max_length=40,
+        required=True
+    )
     account_type = forms.CharField(widget=forms.Select(choices=ACCOUNT_TYPE_CHOICES))
     role = forms.CharField(
         max_length=40,
-        widget=forms.TextInput(
-            attrs={'placeholder': 'ex. CEO, developer, designer, advisor'}
-        ),
+        widget=forms.TextInput(attrs={'placeholder': 'ex. CEO, developer, designer, advisor'}),
         required=True,
     )
     initialized = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(InlineTeamMemberForm, self).__init__(*args, **kwargs)
+        for field in ('role', 'account_type', 'account_name'):
+            self.fields[field].widget.attrs['required'] = 'required'
 
     @property
     def is_initialized(self):
@@ -117,9 +127,7 @@ class InlineTeamMemberForm(forms.Form):
 
 BaseTeamMembersFormSet = formset_factory(
     InlineTeamMemberForm,
-    min_num=1,
     extra=1,
-    validate_min=True,
     can_delete=True,
 )
 

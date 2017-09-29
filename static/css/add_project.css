@@ -1,3 +1,63 @@
 .img-circle {
     margin: 5px;
 }
+
+
+.project-form .field-label {
+    text-align: right;
+    float: right;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    line-height: 1.1;
+}
+
+.project-form .tm-form .field-label {
+    color: #7e93a0;
+}
+
+.project-form .field {
+    text-align: right;
+}
+
+.project-form .field input,
+.project-form .field textarea,
+.project-form .field select
+{
+    width: 100%;
+    background-color: #FFF;
+    height: 40px;
+    margin: 5px 0;
+}
+.project-form .field textarea
+{
+    height: 60px;
+    resize: none;
+    border: none;
+    border-bottom: solid 1px rgb(62, 79, 94);
+}
+
+.project-form .team-member.form .field input,
+.project-form .team-member.form .field select
+{
+    width: inherit;
+    float: left;
+    margin-right: 15px;
+}
+
+.project-form .team-member.form :not(.col-sm-1) .field-label
+{
+    float: inherit;
+    margin-right: 15px;
+}
+
+.project-form .team-member.form .field.account-name input {
+    width: 120px;
+}
+
+.project-form .team-member.form .field.account-type select {
+    width: 80px;
+}
+.project-form .team-member.form .field.role input {
+    width: 235px;
+}
