@@ -7,7 +7,7 @@
 {% block body_class %}login{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/login.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}css/login.css?deployment={{ DEPLOYMENT_DATETIME }}" type="text/css"/>
 {% endblock %}
 
 {% block body %}

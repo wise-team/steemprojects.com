@@ -17,4 +17,4 @@ def used_packages_list(request):
 
 
 def deployment(request):
-    return {'DEPLOYMENT_DATATIME': settings.DEPLOYMENT_DATATIME}
+    return {'DEPLOYMENT_DATETIME': settings.DEPLOYMENT_DATETIME}

@@ -67,9 +67,9 @@ def copy_secrets():
         )))
         put(secret, remote_path)
 
-        DEPLOYMENT_DATATIME = datetime.datetime.utcnow().isoformat()
+        DEPLOYMENT_DATETIME = datetime.datetime.utcnow().isoformat()
         with cd(env.project_dir):
-            run("echo 'DEPLOYMENT_DATATIME=%s' >> %s" % (DEPLOYMENT_DATATIME, secret))
+            run("echo 'DEPLOYMENT_DATETIME=%s' >> %s" % (DEPLOYMENT_DATETIME, secret))
 
 
 def rollback(commit="HEAD~1"):

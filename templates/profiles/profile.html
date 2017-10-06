@@ -7,7 +7,7 @@
 {% block head_title %}Profile for {{ local_profile.username }}{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{{ STATIC_URL }}css/profile.css?deployment={{ DEPLOYMENT_DATATIME }}" type="text/css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}css/profile.css?deployment={{ DEPLOYMENT_DATETIME }}" type="text/css" />
 {% endblock %}
 
 {% block body %}
@@ -45,7 +45,7 @@
                 {% endif %}
 
                 {% if local_profile.github_account %}
-                    <a href="https://steemit.com/@{{ local_profile.github_account }}"><i class="icon-github"></i>{{ local_profile.github_account }}</a>
+                    <a href="https://github.com/{{ local_profile.github_account }}"><i class="icon-github"></i>{{ local_profile.github_account }}</a>
                 {% endif %}
             </div>
         </div>
