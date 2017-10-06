@@ -86,7 +86,7 @@ class Profile(BaseModel):
             repo = get_repo(repo)
             repo_packages = repo.packages_for_profile(self)
             packages.extend(repo_packages)
-        packages.sort(key=lambda a: a.title)
+        packages.sort(key=lambda a: a.name)
         return packages
 
     @models.permalink

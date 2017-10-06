@@ -4,99 +4,80 @@
 {% load profile_tags %}
 {% load crispy_forms_tags %}
 
-{% block head_title %}Profile for {{ local_profile.github_account }}{% endblock %}
+{% block head_title %}Profile for {{ local_profile.username }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/profile.css?deployment={{ DEPLOYMENT_DATATIME }}" type="text/css" />
+{% endblock %}
 
 {% block body %}
-<div class="container">
-  <div class="row">
-    <div class="col-xs-2">
-      <h2>{{ local_profile.github_account }}</h2>
-        <div>
-            {% for membership in local_profile.teammembership_set.all %}
-            <p>
-            {{ membership.project }} - {{ membership.role }}
-            </p>
-            {% endfor %}
+<div class="row">
+    <div class="col-xs-4">
+        <h1>{{ local_profile.username }}</h1>
+        {% if request.user == user %}
+            <a class="edit-profile" href="{% url 'profile_edit' %}"><i class="glyphicon glyphicon-pencil"></i></a>
+        {% endif %}
+    </div>
+</div>
+<div class="row">
+        <div class="col-xs-4">
+{#            <div>#}
+{#                {% if local_profile.steem_account %}#}
+{#                    <img class="img-circle" src="https://img.steemconnect.com/@{{ local_profile.steem_account }}?s=150">#}
+{#                {% elif local_profile.github_account %}#}
+{#                    <img class="img-circle" src="https://github.com/{{ local_profile.github_account }}.png?size=150">#}
+{#                {% endif %}#}
+{#            </div>#}
+
+            <div class="roles">
+                {% for membership in local_profile.teammembership_set.all %}
+                <p>
+                    <a href="{{ membership.project.get_absolute_url }}">{{ membership.project.name }}</a> - {{ membership.role }}
+                    <i class="material-icons" title="Watch out! This information is not verified.">info_outline</i>
+                </p>
+                {% endfor %}
+            </div>
+
+            <h2>Accounts</h2>
+            <div id="accounts">
+                {% if local_profile.steem_account %}
+                    <a href="https://steemit.com/@{{ local_profile.steem_account }}"><i class="icon-steem"></i>{{ local_profile.steem_account }}</a>
+                {% endif %}
+
+                {% if local_profile.github_account %}
+                    <a href="https://steemit.com/@{{ local_profile.github_account }}"><i class="icon-github"></i>{{ local_profile.github_account }}</a>
+                {% endif %}
+            </div>
         </div>
-{#      <h2>{% blocktrans %}<span class="fn nickname">{{ user }}</span>{% endblocktrans %}</h2>#}
 
-      {% if request.user == user %}
-        <p><a href="{% url 'profile_edit' %}">{% trans "Edit my profile" %}</a></p>
-      {% endif %}
-
-      {% if local_profile.steem_account %}
-        <p><b>{% trans "Steem account" %}</b>:
-          <span class="fn"><a href="https://steemit.com/@{{ local_profile.steem_account }}">{{ local_profile.steem_account }}</a></span>
-        </p>
-      {% endif %}
-
-      {% if local_profile.steemit_chat_account %}
-        <p><b>{% trans "Steemit.chat account" %}</b>:
-          <span class="fn"><a href="https://steemit.chat/direct/{{ local_profile.steemit_chat_account }}">{{ local_profile.steemit_chat_account }}</a></span>
-        </p>
-      {% endif %}
-
-      {% if local_profile.github_account %}
-        <p><b>{% trans "Github account" %}</b>:
-          <span class="fn"><a href="https://github.com/{{ local_profile.github_account }}">{{ local_profile.github_account }}</a></span>
-        </p>
-      {% endif %}
-
-      {% if local_profile.bitbucket_url %}
-        <p><b>{% trans "BitBucket account" %}</b>:
-          <span class="fn"><a href="https://bitbucket.org/{{ local_profile.bitbucket_url     }}">{{ local_profile.bitbucket_url }}</a></span>
-        </p>
-      {% endif %}
-
-      {% if local_profile.google_code_url %}
-        <p><b>{% trans "Google Code account" %}</b>:
-                    <span class="fn"><a href="http://code.google.com/u/{{ local_profile.google_code_url|urlize }}/">{{ local_profile.google_code_url|urlize }}</a></span>
-        </p>
-      {% endif %}
-    </div>
-
-    <div class="col-xs-5">
-      {% if local_profile.my_packages %}
-        <h3>{% trans "Projects Contributed To" %}</h3>
-        <table class="table">
-          <thead>
-              <tr>
-                <th>#</th>
-                <th>{% trans "Project" %}</th>
-              </tr>
-          </thead>
-          <tbody>
-          {% for package in local_profile.my_packages %}
-            <tr>
-              <td>{{ forloop.counter }}</td>
-              <td><a href="{{ package.get_absolute_url }}">{{ package.name }}</a></td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      {% endif %}
-    </div>
-
-    <div class="col-xs-5">
-        <h3>{% trans "Favorite Projects" %}</h3>
-
-          <table class="table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>{% trans "Project" %}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for package in user|package_usage %}
+        <div class="col-xs-4">
+          {% if local_profile.my_packages %}
+            <h2>{% trans "Projects Contributed To" %}</h2>
+            <table class="table">
+              <tbody>
+              {% for package in local_profile.my_packages %}
                 <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td><a href="{{ package.get_absolute_url }}">{{ package.name }}</a></td>
+                  <td><a href="{{ package.get_absolute_url }}">{{ package.name }}</a></td>
                 </tr>
               {% endfor %}
-            </tbody>
-          </table>
-      </div>
+              </tbody>
+            </table>
+          {% endif %}
+        </div>
+
+        <div class="col-xs-4">
+            <h2>{% trans "Favorite Projects" %}</h2>
+
+              <table class="table">
+                <tbody>
+                  {% for package in user|package_usage %}
+                    <tr>
+                        <td><i class="heart icon-favorite"></i></td>
+                        <td><a href="{{ package.get_absolute_url }}">{{ package.name }}</a></td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+          </div>
     </div>
-  </div>
 {% endblock %}
