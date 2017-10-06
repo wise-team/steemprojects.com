@@ -492,4 +492,4 @@ REST_FRAMEWORK = {
 }
 
 import datetime
-DEPLOYMENT_DATATIME = environ.get('DEPLOYMENT_DATATIME', datetime.datetime.utcnow().isoformat())
+DEPLOYMENT_DATETIME = environ.get('DEPLOYMENT_DATETIME', datetime.datetime.utcnow().isoformat())
