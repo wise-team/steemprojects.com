@@ -244,7 +244,7 @@ def package_autocomplete(request):
 
 def category(request, slug, template_name="package/category.html"):
     category = get_object_or_404(Category, slug=slug)
-    packages = category.project_set.select_related().annotate(usage_count=Count("usage")).order_by("-repo_watchers", "title")
+    packages = category.project_set.select_related().annotate(usage_count=Count("usage")).order_by("-repo_watchers", "name")
     return render(request, template_name, {
         "category": category,
         "packages": packages,
@@ -346,7 +346,7 @@ def usage(request, slug, action):
 
 def python3_list(request, template_name="package/python3_list.html"):
     packages = Project.objects.filter(version__supports_python3=True).distinct()
-    packages = packages.order_by("-pypi_downloads", "-repo_watchers", "title")
+    packages = packages.order_by("-pypi_downloads", "-repo_watchers", "name")
 
     values = "category, category_id, commit, commit_list, created, added_by, added_by_id, documentation_url, dpotw, grid, gridpackage, id, last_fetched, last_modified_by, last_modified_by_id, modified, packageexample, participants, pypi_downloads, pypi_url, repo_description, repo_forks, repo_url, repo_watchers, slug, title, usage, version".split(',')
     values = [x.strip() for x in values]
@@ -372,7 +372,7 @@ def package_list(request, template_name="package/package_list.html"):
             "count": category.package_count,
             "slug": category.slug,
             "title_plural": category.title_plural,
-            "packages": category.project_set.annotate(usage_count=Count("usage")).order_by("-pypi_downloads", "-repo_watchers", "title")[:9]
+            "packages": category.project_set.annotate(usage_count=Count("usage")).order_by("-pypi_downloads", "-repo_watchers", "name")[:9]
         }
         categories.append(element)
 
