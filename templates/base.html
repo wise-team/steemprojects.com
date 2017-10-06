@@ -136,7 +136,7 @@
                 <tr ng-repeat="item in items">
                   <td>{{ item.weight / max_weight * 100 | number:0 }}%</td>
                   <td>
-                      <a ng-href="{{ item.absolute_url }}">{{ item.title }}</a>
+                      <a ng-href="{{ item.absolute_url }}">{{ item.name }}</a>
                   </td>
                   <td>
                     <strong ng-if="item.item_type=='grid'">Grid:</strong>

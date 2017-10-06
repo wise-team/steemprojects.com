@@ -1,0 +1,58 @@
+h1 {
+    font-size: 22px;
+    font-weight: 400;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 0;
+    display: inline-block;
+}
+
+.edit-profile {
+    margin-left: 10px;
+}
+
+h2 {
+    font-size: 16px;
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+.roles {
+    margin-bottom: 30px;
+}
+
+#accounts i {
+    margin-right: 10px;
+    position: relative;
+    top: 2px;
+    font-size: 16px;
+}
+
+#accounts a {
+    margin-right: 20px;
+}
+
+i.material-icons {
+    font-size: 14px;
+    position: relative;
+    top: 2px;
+    margin-left: 5px;
+    cursor: text;
+}
+
+.row .col-xs-4:first-child {
+    padding-left: 32px;
+}
+
+.heart {
+    color: #bf2155;
+}
+
+.table tbody > tr > td {
+    border: none;
+    border-bottom: 1px solid #ddd;
+}
+
+tr > td:first-child {
+    width: 50px;
+}
