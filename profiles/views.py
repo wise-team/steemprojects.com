@@ -93,19 +93,39 @@ def associate_by_profile_with_github_and_steemconnect(backend, details, user=Non
     """
     Associate current auth with a user with the same Profile in the DB.
     """
-    if user:
-        return None
+    # if user:
+    #     return None
 
     try:
         if backend.name == 'github':
             profile = Profile.objects.get(github_account=details['username'])
+            profile.github_account_confirmed = True
         elif backend.name == 'steemconnect':
             profile = Profile.objects.get(steem_account=details['username'])
+            profile.steem_account_confirmed = True
         else:
             return None
 
-        if profile.user:
-            return {'user': profile.user, 'is_new': False}
+        # # simple login or merging
+        # if profile.user and user:
+        #
+        #     if profile.user == user:
+        #         return {'user': user, 'is_new': False}
+        #     else:
+        #
+        #         # merge
+        #         old_user = profile.user
+        #         old_user.profile = None
+        #         old_user.save()
+        #
+        # elif not profile.user and user:
+        #     profile.user = user
+        #     profile.save()
+        #     return {'user': profile.user, 'is_new': False}
+        #
+        # elif profile.user and user and profile.user != user:
+
+
 
     except Profile.DoesNotExist:
         return None
@@ -146,6 +166,9 @@ def save_profile_pipeline(backend, user, response, details, *args, **kwargs):
             except Profile.DoesNotExist:
                 profile = Profile.objects.create(user=user, steem_account=steem_account)
         else:
+
+            # there is another user with this profile
+
             profile.steem_account = steem_account
 
     if not profile.user:

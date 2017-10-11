@@ -168,3 +168,23 @@ class Profile(BaseModel):
         if getattr(settings, 'RESTRICT_GRID_EDITORS', False):
             return self._is_staff_or_verified() or self.user.has_perm('grid.change_element')
         return True
+
+
+class Account(BaseModel):
+    TYPE_STEEM = "STEEM"
+    TYPE_GITHUB = "GITHUB"
+
+    TYPE_CHOICES = (
+        (TYPE_STEEM, 'Steem'),
+        (TYPE_GITHUB, 'Github'),
+    )
+
+    profile = models.ForeignKey(Profile, null=True, blank=True)
+    name = models.CharField(_("Name"), max_length=40)
+    type = models.CharField(_("Type"), max_length=15, choices=TYPE_CHOICES)
+    confirmed = models.BooleanField(_("Account confirmed"), null=False, blank=True, default=False)
+    email = models.EmailField(_("Email"), null=True, blank=True)
+
+    class Meta:
+        unique_together = ("name", "type")
+
