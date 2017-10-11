@@ -14,7 +14,7 @@ from django.contrib.auth.signals import user_logged_in
 # from social_auth.backends.contrib.github import GithubBackend
 from package.models import TeamMembership
 from profiles.forms import ProfileForm
-from profiles.models import Profile
+from profiles.models import Profile, Account
 
 from social_core.backends.utils import load_backends
 
@@ -23,9 +23,11 @@ from social_auth_local.utils import common_context
 
 def profile_detail(request, template_name="profiles/profile.html", github_account=None, steem_account=None, id=None):
     if github_account:
-        profile = get_object_or_404(Profile, github_account=github_account)
+        account = get_object_or_404(Account, type=Account.TYPE_GITHUB, name=github_account)
+        profile = account.profile
     elif steem_account:
-        profile = get_object_or_404(Profile, steem_account=steem_account)
+        account = get_object_or_404(Account, type=Account.TYPE_STEEM, name=steem_account)
+        profile = account.profile
     else:
         user = get_object_or_404(User, pk=id)
         profile = get_object_or_404(Profile, user=user)
