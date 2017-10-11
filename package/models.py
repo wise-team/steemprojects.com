@@ -22,7 +22,7 @@ from core.models import BaseModel
 from package.repos import get_repo_for_repo_url
 from package.signals import signal_fetch_latest_metadata
 from package.utils import get_version, get_pypi_version, normalize_license
-from profiles.models import Profile
+from profiles.models import Profile, Account
 
 repo_url_help_text = settings.PACKAGINATOR_HELP_TEXT['REPO_URL']
 pypi_url_help_text = settings.PACKAGINATOR_HELP_TEXT['PYPI_URL']
@@ -369,6 +369,7 @@ class TimelineEvent(BaseModel):
 
 class TeamMembership(BaseModel):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, default=None, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     role = models.CharField(max_length=64)
     role_confirmed = models.BooleanField(_("Role confirmed by team mate"), blank=True, null=False, default=False)
