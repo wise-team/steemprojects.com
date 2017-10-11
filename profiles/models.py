@@ -10,29 +10,25 @@ from core.models import BaseModel
 class Profile(BaseModel):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
 
-    # Note to coders: The '_url' fields below need to JUST be the name of the account.
-    #     Examples:
-    #       github_url = 'pydanny'
-    #       bitbucket_url = 'pydanny'
-    #       google_code_url = 'pydanny'
-    steem_account = models.CharField(_("Steem account"), null=True, blank=True, max_length=40, unique=True)
-    steem_account_confirmed = models.BooleanField(
-        _("Steem account confirmed"), null=False, blank=True, default=False
-    )
+    # steem_account = models.CharField(_("Steem account"), null=True, blank=True, max_length=40, unique=True)
+    # steem_account_confirmed = models.BooleanField(
+    #     _("Steem account confirmed"), null=False, blank=True, default=False
+    # )
+    #
+    # steemit_chat_account = models.CharField(_("Steemit.chat account"), null=True, blank=True, max_length=40, unique=True)
+    # steemit_chat_account_confirmed = models.BooleanField(
+    #     _("Steemit.chat account confirmed"), null=False, blank=True, default=False
+    # )
+    #
+    # github_account = models.CharField(_("Github account"), null=True, blank=True, max_length=40)
+    # github_account_confirmed = models.BooleanField(
+    #     _("Github account confirmed"), null=False, blank=True, default=False
+    # )
+    #
+    # github_url = models.CharField(_("Github account"), null=True, blank=True, max_length=100, editable=False)
+    # bitbucket_url = models.CharField(_("Bitbucket account"), null=True, blank=True, max_length=100)
+    # google_code_url = models.CharField(_("Google Code account"), null=True, blank=True, max_length=100)
 
-    steemit_chat_account = models.CharField(_("Steemit.chat account"), null=True, blank=True, max_length=40, unique=True)
-    steemit_chat_account_confirmed = models.BooleanField(
-        _("Steemit.chat account confirmed"), null=False, blank=True, default=False
-    )
-
-    github_account = models.CharField(_("Github account"), null=True, blank=True, max_length=40)
-    github_account_confirmed = models.BooleanField(
-        _("Github account confirmed"), null=False, blank=True, default=False
-    )
-
-    github_url = models.CharField(_("Github account"), null=True, blank=True, max_length=100, editable=False)
-    bitbucket_url = models.CharField(_("Bitbucket account"), null=True, blank=True, max_length=100)
-    google_code_url = models.CharField(_("Google Code account"), null=True, blank=True, max_length=100)
     email = models.EmailField(_("Email"), null=True, blank=True)
     verified_by = models.ForeignKey("Profile", blank=True, null=True, default=None, related_name="verifier_of")
 
@@ -42,6 +38,16 @@ class Profile(BaseModel):
             self.steem_account if self.steem_account else '-',
             self.github_account if self.github_account else '-',
         )
+
+    @property
+    def steem_account(self):
+        account = self.account_set.filter(type=Account.TYPE_STEEM, profile=self).first()
+        return account.name if account else None
+
+    @property
+    def github_account(self):
+        account = self.account_set.filter(type=Account.TYPE_GITHUB, profile=self).first()
+        return account.name if account else None
 
     @property
     def username(self):
@@ -71,8 +77,9 @@ class Profile(BaseModel):
         """
         url_mapping = {
             'Github': self.github_account,
-            'BitBucket': self.bitbucket_url,
-            'Google Code': self.google_code_url}
+            # 'BitBucket': self.bitbucket_url,
+            # 'Google Code': self.google_code_url
+        }
         return url_mapping.get(repo.title)
 
     def my_packages(self):
@@ -188,3 +195,5 @@ class Account(BaseModel):
     class Meta:
         unique_together = ("name", "type")
 
+    def __str__(self):
+        return "{}:{}".format(self.type.lower(), self.name)
