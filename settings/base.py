@@ -169,7 +169,7 @@ ABSOLUTE_URL_OVERRIDES = {
 
 AUTH_PROFILE_MODULE = "profiles.Profile"
 
-LOGIN_URL = "/auth/login/github/"
+LOGIN_URL = "login"
 LOGIN_REDIRECT_URLNAME = "home"
 
 EMAIL_CONFIRMATION_DAYS = 2
