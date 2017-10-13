@@ -59,12 +59,12 @@
             <div>
                 {% for membership in package.teammembership_set.all %}
                     <div class="contributor team-member">
-                        {% if membership.profile.steem_account %}
-                            <img class="img-circle" src="https://img.steemconnect.com/@{{ membership.profile.steem_account }}?s=45">
-                            <a class="name" href="{% url 'steem_profile_detail' membership.profile.steem_account %}">{{ membership.profile.steem_account }}</a> - {{ membership.role }}
-                        {% elif membership.profile.github_account %}
-                            <img class="img-circle" src="https://github.com/{{ membership.profile.github_account }}.png?size=45">
-                            <a class="name" href="{% url 'github_profile_detail' membership.profile.github_account %}">{{ membership.profile.github_account }}</a> - {{ membership.role }}
+                        {% if membership.account.type == "STEEM" %}
+                            <img class="img-circle" src="https://img.steemconnect.com/@{{ membership.account.name }}?s=45">
+                            <a class="name" href="{% url 'steem_profile_detail' membership.account.name %}">{{ membership.account.name }}</a> - {{ membership.role }}
+                        {% elif membership.account.type == "GITHUB" %}
+                            <img class="img-circle" src="https://github.com/{{ membership.account.name}}.png?size=45">
+                            <a class="name" href="{% url 'github_profile_detail' membership.account.name %}">{{ membership.account.name }}</a> - {{ membership.role }}
                         {% endif %}
                     </div>
                 {% endfor %}
@@ -81,12 +81,12 @@
             <div>
                 {% for contributor in not_team_contributors %}
                     <div class="contributor">
-                        {% if contributor.steem_account %}
-                            <img class="img-circle" src="https://img.steemconnect.com/@{{ contributor.steem_account }}?s=30">
-                            <a class="name" href="{% url 'steem_profile_detail' contributor.steem_account %}">{{ contributor.steem_account }}</a>
-                        {% elif contributor.github_account %}
-                            <img class="img-circle" src="https://github.com/{{ contributor.github_account }}.png?size=30">
-                            <a class="name" href="{% url 'github_profile_detail' contributor.github_account %}">{{ contributor.github_account }}</a>
+                        {% if contributor.type == "STEEM" %}
+                            <img class="img-circle" src="https://img.steemconnect.com/@{{ contributor.name }}?s=30">
+                            <a class="name" href="{% url 'steem_profile_detail' contributor.name %}">{{ contributor.name }}</a>
+                        {% elif contributor.type == "GITHUB" %}
+                            <img class="img-circle" src="https://github.com/{{ contributor.name }}.png?size=30">
+                            <a class="name" href="{% url 'github_profile_detail' contributor.name %}">{{ contributor.name }}</a>
                         {% endif %}
                     </div>
                 {% endfor %}
