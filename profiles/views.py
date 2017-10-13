@@ -63,7 +63,7 @@ class ProfileEditUpdateView(LoginRequiredMixin, UpdateView):
             user=self.request.user
         ))
 
-        context['memberships'] = TeamMembership.objects.filter(profile=self.request.user.profile)
+        context['memberships'] = TeamMembership.objects.filter(account__in=self.request.user.profile.account_set.all())
 
         return context
 
