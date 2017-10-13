@@ -414,6 +414,12 @@ def package_detail(request, slug, template_name="package/package.html"):
     else:
         proj_imgs.extend(ProjectImage.objects.filter(project=package))
 
+    all_github_accounts_of_teammambers = [
+        ac.pk for profile in [ac.profile for ac in package.team_members.all()]
+            for ac in profile.account_set.all()
+            if ac.type == Account.TYPE_GITHUB
+    ]
+
     return render(request, template_name,
             dict(
                 package=package,
@@ -424,7 +430,7 @@ def package_detail(request, slug, template_name="package/package.html"):
                 warnings=warnings,
                 latest_version=package.last_released(),
                 repo=package.repo,
-                not_team_contributors=package.contributors.exclude(pk__in=package.team_members.all())
+                not_team_contributors=package.contributors.exclude(pk__in=all_github_accounts_of_teammambers)
             )
         )
 

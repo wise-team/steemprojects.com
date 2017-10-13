@@ -109,7 +109,7 @@ class Project(BaseModel):
     participants = models.TextField(_("Participants"),
                         help_text="List of collaborats/participants on the project", blank=True)
     team_members = models.ManyToManyField(Account, through='TeamMembership', blank=True, related_name="team_member_of")
-    contributors = models.ManyToManyField(Profile, blank=True, related_name="contribiuted_to")
+    contributors = models.ManyToManyField(Account, blank=True, related_name="contribiuted_to")
     usage = models.ManyToManyField(User, blank=True)
     added_by = models.ForeignKey(User, blank=True, null=True, related_name="added_by", on_delete=models.SET_NULL)
     last_modified_by = models.ForeignKey(User, blank=True, null=True, related_name="modifier", on_delete=models.SET_NULL)
@@ -377,7 +377,7 @@ class TeamMembership(BaseModel):
         unique_together = ("account", "project")
 
     def __str__(self):
-        return "{} in {} as {}".format(str(self.profile), self.project.name, self.role)
+        return "{} in {} as {}".format(str(self.account), self.project.name, self.role)
 
 
 def project_img_path(instance, filename):
