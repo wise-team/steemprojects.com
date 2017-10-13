@@ -108,7 +108,7 @@ class Project(BaseModel):
     pypi_downloads = models.IntegerField(_("Pypi downloads"), default=0)
     participants = models.TextField(_("Participants"),
                         help_text="List of collaborats/participants on the project", blank=True)
-    team_members = models.ManyToManyField(Profile, through='TeamMembership', blank=True, related_name="team_member_of")
+    team_members = models.ManyToManyField(Account, through='TeamMembership', blank=True, related_name="team_member_of")
     contributors = models.ManyToManyField(Profile, blank=True, related_name="contribiuted_to")
     usage = models.ManyToManyField(User, blank=True)
     added_by = models.ForeignKey(User, blank=True, null=True, related_name="added_by", on_delete=models.SET_NULL)
@@ -368,14 +368,13 @@ class TimelineEvent(BaseModel):
 
 
 class TeamMembership(BaseModel):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     account = models.ForeignKey(Account, default=None, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     role = models.CharField(max_length=64)
     role_confirmed = models.BooleanField(_("Role confirmed by team mate"), blank=True, null=False, default=False)
 
     class Meta:
-        unique_together = ("profile", "project")
+        unique_together = ("account", "project")
 
     def __str__(self):
         return "{} in {} as {}".format(str(self.profile), self.project.name, self.role)
