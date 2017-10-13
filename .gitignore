@@ -104,3 +104,9 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
+# Processed CSS files
+static/css/
+
+# Sass cache files
+.sass-cache/
