@@ -19,7 +19,7 @@ from package.forms import PackageForm, PackageExampleForm, DocumentationForm, Ti
 from package.models import Category, Project, PackageExample, ProjectImage, TeamMembership, TimelineEvent
 from package.repos import get_all_repos
 from package.forms import TeamMembersFormSet
-from profiles.models import Profile
+from profiles.models import Profile, Account
 
 from .utils import quote_plus
 
@@ -58,10 +58,12 @@ def add_package(request, template_name="package/package_form.html"):
         for inlineform in formset:
             if hasattr(inlineform, 'cleaned_data') and inlineform.cleaned_data:
                 data = inlineform.cleaned_data
-                account = '{}_account'.format(data['account_type'].lower())
-                profile, created = Profile.objects.get_or_create(**{account: data['account_name']})
+                account, created = Account.objects.get_or_create(
+                    type=data['account_type'],
+                    name=data['account_name']
+                )
 
-                membership = TeamMembership.objects.create(profile=profile, project=new_package, role=data['role'])
+                membership = TeamMembership.objects.create(account=account, project=new_package, role=data['role'])
                 membership.save()
 
         return HttpResponseRedirect(reverse("package", kwargs={"slug": new_package.slug}))
@@ -85,8 +87,8 @@ def edit_package(request, slug, template_name="package/package_form.html"):
     initial = [
         {
             'role': tm.role,
-            'account_name': tm.profile.steem_account or tm.profile.github_account,
-            'account_type': 'STEEM' if tm.profile.steem_account else 'GITHUB',
+            'account_name': tm.account.name,
+            'account_type': tm.account.type,
             'initialized': True,
         }
         for tm in package.teammembership_set.all()
@@ -106,16 +108,14 @@ def edit_package(request, slug, template_name="package/package_form.html"):
         for inlineform in formset:
             if hasattr(inlineform, 'cleaned_data') and inlineform.cleaned_data:
                 data = inlineform.cleaned_data
-                account = '{}_account'.format(data['account_type'].lower())
 
                 if data['DELETE']:
-                    profile = Profile.objects.get(**{account: data['account_name']})
-                    membership = TeamMembership.objects.get(profile=profile, project=modified_package)
+                    account = Account.objects.get(type=data['account_type'], name=data['account_name'])
+                    membership = TeamMembership.objects.get(account=account, project=modified_package)
                     membership.delete()
                 else:
-                    profile, __ = Profile.objects.get_or_create(**{account: data['account_name']})
-
-                    membership, __ = TeamMembership.objects.get_or_create(profile=profile, project=modified_package)
+                    account, __ = Account.objects.get_or_create(type=data['account_type'], name=data['account_name'])
+                    membership, __ = TeamMembership.objects.get_or_create(account=account, project=modified_package)
                     membership.role = data['role']
                     membership.save()
 

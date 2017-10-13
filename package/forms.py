@@ -38,11 +38,11 @@ class PackageForm(ModelForm):
         instance = super(PackageForm, self).save(commit=False)
 
         if not instance.slug:
-            slug = title_slug = slugify(instance.title)
+            slug = name_slug = slugify(instance.name)
 
             for x in itertools.count(2):
                 if Project.objects.filter(slug=slug).exists():
-                    slug = '{}-{}'.format(title_slug, x)
+                    slug = '{}-{}'.format(name_slug, x)
                 else:
                     instance.slug = slug
                     instance.save()
