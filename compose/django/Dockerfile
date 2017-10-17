@@ -9,6 +9,10 @@ RUN pip install -r /requirements.txt \
     && groupadd -r django \
     && useradd -r -g django django
 
+RUN apt-get update
+RUN apt-get install -y ruby-dev rubygems
+RUN gem install sass
+
 COPY ./compose/django/entrypoint.sh /entrypoint.sh
 RUN sed -i 's/\r//' /entrypoint.sh
 RUN chmod +x /entrypoint.sh
