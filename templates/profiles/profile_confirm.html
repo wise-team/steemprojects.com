@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% load i18n profile_tags static %}
+
+{% block head_title %}{% trans "Login" %}{% endblock %}
+
+{% block body_class %}profile-confirm{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/profile.css?deployment={{ DEPLOYMENT_DATETIME }}" type="text/css"/>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/profile_confirm.css?deployment={{ DEPLOYMENT_DATETIME }}" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+    <div class="sp-jumbotron">
+        <section>
+            <h1>Please confirm information about you</h1>
+            <p>
+                SteemProjects is a community driven website. Our great community in good faith, gathered some basic information about you. Could you confirm/verify information about you?
+            </p>
+        </section>
+
+        {% if accounts %}
+        <section id="accounts">
+            <h2>Your Accounts</h2>
+            {% for account in accounts %}
+                <div class="account">
+                    <a href="{{ account.thirdparty_profile_page }}"><i class="icon-{{ account.type.lower }}"></i>{{ account.name }}</a>
+                    <span class="status">
+                        {% if account.connected %}
+                            <span class="role-confirm role-confirm-confirmed"><i class="material-icons">check_circle</i>Verified</span>
+                        {% else%}
+                            <a class="role-confirm role-confirm-verify" href="{% url 'social:begin' account.account_type.social_auth_provider_name %}"><i class="material-icons">done</i>Verify this</a>
+                            <a class="role-confirm role-confirm-deny" href="{% url 'profile_deny_account' account.account_type.name.lower account.name %}"><i class="material-icons">clear</i>Deny</a>
+                        {% endif %}
+                    </span>
+                </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        {% if memberships %}
+        <section id="roles">
+            <h2>Projects which you are a member</h2>
+            {% for membership in memberships %}
+                {% if membership.role_confirmed_by_account != False %}
+                <div>
+                    <a href="{{ membership.project.get_absolute_url }}">{{ membership.project.name }}</a>
+{#                    - {{ membership.role }}#}
+                    <span class="status">
+{#                        {% if not membership.role_confirmed_by_project_owner %}#}
+{#                            <span><i class="material-icons" title="Your new role needs to be accepted by a project owner">info_outline</i> Applied</span>#}
+{#                            <a class="role-confirm role-confirm-edit" href="{% url 'profile_confirm_role' membership.id 'deny' %}"><i class="material-icons">edit</i>Edit</a>#}
+                        {% if membership.role_confirmed_by_account == None %}
+                            <a class="role-confirm role-confirm-verify" href="{% url 'profile_confirm_role' membership.id 'verify' %}"><i class="material-icons">done</i>Verify this</a>
+{#                            <a class="role-confirm role-confirm-edit" href="{% url 'profile_confirm_role' membership.id 'deny' %}"><i class="material-icons">edit</i>Edit</a>#}
+                            <a class="role-confirm role-confirm-deny" href="{% url 'profile_confirm_role' membership.id 'deny' %}"><i class="material-icons">clear</i>Deny</a>
+                        {% elif membership.role_confirmed_by_account %}
+                            <span class="role-confirm role-confirm-confirmed"><i class="material-icons">check_circle</i>Verified</span>
+                        {% endif %}
+                    </span>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </section>
+        {% endif %}
+
+    </div>
+{% endblock %}

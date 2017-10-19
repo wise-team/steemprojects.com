@@ -58,15 +58,12 @@
             <h3>Team</h3>
             <div>
                 {% for membership in package.teammembership_set.all %}
+                    {% if membership.role_confirmed_by_account != False %}
                     <div class="contributor team-member">
-                        {% if membership.profile.steem_account %}
-                            <img class="img-circle" src="https://img.steemconnect.com/@{{ membership.profile.steem_account }}?s=45">
-                            <a class="name" href="{% url 'steem_profile_detail' membership.profile.steem_account %}">{{ membership.profile.steem_account }}</a> - {{ membership.role }}
-                        {% elif membership.profile.github_account %}
-                            <img class="img-circle" src="https://github.com/{{ membership.profile.github_account }}.png?size=45">
-                            <a class="name" href="{% url 'github_profile_detail' membership.profile.github_account %}">{{ membership.profile.github_account }}</a> - {{ membership.role }}
-                        {% endif %}
+                        <img class="img-circle" src="{{ membership.account.avatar_medium }}">
+                        <a class="name" href="{{ membership.account.profile_page }}">{{ membership.account.name }}</a> - {{ membership.role }}
                     </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
@@ -81,13 +78,8 @@
             <div>
                 {% for contributor in not_team_contributors %}
                     <div class="contributor">
-                        {% if contributor.steem_account %}
-                            <img class="img-circle" src="https://img.steemconnect.com/@{{ contributor.steem_account }}?s=30">
-                            <a class="name" href="{% url 'steem_profile_detail' contributor.steem_account %}">{{ contributor.steem_account }}</a>
-                        {% elif contributor.github_account %}
-                            <img class="img-circle" src="https://github.com/{{ contributor.github_account }}.png?size=30">
-                            <a class="name" href="{% url 'github_profile_detail' contributor.github_account %}">{{ contributor.github_account }}</a>
-                        {% endif %}
+                        <img class="img-circle" src="{{ contributor.avatar_small }}">
+                        <a class="name" href="{{ contributor.profile_page }}">{{ contributor.name }}</a>
                     </div>
                 {% endfor %}
             </div>

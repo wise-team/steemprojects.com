@@ -45,7 +45,7 @@ class PackageExampleAdmin(admin.ModelAdmin):
 
 
 class TeamMembershipAdmin(admin.ModelAdmin):
-    list_display = ("profile", "project", "role")
+    list_display = ("account", "project", "role", "role_confirmed_by_account")
 
 
 class TimelineEventAdmin(admin.ModelAdmin):

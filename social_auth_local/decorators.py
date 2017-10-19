@@ -19,7 +19,6 @@ def render_to(template):
             if isinstance(out, dict):
                 out = render(request, template, common_context(
                     settings.AUTHENTICATION_BACKENDS,
-                    load_strategy(),
                     request.user,
                     plus_id=getattr(settings, 'SOCIAL_AUTH_GOOGLE_PLUS_KEY', None),
                     **out

@@ -10,7 +10,7 @@ def require_email(request):
     partial = strategy.partial_load(partial_token)
     return {
         'email_required': True,
-        'partial_backend_name': partial.backend,
+        'partial_backend_name': partial.backend if partial else None,
         'partial_token': partial_token
     }
 
