@@ -24,13 +24,13 @@
                     {% if membership.role_confirmed_by_account != False %}
                     <p>
                         <a href="{{ membership.project.get_absolute_url }}">{{ membership.project.name }}</a> - {{ membership.role }}
-                        {% if request.user == user %}
-                            {% if membership.role_confirmed_by_account == None %}
+                        {% if membership.role_confirmed_by_account == None %}
+                            {% if request.user == user %}
                                 <a class="role-confirm role-confirm-verify" href="{% url 'profile_confirm_role' membership.id 'verify' %}"><i class="material-icons">done</i>Verify this</a>
                                 <a class="role-confirm role-confirm-deny" href="{% url 'profile_confirm_role' membership.id 'deny' %}"><i class="material-icons">clear</i>Deny</a>
+                            {% else %}
+                                <i class="material-icons" title="Watch out! This information is not verified by {{ local_profile.username }}.">info_outline</i>
                             {% endif %}
-                        {% else %}
-                            <i class="material-icons" title="Watch out! This information is not verified by {{ local_profile.username }}.">info_outline</i>
                         {% endif %}
                     </p>
                     {% endif %}
