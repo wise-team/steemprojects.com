@@ -19,7 +19,7 @@ def profile_to_accounts(apps, schema_editor):
         if profile.steem_account:
             steem_account, _ = Account.objects.get_or_create(
                 type='STEEM',
-                name=profile.steem_account.name,
+                name=profile.steem_account,
             )
             steem_account.profile = profile
             steem_account.save()
@@ -27,7 +27,7 @@ def profile_to_accounts(apps, schema_editor):
         if profile.github_account:
             github_account, _ = Account.objects.get_or_create(
                 type='GITHUB',
-                name=profile.github_account.name,
+                name=profile.github_account,
             )
             github_account.profile = profile
             github_account.save()

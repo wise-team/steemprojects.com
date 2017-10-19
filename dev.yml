@@ -10,10 +10,10 @@ services:
     volumes:
       - postgres_data_dev:/var/lib/postgresql/data
       - postgres_backup_dev:/backups
-    environment:
-      - POSTGRES_USER=djangopackages
     ports:
       - "5432:5432"
+    env_file:
+      - .env.local
 
   django:
     build:
@@ -23,8 +23,6 @@ services:
     depends_on:
       - postgres
       - redis
-    environment:
-      - POSTGRES_USER=djangopackages
     volumes:
       - .:/app
     ports:
