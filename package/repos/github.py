@@ -6,7 +6,7 @@ from django.utils import timezone
 from github3 import GitHub, login
 import requests
 
-from profiles.models import Profile, Account
+from profiles.models import Profile, Account, AccountType
 from .base_handler import BaseHandler
 from package.utils import uniquer
 
@@ -49,8 +49,9 @@ class GitHubHandler(BaseHandler):
         package.repo_description = repo.description
 
         contributors = []
+        github_account_type = AccountType.objects.get(name="GITHUB")
         for contributor in repo.iter_contributors():
-            account, created = Account.objects.get_or_create(type=Account.TYPE_GITHUB, name=contributor.login)
+            account, created = Account.objects.get_or_create(account_type=github_account_type, name=contributor.login)
             contributors.append(account)
             self.manage_ratelimit()
 
