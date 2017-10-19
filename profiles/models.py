@@ -1,55 +1,43 @@
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from social_django.models import UserSocialAuth
 
 from core.models import BaseModel
 
 
 class Profile(BaseModel):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
-
-    # Note to coders: The '_url' fields below need to JUST be the name of the account.
-    #     Examples:
-    #       github_url = 'pydanny'
-    #       bitbucket_url = 'pydanny'
-    #       google_code_url = 'pydanny'
-    steem_account = models.CharField(_("Steem account"), null=True, blank=True, max_length=40, unique=True)
-    steem_account_confirmed = models.BooleanField(
-        _("Steem account confirmed"), null=False, blank=True, default=False
-    )
-
-    steemit_chat_account = models.CharField(_("Steemit.chat account"), null=True, blank=True, max_length=40, unique=True)
-    steemit_chat_account_confirmed = models.BooleanField(
-        _("Steemit.chat account confirmed"), null=False, blank=True, default=False
-    )
-
-    github_account = models.CharField(_("Github account"), null=True, blank=True, max_length=40)
-    github_account_confirmed = models.BooleanField(
-        _("Github account confirmed"), null=False, blank=True, default=False
-    )
-
-    github_url = models.CharField(_("Github account"), null=True, blank=True, max_length=100, editable=False)
-    bitbucket_url = models.CharField(_("Bitbucket account"), null=True, blank=True, max_length=100)
-    google_code_url = models.CharField(_("Google Code account"), null=True, blank=True, max_length=100)
     email = models.EmailField(_("Email"), null=True, blank=True)
     verified_by = models.ForeignKey("Profile", blank=True, null=True, default=None, related_name="verifier_of")
 
     def __str__(self):
         return "id:{}, steem:{}, github:{}".format(
             self.user.pk if self.user else '-',
-            self.steem_account if self.steem_account else '-',
-            self.github_account if self.github_account else '-',
+            self.steem_account.name if self.steem_account else '-',
+            self.github_account.name if self.github_account else '-',
         )
+
+    @property
+    def steem_account(self):
+        return self.account_set.filter(account_type__name=Account.TYPE_STEEM, profile=self).first()
+
+    @property
+    def github_account(self):
+        return self.account_set.filter(account_type__name=Account.TYPE_GITHUB, profile=self).first()
 
     @property
     def username(self):
         if self.steem_account:
-            return self.steem_account
+            return self.steem_account.name
         if self.github_account:
-            return self.github_account
-        if self.user.username:
+            return self.github_account.name
+        if self.user and self.user.username:
             return self.user.username
+        else:
+            return "(no username)"
 
     def save(self, **kwargs):
         """ Override save to always populate email changes to auth.user model
@@ -69,9 +57,10 @@ class Profile(BaseModel):
         If url doesn't exist return None.
         """
         url_mapping = {
-            'Github': self.github_account,
-            'BitBucket': self.bitbucket_url,
-            'Google Code': self.google_code_url}
+            'Github': self.github_account.name if self.github_account else '',
+            # 'BitBucket': self.bitbucket_url,
+            # 'Google Code': self.google_code_url
+        }
         return url_mapping.get(repo.title)
 
     def my_packages(self):
@@ -89,14 +78,13 @@ class Profile(BaseModel):
         packages.sort(key=lambda a: a.name)
         return packages
 
-    @models.permalink
     def get_absolute_url(self):
         if self.steem_account:
-            return "steem_profile_detail", [self.steem_account]
+            return reverse('steem_profile_detail', args=(self.steem_account.name,))
         if self.github_account:
-            return "github_profile_detail", [self.github_account]
+            return reverse('github_profile_detail', args=(self.github_account.name,))
         if self.user.username:
-            return "id_profile_detail", [self.user.pk]
+            return reverse('id_profile_detail', args=(self.user.pk,))
 
     # define permission properties as properties so we can access in templates
 
@@ -168,3 +156,62 @@ class Profile(BaseModel):
         if getattr(settings, 'RESTRICT_GRID_EDITORS', False):
             return self._is_staff_or_verified() or self.user.has_perm('grid.change_element')
         return True
+
+
+class Account(BaseModel):
+    TYPE_STEEM = "STEEM"
+    TYPE_GITHUB = "GITHUB"
+
+    TYPE_CHOICES = (
+        (TYPE_STEEM, 'Steem'),
+        (TYPE_GITHUB, 'Github'),
+    )
+
+    profile = models.ForeignKey(Profile, null=True, blank=True)
+    name = models.CharField(_("Name"), max_length=40)
+    account_type = models.ForeignKey("AccountType", null=True, blank=True, default=None)
+    user_social_auth = models.ForeignKey(UserSocialAuth, null=True, blank=True, default=None)
+    email = models.EmailField(_("Email"), null=True, blank=True)
+
+    @property
+    def connected(self):
+        return bool(self.user_social_auth)
+
+    class Meta:
+        unique_together = ("name", "account_type")
+
+    def __str__(self):
+        return "{}:{}".format(self.type.lower(), self.name)
+
+    @property
+    def type(self):
+        return self.account_type.name
+
+    @property
+    def thirdparty_profile_page(self):
+        return self.account_type.link_to_account_with_param.format(account_name=self.name)
+
+    @property
+    def profile_page(self):
+        return reverse('{}_profile_detail'.format(self.account_type.name.lower()), args=(self.name,))
+
+    @property
+    def avatar_small(self):
+        return self.account_type.link_to_avatar_with_params.format(account_name=self.name, size=30)
+
+    @property
+    def avatar_medium(self):
+        return self.account_type.link_to_avatar_with_params.format(account_name=self.name, size=45)
+
+    @property
+    def avatar_big(self):
+        return self.account_type.link_to_avatar_with_params.format(account_name=self.name, size=150)
+
+
+class AccountType(BaseModel):
+    name = models.CharField(max_length=40)
+    display_name = models.CharField(max_length=40)
+    social_auth_provider_name = models.CharField(max_length=40)
+    link_to_account_with_param = models.CharField(max_length=256)
+    link_to_avatar_with_params = models.CharField(max_length=256)
+

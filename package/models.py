@@ -22,7 +22,7 @@ from core.models import BaseModel
 from package.repos import get_repo_for_repo_url
 from package.signals import signal_fetch_latest_metadata
 from package.utils import get_version, get_pypi_version, normalize_license
-from profiles.models import Profile
+from profiles.models import Profile, Account
 
 repo_url_help_text = settings.PACKAGINATOR_HELP_TEXT['REPO_URL']
 pypi_url_help_text = settings.PACKAGINATOR_HELP_TEXT['PYPI_URL']
@@ -108,8 +108,8 @@ class Project(BaseModel):
     pypi_downloads = models.IntegerField(_("Pypi downloads"), default=0)
     participants = models.TextField(_("Participants"),
                         help_text="List of collaborats/participants on the project", blank=True)
-    team_members = models.ManyToManyField(Profile, through='TeamMembership', blank=True, related_name="team_member_of")
-    contributors = models.ManyToManyField(Profile, blank=True, related_name="contribiuted_to")
+    team_members = models.ManyToManyField(Account, through='TeamMembership', blank=True, related_name="team_member_of", through_fields=("project", "account"))
+    contributors = models.ManyToManyField(Account, blank=True, related_name="contribiuted_to")
     usage = models.ManyToManyField(User, blank=True)
     added_by = models.ForeignKey(User, blank=True, null=True, related_name="added_by", on_delete=models.SET_NULL)
     last_modified_by = models.ForeignKey(User, blank=True, null=True, related_name="modifier", on_delete=models.SET_NULL)
@@ -368,16 +368,25 @@ class TimelineEvent(BaseModel):
 
 
 class TeamMembership(BaseModel):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, default=None, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     role = models.CharField(max_length=64)
-    role_confirmed = models.BooleanField(_("Role confirmed by team mate"), blank=True, null=False, default=False)
+    project_owner = models.BooleanField(_("Project owner"), blank=True, default=False)
+    confirmed_by_project_owner = models.ForeignKey(Account, default=None, blank=True, null=True, related_name="approvers")
+
+    @property
+    def role_confirmed_by_project_owner(self):
+        return bool(self.confirmed_by_project_owner)
+
+    role_confirmed_by_account = models.NullBooleanField(_("Role confirmed by team mate"), blank=True, default=None)
+
 
     class Meta:
-        unique_together = ("profile", "project")
+        unique_together = ("account", "project")
 
     def __str__(self):
-        return "{} in {} as {}".format(str(self.profile), self.project.name, self.role)
+        return "{} in {} as {}".format(str(self.account), self.project.name, self.role)
+
 
 
 def project_img_path(instance, filename):

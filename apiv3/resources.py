@@ -46,12 +46,12 @@ def package_resource(package):
         if package.created_by is None or package.created_by.profile is None:
             created_by = None
         else:
-            created_by = reverse("apiv3:user_detail", kwargs={"github_account": package.created_by.profile.github_account})
+            created_by = reverse("apiv3:user_detail", kwargs={"github_account": package.created_by.profile.github_account.name})
     except Profile.DoesNotExist:
         created_by = None
 
     try:
-        last_modified_by = package.last_modified_by.profile.github_account
+        last_modified_by = package.last_modified_by.profile.github_account.name
     except AttributeError:
         last_modified_by = None
 
@@ -85,10 +85,10 @@ def user_resource(profile, list_packages=False):
     user = profile.user
     data = {
         "absolute_url": profile.get_absolute_url(),
-        "resource_uri": reverse("apiv3:user_detail", kwargs={"github_account": profile.github_account}),
+        "resource_uri": reverse("apiv3:user_detail", kwargs={"github_account": profile.github_account.name}),
         "created": profile.created,
         "modified": profile.modified,
-        "github_account": profile.github_account,
+        "github_account": profile.github_account.name,
         "username": user.username,
         "date_joined": user.date_joined,
         "last_login": user.last_login,

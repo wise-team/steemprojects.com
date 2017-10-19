@@ -67,7 +67,7 @@
                 <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
                 <li><a href="{% url 'faq' %}">{% trans "FAQ" %}</a></li>
                 {% if request.user.is_authenticated %}
-                    <li><a href="{{ profile.get_absolute_url }}">{{ profile.username }}</a></li>
+                    <li>{{ profile.account.name }}<a href="{{ profile.get_absolute_url }}">{{ profile.username }}</a></li>
                     {% if request.user.is_staff %}
                         <li><a href="{% url 'admin:index' %}">{% trans "Admin" %}</a></li>
                     {% endif %}

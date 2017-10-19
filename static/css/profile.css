@@ -21,15 +21,16 @@ h2 {
     margin-bottom: 30px;
 }
 
-#accounts i {
+#accounts i[class^="icon-"] {
     margin-right: 10px;
     position: relative;
     top: 2px;
     font-size: 16px;
 }
 
-#accounts a {
+#accounts .account {
     margin-right: 20px;
+    margin-bottom: 10px;
 }
 
 i.material-icons {
@@ -38,6 +39,11 @@ i.material-icons {
     top: 2px;
     margin-left: 5px;
     cursor: text;
+    vertical-align: initial;
+}
+
+a:hover i.material-icons {
+    vertical-align: initial;
 }
 
 .row .col-xs-4:first-child {
@@ -55,4 +61,38 @@ i.material-icons {
 
 tr > td:first-child {
     width: 50px;
+}
+
+.role-confirm {
+    margin: 0 5px;
+
+}
+
+.role-confirm i.material-icons {
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+a.role-confirm-verify {
+    color: #4aa1f1;
+}
+
+a.role-confirm-verify i.material-icons {
+    color: #4aa1f1;
+}
+
+a.role-confirm-deny {
+    color: #bf2155;
+}
+
+a.role-confirm-deny i.material-icons {
+    color: #bf2155;
+}
+
+.account .disconnect-account {
+    display: none;
+}
+
+.account:hover .disconnect-account {
+    display: inline-block;
 }
