@@ -20,12 +20,12 @@ class TestProfile(TestCase):
 
     def test_view(self):
         self.assertTrue(self.client.login(username=self.user.username, password=STOCK_PASSWORD))
-        url = reverse('profile_detail', kwargs={'github_account': self.profile.github_account})
+        url = reverse('profile_detail', kwargs={'github_account': self.profile.github_account.name})
         response = self.client.get(url)
         self.assertContains(response, "Profile for user")
 
     def test_view_not_loggedin(self):
-        url = reverse('profile_detail', kwargs={'github_account': self.profile.github_account})
+        url = reverse('profile_detail', kwargs={'github_account': self.profile.github_account.name})
         response = self.client.get(url)
         self.assertContains(response, "Profile for user")
 

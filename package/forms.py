@@ -95,6 +95,7 @@ class InlineTeamMemberForm(forms.Form):
         required=True,
     )
     initialized = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    role_confirmed_by_account = forms.NullBooleanField(widget=forms.HiddenInput(), required=False)
 
     def __init__(self, *args, **kwargs):
         super(InlineTeamMemberForm, self).__init__(*args, **kwargs)

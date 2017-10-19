@@ -19,7 +19,7 @@ from package.forms import PackageForm, PackageExampleForm, DocumentationForm, Ti
 from package.models import Category, Project, PackageExample, ProjectImage, TeamMembership, TimelineEvent
 from package.repos import get_all_repos
 from package.forms import TeamMembersFormSet
-from profiles.models import Profile, Account
+from profiles.models import Profile, Account, AccountType
 
 from .utils import quote_plus
 
@@ -58,8 +58,10 @@ def add_package(request, template_name="package/package_form.html"):
         for inlineform in formset:
             if hasattr(inlineform, 'cleaned_data') and inlineform.cleaned_data:
                 data = inlineform.cleaned_data
+
+                account_type = AccountType.objects.get(name=data['account_type'])
                 account, created = Account.objects.get_or_create(
-                    type=data['account_type'],
+                    account_type=account_type,
                     name=data['account_name']
                 )
 
@@ -89,6 +91,7 @@ def edit_package(request, slug, template_name="package/package_form.html"):
             'role': tm.role,
             'account_name': tm.account.name,
             'account_type': tm.account.type,
+            'role_confirmed_by_account': tm.role_confirmed_by_account,
             'initialized': True,
         }
         for tm in package.teammembership_set.all()
@@ -109,12 +112,14 @@ def edit_package(request, slug, template_name="package/package_form.html"):
             if hasattr(inlineform, 'cleaned_data') and inlineform.cleaned_data:
                 data = inlineform.cleaned_data
 
+                account_type = AccountType.objects.get(name=data['account_type'])
+
                 if data['DELETE']:
-                    account = Account.objects.get(type=data['account_type'], name=data['account_name'])
+                    account = Account.objects.get(account_type=account_type, name=data['account_name'])
                     membership = TeamMembership.objects.get(account=account, project=modified_package)
                     membership.delete()
                 else:
-                    account, __ = Account.objects.get_or_create(type=data['account_type'], name=data['account_name'])
+                    account, __ = Account.objects.get_or_create(account_type=account_type, name=data['account_name'])
                     membership, __ = TeamMembership.objects.get_or_create(account=account, project=modified_package)
                     membership.role = data['role']
                     membership.save()
