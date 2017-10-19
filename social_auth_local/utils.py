@@ -33,20 +33,14 @@ def common_context(authentication_backends, user=None, **extra):
         if user.profile.github_account:
             context['associations']['github'] = {
                 'confirmed': False,
-                'data': {'user': {'username': user.profile.github_account}},
+                'data': {'uid': user.profile.github_account.name},
             }
 
         if user.profile.steem_account:
             context['associations']['steemconnect'] = {
                 'confirmed': False,
-                'data': {'user': {'username': user.profile.steem_account}},
+                'data': {'uid': user.profile.steem_account.name},
             }
-
-        # if user.profile.facebook:
-        #     context['associations']['facebook'] = {
-        #         'confirmed': False,
-        #         'data': {'user': {'username': 'Facebook placeholder name'}},
-        #     }
 
         context['associations'].update(dict(
             (

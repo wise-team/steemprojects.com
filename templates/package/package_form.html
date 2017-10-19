@@ -72,7 +72,11 @@
                                         {% elif form.account_type.value == 'GITHUB' %}
                                             <img class="img-circle" src="https://github.com/{{ form.account_name.value }}.png?size=30">
                                         {% endif %}
-                                            {{ form.account_name.value }} - {{ form.role.value }} <span class="rm-btn tm-entry"><i class="icon-close"></i>Remove</span>
+
+                                        {% if form.role_confirmed_by_account.value == False %}<strike style="color: grey">{% endif %}
+                                            {{ form.account_name.value }} - {{ form.role.value }}
+                                        {% if form.role_confirmed_by_account.value == False%}</strike>&nbsp;&nbsp;(membership rejected){% endif %}
+                                            <span class="rm-btn tm-entry"><i class="icon-close"></i>Remove</span>
                                     </div>
                                 </div>
                             {% endif %}

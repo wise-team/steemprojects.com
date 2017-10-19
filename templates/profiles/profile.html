@@ -8,45 +8,70 @@
 
 {% block extra_head %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/profile.css?deployment={{ DEPLOYMENT_DATETIME }}" type="text/css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}css/profile_confirm.css?deployment={{ DEPLOYMENT_DATETIME }}" type="text/css" />
 {% endblock %}
 
 {% block body %}
 <div class="row">
     <div class="col-xs-4">
         <h1>{{ local_profile.username }}</h1>
-        {% if request.user == user %}
-            <a class="edit-profile" href="{% url 'profile_edit' %}"><i class="glyphicon glyphicon-pencil"></i></a>
-        {% endif %}
     </div>
 </div>
 <div class="row">
         <div class="col-xs-4">
-{#            <div>#}
-{#                {% if local_profile.steem_account %}#}
-{#                    <img class="img-circle" src="https://img.steemconnect.com/@{{ local_profile.steem_account }}?s=150">#}
-{#                {% elif local_profile.github_account %}#}
-{#                    <img class="img-circle" src="https://github.com/{{ local_profile.github_account }}.png?size=150">#}
-{#                {% endif %}#}
-{#            </div>#}
-
             <div class="roles">
-                {% for membership in local_profile.teammembership_set.all %}
-                <p>
-                    <a href="{{ membership.project.get_absolute_url }}">{{ membership.project.name }}</a> - {{ membership.role }}
-                    <i class="material-icons" title="Watch out! This information is not verified.">info_outline</i>
-                </p>
+                {% for membership in memberships|dictsort:"id" %}
+                    {% if membership.role_confirmed_by_account != False %}
+                    <p>
+                        <a href="{{ membership.project.get_absolute_url }}">{{ membership.project.name }}</a> - {{ membership.role }}
+                        {% if request.user == user %}
+                            {% if membership.role_confirmed_by_account == None %}
+                                <a class="role-confirm role-confirm-verify" href="{% url 'profile_confirm_role' membership.id 'verify' %}"><i class="material-icons">done</i>Verify this</a>
+                                <a class="role-confirm role-confirm-deny" href="{% url 'profile_confirm_role' membership.id 'deny' %}"><i class="material-icons">clear</i>Deny</a>
+                            {% endif %}
+                        {% else %}
+                            <i class="material-icons" title="Watch out! This information is not verified by {{ local_profile.username }}.">info_outline</i>
+                        {% endif %}
+                    </p>
+                    {% endif %}
                 {% endfor %}
             </div>
 
             <h2>Accounts</h2>
             <div id="accounts">
-                {% if local_profile.steem_account %}
-                    <a href="https://steemit.com/@{{ local_profile.steem_account }}"><i class="icon-steem"></i>{{ local_profile.steem_account }}</a>
-                {% endif %}
+                {% for account in accounts %}
+                    <span class="account"{% if request.user == user %} style="display: block"{% endif %}>
+                        {%  if account.connected %}
+                            <a href="{{ account.thirdparty_profile_page }}"><i class="icon-{{ account.account_type.name.lower }}"></i>{{ account.name }}</a>
+                            {% if request.user == user %}
+                                <a class="role-confirm role-confirm-deny disconnect-account" href="{% url "social:disconnect_individual" backend=account.account_type.social_auth_provider_name association_id=account.user_social_auth.id %}">
+                                    <i class="material-icons">clear</i>Disconnect
+                                </a>
+                            {% endif %}
+                        {% elif account.profile %}
+                            <a href="{{ account.thirdparty_profile_page }}"><i class="icon-{{ account.account_type.name.lower }}"></i>{{ account.name }}</a>
+                            {% if request.user == user %}
+                                <a class="role-confirm role-confirm-verify" href="{% url 'social:begin' account.account_type.social_auth_provider_name %}"><i class="material-icons">done</i>Confirm</a>
+                                <a class="role-confirm role-confirm-deny" href="{% url 'profile_deny_account' account.account_type.name.lower account.name %}"><i class="material-icons">clear</i>Deny</a>
+                            {% else %}
+                                <i class="material-icons" title="Watch out! {{ local_profile.username }} didn't confirmed ownership of this account.">info_outline</i>
+                            {% endif %}
+                        {% else %}
+                            {% if request.user == user %}
+                                <a href="{{ account.thirdparty_profile_page }}"><i class="icon-{{ account.account_type.name.lower }}"></i>{{ account.name }}</a>
+                                <a href="{% url 'social:begin' account.account_type.social_auth_provider_name %}">
+                                    Connect your {{ account.account_type.display_name }} account
+                                </a>
+                            {% endif %}
+                        {% endif %}
 
-                {% if local_profile.github_account %}
-                    <a href="https://github.com/{{ local_profile.github_account }}"><i class="icon-github"></i>{{ local_profile.github_account }}</a>
-                {% endif %}
+                    </span>
+
+                {% endfor %}
+                <div class="add-more-accounts">
+
+
+                </div>
             </div>
         </div>
 
@@ -78,6 +103,6 @@
                   {% endfor %}
                 </tbody>
               </table>
-          </div>
+        </div>
     </div>
 {% endblock %}

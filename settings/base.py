@@ -295,7 +295,10 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.auth_allowed',
 
     # Checks if the current social-account is already associated in the site.
-    'social_core.pipeline.social_auth.social_user',
+    # 'social_core.pipeline.social_auth.social_user',
+
+
+    'profiles.pipeline.account_already_in_use',
 
     # CUSTOM PIPELINE
     'social_auth_local.pipeline.require_email',
@@ -336,6 +339,7 @@ SOCIAL_AUTH_STEEMCONNECT_FORCE_EMAIL_VALIDATION = True
 VALIDATION_EMAIL_SENDER = environ.get('VALIDATION_EMAIL_SENDER')
 
 LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/profiles/confirm'
 
 DATABASES = {
 

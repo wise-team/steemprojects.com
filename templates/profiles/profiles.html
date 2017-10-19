@@ -58,7 +58,7 @@
                             {% endif %}
                         </td>
                     {% endif %}
-                    <td><a href="https://github.com/{{ profile.github_account|default:"" }}">{{ profile.github_account|default:"" }}</a</td>
+                    <td><a href="https://github.com/{{ profile.github_account.name|default:"" }}">{{ profile.github_account.name|default:"" }}</a</td>
                     <td><a href="https://bitbucket.org/{{ profile.bitbucket_url|default:"" }}">{{ profile.bitbucket_url|default:"" }}</a</td>
                 </tr>
                 {% endwith %}

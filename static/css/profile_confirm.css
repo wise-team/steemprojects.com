@@ -1,0 +1,57 @@
+.profile-confirm .sp-jumbotron {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 600px;
+}
+
+.profile-confirm section {
+    margin-bottom: 30px;
+}
+
+.profile-confirm h2 {
+    margin-bottom: 20px;
+}
+
+.profile-confirm #accounts .account,
+.profile-confirm section > div {
+    margin: 10px 0;
+}
+
+.profile-confirm .role-confirm:last-child {
+    margin-right: 0;
+}
+
+
+a.role-confirm-verify,
+span.role-confirm-confirmed
+{
+    color: #39bd6e;
+}
+
+a.role-confirm-verify i.material-icons,
+span.role-confirm-confirmed i.material-icons
+{
+    color: #39bd6e;
+}
+
+a.role-confirm-edit {
+    color: #4aa1f1;
+}
+
+a.role-confirm-edit i.material-icons {
+    color: #4aa1f1;
+}
+
+a.role-confirm-deny {
+    color: #bf2155;
+}
+
+a.role-confirm-deny i.material-icons {
+    color: #bf2155;
+}
+
+.profile-confirm .status {
+    float: right;
+}

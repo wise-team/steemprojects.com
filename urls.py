@@ -1,10 +1,13 @@
 from django.conf import settings
 from django.conf.urls import url, include
 from django.conf.urls.static import static
+from django.shortcuts import redirect
+from django.urls.base import reverse_lazy
 from django.views.generic.base import TemplateView, RedirectView
 
 from django.contrib import admin
 
+from profiles.views import profile_detail
 from social_auth_local.views import require_email, validation_sent
 
 admin.autodiscover()
@@ -28,6 +31,7 @@ urlpatterns = [
     url(r"^500$", error_500_view, name="500"),
     url(settings.ADMIN_URL_BASE, include(admin.site.urls)),
     url(r"^profiles/", include("profiles.urls")),
+    url(r"^@(?P<steem_account>[-\.\w]+)", lambda request, steem_account: redirect('steem_profile_detail', steem_account, permanent=True)),
     url(r"^projects/", include("package.urls")),
     url(r"^grids/", include("grid.urls")),
     url(r"^feeds/", include("feeds.urls")),

@@ -29,7 +29,10 @@
             {% if association %}
                 {% if association.confirmed %}
                     <div>
-                        Disconnect <span style="display: inline-block; margin: 0 10px"><img class="img-circle" src="https://img.steemconnect.com/@{{ association.data.user.username }}?s=30"><a class="name" href="#">{{ association.data.user.username }}</a></span> account: <a href="{% url 'social:begin' name %}" class="login-btn login-{{ name }}" title="Log in with {{ name }}" style="display: inline-block;"> Disconnect {{ name }} </a>
+                        Disconnect
+                        <span style="display: inline-block; margin: 0 10px">
+                            <img class="img-circle" src="https://img.steemconnect.com/@{{ association.data.uid }}?s=30"><a class="name" href="#">{{ association.data.uid }}</a>
+                            </span> account: <a href="{% url 'social:begin' name %}" class="login-btn login-{{ name }}" title="Log in with {{ name }}" style="display: inline-block;"> Disconnect {{ name }} </a>
 
 {#                        Disconnect {{ association.data.user.username }} account <a href="{% url 'social:begin' name %}" class="login-btn login-{{ name }}" title="Log in with {{ name }}" style="display: inline-block;"> {{ name }} </a>#}
                     </div>
@@ -37,18 +40,18 @@
 
 {#                    <div class="contributor">#}
 {#                        {% if contributor.steem_account %}#}
-{#                            <img class="img-circle" src="https://img.steemconnect.com/@{{ contributor.steem_account }}?s=30">#}
-{#                            <a class="name" href="{% url 'steem_profile_detail' contributor.steem_account %}">{{ contributor.steem_account }}</a>#}
+{#                            <img class="img-circle" src="https://img.steemconnect.com/@{{ contributor.steem_account.name }}?s=30">#}
+{#                            <a class="name" href="{% url 'steem_profile_detail' contributor.steem_account.name %}">{{ contributor.steem_account.name }}</a>#}
 {#                        {% elif contributor.github_account %}#}
-{#                            <img class="img-circle" src="https://github.com/{{ contributor.github_account }}.png?size=30">#}
-{#                            <a class="name" href="{% url 'github_profile_detail' contributor.github_account %}">{{ contributor.github_account }}</a>#}
+{#                            <img class="img-circle" src="https://github.com/{{ contributor.github_account.name }}.png?size=30">#}
+{#                            <a class="name" href="{% url 'github_profile_detail' contributor.github_account.name %}">{{ contributor.github_account.name }}</a>#}
 {#                        {% endif %}#}
 {#                    </div>#}
 
                 <div class="contributor ">
                     Does account <span style="display: inline-block; margin: 0 10px">
-                        <img class="img-circle" src="https://img.steemconnect.com/@{{ association.data.user.username }}?s=30">
-                        <a class="name" href="#">{{ association.data.user.username }}</a>
+                        <img class="img-circle" src="https://img.steemconnect.com/@{{ association.data.uid }}?s=30">
+                        <a class="name" href="#">{{ association.data.uid }}</a>
                     </span> belongs to you? Confirm with <a href="{% url 'social:begin' name %}" class="login-btn login-{{ name }}" title="Log in with {{ name }}" style="display: inline-block;"> {{ name }} </a> or <a href="#" class="login-btn" title="Deny" style="display: inline-block;"> Deny </a>
                 </div>
 

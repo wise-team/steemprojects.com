@@ -108,7 +108,7 @@ class Project(BaseModel):
     pypi_downloads = models.IntegerField(_("Pypi downloads"), default=0)
     participants = models.TextField(_("Participants"),
                         help_text="List of collaborats/participants on the project", blank=True)
-    team_members = models.ManyToManyField(Account, through='TeamMembership', blank=True, related_name="team_member_of")
+    team_members = models.ManyToManyField(Account, through='TeamMembership', blank=True, related_name="team_member_of", through_fields=("project", "account"))
     contributors = models.ManyToManyField(Account, blank=True, related_name="contribiuted_to")
     usage = models.ManyToManyField(User, blank=True)
     added_by = models.ForeignKey(User, blank=True, null=True, related_name="added_by", on_delete=models.SET_NULL)
@@ -371,13 +371,22 @@ class TeamMembership(BaseModel):
     account = models.ForeignKey(Account, default=None, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     role = models.CharField(max_length=64)
-    role_confirmed = models.BooleanField(_("Role confirmed by team mate"), blank=True, null=False, default=False)
+    project_owner = models.BooleanField(_("Project owner"), blank=True, default=False)
+    confirmed_by_project_owner = models.ForeignKey(Account, default=None, blank=True, null=True, related_name="approvers")
+
+    @property
+    def role_confirmed_by_project_owner(self):
+        return bool(self.confirmed_by_project_owner)
+
+    role_confirmed_by_account = models.NullBooleanField(_("Role confirmed by team mate"), blank=True, default=None)
+
 
     class Meta:
         unique_together = ("account", "project")
 
     def __str__(self):
         return "{} in {} as {}".format(str(self.account), self.project.name, self.role)
+
 
 
 def project_img_path(instance, filename):
