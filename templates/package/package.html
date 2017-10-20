@@ -62,6 +62,16 @@
                     <div class="contributor team-member">
                         <img class="img-circle" src="{{ membership.account.avatar_medium }}">
                         <a class="name" href="{{ membership.account.profile_page }}">{{ membership.account.name }}</a> - {{ membership.role }}
+                        {% if membership.role_confirmed_by_account == None %}
+                            <span class="role-panel">
+                            {% if request.user == membership.account.profile.user %}
+                                <a class="role-confirm role-confirm-verify" href="{% url 'profile_confirm_role' membership.id 'verify' %}"><i class="material-icons">done</i>Verify this</a>
+                                <a class="role-confirm role-confirm-deny" href="{% url 'profile_confirm_role' membership.id 'deny' %}"><i class="material-icons">clear</i>Deny</a>
+                            {% else %}
+                                <i class="material-icons" title="Watch out! This information is not verified by {{ membership.account.profile.username }}.">info_outline</i>
+                            {% endif %}
+                            </span>
+                        {% endif %}
                     </div>
                     {% endif %}
                 {% endfor %}

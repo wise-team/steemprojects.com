@@ -85,3 +85,40 @@
 #edit-images {
     float: right;
 }
+
+
+.role-panel i.material-icons {
+    font-size: 18px;
+    position: relative;
+    top: 2px;
+    margin-left: 5px;
+    cursor: text;
+    vertical-align: initial;
+}
+
+.role-panel .role-confirm {
+    margin: 0 5px;
+
+}
+
+.role-panel .role-confirm i.material-icons {
+    margin: 0 5px;
+    cursor: pointer;
+    top: 3px;
+}
+
+.role-panel a.role-confirm-verify {
+    color: #4aa1f1;
+}
+
+.role-panel a.role-confirm-verify i.material-icons {
+    color: #4aa1f1;
+}
+
+.role-panel a.role-confirm-deny {
+    color: #bf2155;
+}
+
+.role-panel a.role-confirm-deny i.material-icons {
+    color: #bf2155;
+}
