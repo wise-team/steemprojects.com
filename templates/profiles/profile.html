@@ -43,9 +43,10 @@
                         {%  if account.connected %}
                             <a href="{{ account.thirdparty_profile_page }}"><i class="icon-{{ account.account_type.name.lower }}"></i>{{ account.name }}</a>
                             {% if request.user == user %}
-                                <a class="role-confirm role-confirm-deny disconnect-account" href="{% url "social:disconnect_individual" backend=account.account_type.social_auth_provider_name association_id=account.user_social_auth.id %}">
-                                    <i class="material-icons">clear</i>Disconnect
-                                </a>
+                                <form class="disconnect" action="{% url "social:disconnect_individual" backend=account.account_type.social_auth_provider_name association_id=account.user_social_auth.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="role-confirm role-confirm-deny disconnect-account"> <i class="material-icons">clear</i>Disconnect </button>
+                                </form>
                             {% endif %}
                         {% elif account.profile %}
                             <a href="{{ account.thirdparty_profile_page }}"><i class="icon-{{ account.account_type.name.lower }}"></i>{{ account.name }}</a>

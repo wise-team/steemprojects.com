@@ -73,19 +73,19 @@ tr > td:first-child {
     cursor: pointer;
 }
 
-a.role-confirm-verify {
+.role-confirm-verify {
     color: #4aa1f1;
 }
 
-a.role-confirm-verify i.material-icons {
+.role-confirm-verify i.material-icons {
     color: #4aa1f1;
 }
 
-a.role-confirm-deny {
+.role-confirm-deny {
     color: #bf2155;
 }
 
-a.role-confirm-deny i.material-icons {
+.role-confirm-deny i.material-icons {
     color: #bf2155;
 }
 
@@ -95,4 +95,14 @@ a.role-confirm-deny i.material-icons {
 
 .account:hover .disconnect-account {
     display: inline-block;
+}
+
+.account form.disconnect {
+    display: inline-block;
+}
+
+.account:hover form.disconnect button {
+    border: none;
+    background: none;
+    line-height: 14px;
 }
