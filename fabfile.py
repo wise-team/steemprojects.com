@@ -125,14 +125,14 @@ def docker_compose(command):
         return env.run("docker-compose -f {file} {command}".format(file=env.compose_file, command=command))
 
 
-def download_db():
-    dump_filename = 'tmp.sql'
+def download_db(filename="tmp.sql"):
     with env.cd(env.project_dir):
-        docker_compose("run postgres backup {}".format(dump_filename))
-        remote_sql_dump_filepath = os.path.join(env.data_dir, 'backups', dump_filename)
+        docker_compose("run postgres backup {}".format(filename))
+        remote_sql_dump_filepath = os.path.join(env.data_dir, 'backups', filename)
 
-        get(remote_sql_dump_filepath, './backups/{}'.format(dump_filename))
-        env.run("rm {}".format(remote_sql_dump_filepath))
+        get(remote_sql_dump_filepath, './backups/{}'.format(filename))
+
+        docker_compose("run postgres rm /backups/{}".format(filename))
         print("Remote done!")
 
     local()
@@ -141,10 +141,10 @@ def download_db():
         docker_compose("down -v")
         docker_compose("up -d postgres")
         time.sleep(10)
-        docker_compose("run postgres restore {}".format(dump_filename))
+        docker_compose("run postgres restore {}".format(filename))
         docker_compose("run django python manage.py migrate")
         docker_compose("up -d")
-        env.run("rm ./backups/{}".format(dump_filename))
+        env.run("rm ./backups/{}".format(filename))
         print("Local done!")
 
-    print("Your local environment has now new databas!")
+    print(green("Your local environment has now new database!"))
