@@ -17,6 +17,7 @@ To list all available commands, run::
 from fabric.operations import local as lrun, run, sudo, put
 from fabric.api import *
 from fabric.colors import green, red, yellow, blue
+import os
 import time
 import datetime
 
@@ -25,7 +26,7 @@ def local():
     """
     Work on the local environment
     """
-    env.compose_file = "docker-compose.yml"
+    env.compose_file = "dev.yml"
     env.project_dir = "."
     env.run = lrun
     env.cd = lcd
@@ -41,6 +42,7 @@ def production():
 
     env.compose_file = "docker-compose.yml"
     env.project_dir = "/home/deploy/Deploy/steemprojects.com"  # this is the project dir where your code lives on this machine
+    env.data_dir = "/home/deploy/Data/steemprojects.com"
 
     # if you don't use key authentication, add your password here
     # env.password = "foobar"
@@ -121,3 +123,28 @@ def docker_compose(command):
     """
     with env.cd(env.project_dir):
         return env.run("docker-compose -f {file} {command}".format(file=env.compose_file, command=command))
+
+
+def download_db():
+    dump_filename = 'tmp.sql'
+    with env.cd(env.project_dir):
+        docker_compose("run postgres backup {}".format(dump_filename))
+        remote_sql_dump_filepath = os.path.join(env.data_dir, 'backups', dump_filename)
+
+        get(remote_sql_dump_filepath, './backups/{}'.format(dump_filename))
+        env.run("rm {}".format(remote_sql_dump_filepath))
+        print("Remote done!")
+
+    local()
+
+    with env.cd(env.project_dir):
+        docker_compose("down -v")
+        docker_compose("up -d postgres")
+        time.sleep(10)
+        docker_compose("run postgres restore {}".format(dump_filename))
+        docker_compose("run django python manage.py migrate")
+        docker_compose("up -d")
+        env.run("rm ./backups/{}".format(dump_filename))
+        print("Local done!")
+
+    print("Your local environment has now new databas!")
