@@ -47,7 +47,7 @@
                                 {% endif %}
                             {% endwith %}
                         </p>
-                        <p class="list-group-item-text category"><i class="material-icons">format_list_bulleted</i> {{ package.category }}</p>
+                        <p class="list-group-item-text category"><a href="{% url "category" package.category.slug %}"><i class="material-icons">format_list_bulleted</i> {{ package.category }}</a></p>
 
                     </div>
                 </a>
