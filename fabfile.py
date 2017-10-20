@@ -18,8 +18,9 @@ from fabric.operations import local as lrun, run, sudo, put
 from fabric.api import *
 from fabric.colors import green, red, yellow, blue
 import os
-import time
 import datetime
+import tempfile
+import time
 
 
 def local():
@@ -148,3 +149,20 @@ def download_db(filename="tmp.sql"):
         print("Local done!")
 
     print(green("Your local environment has now new database!"))
+
+
+def download_media():
+    temp_dirpath = tempfile.mkdtemp()
+
+    env.run("mkdir -p {}".format(temp_dirpath))
+    with env.cd(temp_dirpath):
+        container_id = docker_compose("ps -q django-a").split()[0]
+        env.run(
+            "docker cp {}:/data/media/ {}".format(
+                container_id,
+                temp_dirpath
+            )
+        )
+        get("{}/media/".format(temp_dirpath), "./")
+
+    env.run("rm -rf {}".format(temp_dirpath))
