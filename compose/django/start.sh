@@ -1,4 +1,5 @@
 #!/bin/sh
+sass static/scss:static/css
 python manage.py migrate
 python /app/manage.py collectstatic --noinput
 /usr/local/bin/uwsgi --http :5000 \
