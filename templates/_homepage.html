@@ -57,12 +57,12 @@
                     </div>
                     <div class="project-link-icon">
                         {% if package.repo_url %}
-                        <a href="{{ package.repo_url }}" title="{% trans "Open on GitHub"%}"><i class="icon-github"></i></a>
+                        <a href="{{ package.repo_url }}" target="_blank" title="{% trans "Open on GitHub"%}"><i class="icon-github"></i></a>
                         {% endif %}
                     </div>
                     <div class="project-link-icon">
                         {% if package.url %}
-                        <a href="{{ package.url }}" class="link-color-reversed"><i class="icon-link"></i></a>
+                        <a href="{{ package.url }}" target="_blank" class="link-color-reversed"><i class="icon-link"></i></a>
                         {% endif %}
                     </div>
                 </div>
