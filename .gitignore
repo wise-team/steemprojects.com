@@ -59,7 +59,7 @@ key
 root-cert
 
 # backups dir
-backups/*.sql
+backups/*.sql*
 
 # media dir
 media/*
