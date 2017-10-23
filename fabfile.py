@@ -20,6 +20,7 @@ from fabric.colors import green, red, yellow, blue
 import os
 import datetime
 import tempfile
+import textwrap
 import time
 
 ENV = env
@@ -61,7 +62,8 @@ def env(name="prod"):
     filename = ".env.{}".format(name)
 
     if not os.path.isfile(filename):
-        raise Exception("Missing {} file".format(filename))
+        print(red("Missing {} file".format(filename)))
+        raise SystemExit()
 
     with open(".env.{}".format(name)) as env_file:
         ENV.name = name
@@ -71,27 +73,42 @@ def env(name="prod"):
                 ENV.__setattr__(key.replace("FAB_", "").lower(), value)
 
     if ENV.name == "local":
-        ENV.run = lrun
+        ENV.run = lambda *args, **kwargs: lrun(capture=True, *args, **kwargs)
         ENV.cd = lcd
     else:
         ENV.run = run  # if you don't log in as root, replace with 'ENV.run = sudo'
         ENV.cd = cd
 
 
-def deploy():
+def _check_env():
+    if not hasattr(ENV, "name"):
+        print(red(textwrap.dedent("""
+            You need to specify environment, by:
+                fab env:<env_name> deploy
+            or:
+                fab deploy:<env_name>
+        """)))
+        raise SystemExit()
+
+
+def deploy(branch="master"):
     """
     Pulls the latest changes from master, rebuilt and restarts the stack
     """
 
-    ENV.DEPLOYMENT_DATETIME = datetime.datetime.utcnow().isoformat()
+    _check_env()
 
-    lrun("git push origin master")
+    ENV.DEPLOYMENT_DATETIME = datetime.datetime.utcnow().isoformat()
+    deployment_branch = ENV.DEPLOYMENT_DATETIME.replace(":", "").replace(".", "")
+
+    lrun("git push origin {}".format(branch))
     _copy_secrets()
     with ENV.cd(ENV.project_dir):
 
-        docker_compose("run postgres backup before-deploy-at-{}.sql".format(ENV.DEPLOYMENT_DATETIME))
+        docker_compose("run postgres backup before-deploy-at-{}.sqlc".format(ENV.DEPLOYMENT_DATETIME))
 
-        ENV.run("git pull origin master")
+        ENV.run("git fetch --all")
+        ENV.run("git checkout -f origin/{} -b {}".format(branch, deployment_branch))
 
         _build_and_restart("django-a")
         time.sleep(10)
@@ -120,38 +137,71 @@ def docker_compose(command):
         return ENV.run("docker-compose -f {file} {command}".format(file=ENV.compose_file, command=command))
 
 
-def download_db(filename="tmp.sql"):
+def download_db(filename="tmp.sqlc"):
     """
-    Download and apply database from remote environment to your local environment  
+    Download and apply database from remote environment to your local environment
     """
+
+    temp_dirpath = "/tmp/"
+    remote_filename = "{}-{}-{}".format(
+        ENV.name,
+        datetime.datetime.utcnow().isoformat(),
+        filename
+    )
 
     with ENV.cd(ENV.project_dir):
-        docker_compose("run postgres backup {}".format(filename))
-        remote_sql_dump_filepath = os.path.join(ENV.data_dir, 'backups', filename)
+        docker_compose("run postgres backup {}".format(remote_filename))
+        remote_sql_dump_filepath = os.path.join(temp_dirpath, remote_filename)
+        container_id = docker_compose("ps -q postgres").split()[0]
+        ENV.run("docker cp {}:/backups/{} {}".format(
+            container_id,
+            remote_filename,
+            remote_sql_dump_filepath
+        ))
+        get(remote_sql_dump_filepath, '{}/{}'.format(temp_dirpath, filename))
 
-        get(remote_sql_dump_filepath, './backups/{}'.format(filename))
-
-        docker_compose("run postgres rm /backups/{}".format(filename))
+        docker_compose("run postgres rm /backups/{}".format(remote_filename))
+        ENV.run("rm {}".format(remote_sql_dump_filepath))
         print("Remote done!")
 
-    env("local")
+
+def restore_db(filename="tmp.sqlc"):
+    temp_dirpath = "/tmp/"
+    remote_filename = "{}-{}-{}".format(
+        ENV.name,
+        datetime.datetime.utcnow().isoformat(),
+        filename
+    )
 
     with ENV.cd(ENV.project_dir):
-        docker_compose("down -v")
-        docker_compose("up -d postgres")
-        time.sleep(10)
-        docker_compose("run postgres restore {}".format(filename))
-        docker_compose("run django python manage.py migrate")
-        docker_compose("up -d")
-        ENV.run("rm ./backups/{}".format(filename))
-        print("Local done!")
+        local_sql_dump_filepath = os.path.join(temp_dirpath, filename)
+        container_id = docker_compose("ps -q postgres").split()[0]
 
-    print(green("Your local environment has now new database!"))
+        if ENV.name == "local":
+            file_to_copy = local_sql_dump_filepath
+        else:
+            remote_sql_dump_filepath = os.path.join(temp_dirpath, remote_filename)
+            put(local_sql_dump_filepath, remote_sql_dump_filepath)
+            file_to_copy = remote_sql_dump_filepath
+
+        ENV.run("docker cp {} {}:/backups/{}".format(
+            file_to_copy,
+            container_id,
+            remote_filename,
+        ))
+
+        docker_compose("run postgres restore {}".format(remote_filename))
+        docker_compose("up -d")
+        docker_compose("run postgres rm /backups/{}".format(remote_filename))
+        if ENV.name != "local":
+            ENV.run("rm {}".format(remote_sql_dump_filepath))
+
+        print(green("Your {} environment has now new database!".format(ENV.name)))
 
 
 def download_media():
     """
-    Download and replace all files from media directory from remote environment to your local environment  
+    Download and replace all files from media directory from remote environment to your local environment
     """
     temp_dirpath = tempfile.mkdtemp()
 
