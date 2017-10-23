@@ -5,6 +5,8 @@ networks:
     external: true
 
 volumes:
+  database: {}
+  backups: {}
   static: {}
   caddy: {}
   media: {}
@@ -13,8 +15,8 @@ services:
   postgres:
     build: ./compose/postgres
     volumes:
-      - /home/deploy/Data/steemprojects.com/postgres:/var/lib/postgresql/data
-      - /home/deploy/Data/steemprojects.com/backups:/backups
+      - database:/var/lib/postgresql/data
+      - backups:/backups
     env_file: .env
     networks:
       - gallifrey
