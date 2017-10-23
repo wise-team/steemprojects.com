@@ -51,8 +51,7 @@ logfile
 *.dump
 
 collected_static
-.env
-.env.local
+.env.*
 key.pem
 cert
 dhparam.pem
