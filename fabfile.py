@@ -22,57 +22,24 @@ import datetime
 import tempfile
 import time
 
-
-def local():
-    """
-    Work on the local environment
-    """
-    env.compose_file = "dev.yml"
-    env.project_dir = "."
-    env.run = lrun
-    env.cd = lcd
+ENV = env
 
 
-def production():
-    """
-    Work on the production environment
-    """
-    env.hosts = ["94.23.220.88"]  # list the ip addresses or domain names of your production boxes here
-    env.port = 22  # ssh port
-    env.user = "deploy"  # remote user, see `env.run` if you don't log in as root
-
-    env.compose_file = "docker-compose.yml"
-    env.project_dir = "/home/deploy/Deploy/steemprojects.com"  # this is the project dir where your code lives on this machine
-    env.data_dir = "/home/deploy/Data/steemprojects.com"
-
-    # if you don't use key authentication, add your password here
-    # env.password = "foobar"
-    # if your machine has no bash installed, fall back to sh
-    # env.shell = "/bin/sh -c"
-
-    env.run = run  # if you don't log in as root, replace with 'env.run = sudo'
-    env.cd = cd
-
-
-def copy_secrets():
+def _copy_secrets():
     """
     Copies secrets from local to remote.
     :return:
     """
-    secrets = [
-        ".env",
-    ]
+    secret = ".env.{}".format(ENV.name)
 
-    for secret in secrets:
-        remote_path = "/".join([env.project_dir, secret])
-        print(blue("Copying {secret} to {remote_path} on {host}".format(
-            secret=secret, remote_path=remote_path, host=env.host
-        )))
-        put(secret, remote_path)
+    remote_path = "/".join([ENV.project_dir, ".env"])
+    print(blue("Copying {secret} to {remote_path} on {host}".format(
+        secret=secret, remote_path=remote_path, host=ENV.host
+    )))
+    put(secret, remote_path)
 
-        DEPLOYMENT_DATETIME = datetime.datetime.utcnow().isoformat()
-        with cd(env.project_dir):
-            run("echo 'DEPLOYMENT_DATETIME=%s' >> %s" % (DEPLOYMENT_DATETIME, secret))
+    with cd(ENV.project_dir):
+        run("echo 'DEPLOYMENT_DATETIME=%s' >> %s" % (ENV.DEPLOYMENT_DATETIME, remote_path))
 
 
 def rollback(commit="HEAD~1"):
@@ -80,10 +47,35 @@ def rollback(commit="HEAD~1"):
     Rollback to a previous commit and build the stack
     :param commit: Commit you want to roll back to. Default is the previous commit
     """
-    with env.cd(env.project_dir):
-        env.run("git checkout {}".format(commit))
+    with ENV.cd(ENV.project_dir):
+        ENV.run("git checkout {}".format(commit))
 
     deploy()
+
+
+def env(name="prod"):
+    """
+    Set environment based on your local .env.<name> file  
+    """
+
+    filename = ".env.{}".format(name)
+
+    if not os.path.isfile(filename):
+        raise Exception("Missing {} file".format(filename))
+
+    with open(".env.{}".format(name)) as env_file:
+        ENV.name = name
+        for line in env_file:
+            key, value = line.strip().split("=")
+            if key.startswith("FAB_") and value:
+                ENV.__setattr__(key.replace("FAB_", "").lower(), value)
+
+    if ENV.name == "local":
+        ENV.run = lrun
+        ENV.cd = lcd
+    else:
+        ENV.run = run  # if you don't log in as root, replace with 'ENV.run = sudo'
+        ENV.cd = cd
 
 
 def deploy():
@@ -91,15 +83,17 @@ def deploy():
     Pulls the latest changes from master, rebuilt and restarts the stack
     """
 
+    ENV.DEPLOYMENT_DATETIME = datetime.datetime.utcnow().isoformat()
+
     lrun("git push origin master")
-    copy_secrets()
-    with env.cd(env.project_dir):
+    _copy_secrets()
+    with ENV.cd(ENV.project_dir):
 
-        #docker_compose("run postgres backup")
+        docker_compose("run postgres backup before-deploy-at-{}.sql".format(ENV.DEPLOYMENT_DATETIME))
 
-        env.run("git pull origin master")
+        ENV.run("git pull origin master")
 
-        build_and_restart("django-a")
+        _build_and_restart("django-a")
         time.sleep(10)
 
         # just to make sure they are on
@@ -107,10 +101,10 @@ def deploy():
         docker_compose("start redis")
         time.sleep(10)
 
-        build_and_restart("django-b")
+        _build_and_restart("django-b")
 
 
-def build_and_restart(service):
+def _build_and_restart(service):
     docker_compose("build " + service)
     docker_compose("create " + service)
     docker_compose("stop " + service)
@@ -122,42 +116,49 @@ def docker_compose(command):
     Run a docker-compose command
     :param command: Command you want to run
     """
-    with env.cd(env.project_dir):
-        return env.run("docker-compose -f {file} {command}".format(file=env.compose_file, command=command))
+    with ENV.cd(ENV.project_dir):
+        return ENV.run("docker-compose -f {file} {command}".format(file=ENV.compose_file, command=command))
 
 
 def download_db(filename="tmp.sql"):
-    with env.cd(env.project_dir):
+    """
+    Download and apply database from remote environment to your local environment  
+    """
+
+    with ENV.cd(ENV.project_dir):
         docker_compose("run postgres backup {}".format(filename))
-        remote_sql_dump_filepath = os.path.join(env.data_dir, 'backups', filename)
+        remote_sql_dump_filepath = os.path.join(ENV.data_dir, 'backups', filename)
 
         get(remote_sql_dump_filepath, './backups/{}'.format(filename))
 
         docker_compose("run postgres rm /backups/{}".format(filename))
         print("Remote done!")
 
-    local()
+    env("local")
 
-    with env.cd(env.project_dir):
+    with ENV.cd(ENV.project_dir):
         docker_compose("down -v")
         docker_compose("up -d postgres")
         time.sleep(10)
         docker_compose("run postgres restore {}".format(filename))
         docker_compose("run django python manage.py migrate")
         docker_compose("up -d")
-        env.run("rm ./backups/{}".format(filename))
+        ENV.run("rm ./backups/{}".format(filename))
         print("Local done!")
 
     print(green("Your local environment has now new database!"))
 
 
 def download_media():
+    """
+    Download and replace all files from media directory from remote environment to your local environment  
+    """
     temp_dirpath = tempfile.mkdtemp()
 
-    env.run("mkdir -p {}".format(temp_dirpath))
-    with env.cd(temp_dirpath):
+    ENV.run("mkdir -p {}".format(temp_dirpath))
+    with ENV.cd(temp_dirpath):
         container_id = docker_compose("ps -q django-a").split()[0]
-        env.run(
+        ENV.run(
             "docker cp {}:/data/media/ {}".format(
                 container_id,
                 temp_dirpath
@@ -165,4 +166,4 @@ def download_media():
         )
         get("{}/media/".format(temp_dirpath), "./")
 
-    env.run("rm -rf {}".format(temp_dirpath))
+    ENV.run("rm -rf {}".format(temp_dirpath))
