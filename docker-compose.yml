@@ -8,7 +8,6 @@ volumes:
   database: {}
   backups: {}
   static: {}
-  caddy: {}
   media: {}
 
 services:
