@@ -425,6 +425,8 @@ def package_detail(request, slug, template_name="package/package.html"):
         for ac in profile.account_set.all() if ac.type == Account.TYPE_GITHUB
     ]
 
+    can_edit_package = hasattr(request.user, "profile") and request.user.profile.can_edit_package(package)
+
     return render(request, template_name,
             dict(
                 package=package,
@@ -435,7 +437,8 @@ def package_detail(request, slug, template_name="package/package.html"):
                 warnings=warnings,
                 latest_version=package.last_released(),
                 repo=package.repo,
-                not_team_contributors=package.contributors.exclude(pk__in=all_github_accounts_of_teammambers)
+                not_team_contributors=package.contributors.exclude(pk__in=all_github_accounts_of_teammambers),
+                can_edit_package=can_edit_package
             )
         )
 

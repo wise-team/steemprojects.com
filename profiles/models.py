@@ -106,8 +106,13 @@ class Profile(BaseModel):
 
     def can_edit_package(self, project):
         if getattr(settings, 'RESTRICT_PACKAGE_EDITORS', False):
+            tm_accounts = project.team_members.all()
+
             return self._is_staff_or_verified() or \
-                   self in project.team_members.all() or \
+                   any([
+                       account.connected and account in tm_accounts
+                       for account in self.account_set.all()
+                   ]) or \
                    self.user.has_perm('package.change_package')
 
         # anyone can edit
@@ -215,3 +220,5 @@ class AccountType(BaseModel):
     link_to_account_with_param = models.CharField(max_length=256)
     link_to_avatar_with_params = models.CharField(max_length=256)
 
+    def __str__(self):
+        return self.display_name
