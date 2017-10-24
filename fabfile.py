@@ -201,21 +201,47 @@ def restore_db(filename="tmp.sqlc"):
         print(green("Your {} environment has now new database!".format(ENV.name)))
 
 
-def download_media():
+def download_media(media_dir="/tmp", override="n"):
     """
     Download and replace all files from media directory from remote environment to your local environment
     """
     temp_dirpath = tempfile.mkdtemp()
+    media_dir = os.path.abspath(media_dir)
+    target_media_dir = os.path.join(media_dir, "media")
+
+    if override != "y" and prompt(
+        '{} directory will be override. Continue? [y/N]'.format(target_media_dir),
+        default='n',
+        validate=r'^y|n$'
+    ) == 'n':
+        exit()
+
+    lrun('rm -rfv {}'.format(target_media_dir))
 
     ENV.run("mkdir -p {}".format(temp_dirpath))
-    with ENV.cd(temp_dirpath):
-        container_id = docker_compose("ps -q django-a").split()[0]
-        ENV.run(
-            "docker cp {}:/data/media/ {}".format(
-                container_id,
-                temp_dirpath
-            )
+    container_id = docker_compose("ps -q django-a").split()[0]
+    ENV.run(
+        "docker cp {}:/data/media/ {}".format(
+            container_id,
+            temp_dirpath
         )
-        get("{}/media/".format(temp_dirpath), "./")
+    )
+
+    get("{}/media/".format(temp_dirpath), media_dir)
 
     ENV.run("rm -rf {}".format(temp_dirpath))
+
+
+def upload_media(media_dir="/tmp"):
+    media_dir = os.path.abspath(os.path.join(media_dir, "media"))
+    temp_dirpath = tempfile.mkdtemp()
+    ENV.run("mkdir -p {}".format(temp_dirpath))
+    put(media_dir, temp_dirpath)
+
+    container_id = docker_compose("ps -q django-a").split()[0]
+    ENV.run(
+        "docker cp {}/media {}:/data/".format(
+            temp_dirpath,
+            container_id,
+        )
+    )
