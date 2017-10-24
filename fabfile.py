@@ -33,7 +33,7 @@ def _copy_secrets():
     """
     secret = ".env.{}".format(ENV.name)
 
-    remote_path = "/".join([ENV.project_dir, ".env"])
+    remote_path = os.path.join(ENV.project_dir, ".env")
     print(blue("Copying {secret} to {remote_path} on {host}".format(
         secret=secret, remote_path=remote_path, host=ENV.host
     )))
