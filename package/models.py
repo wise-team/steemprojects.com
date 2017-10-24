@@ -94,7 +94,7 @@ class Project(BaseModel):
             )
         )
     description = models.TextField(_("Description"), blank=True, null=True, default="")
-    announcement_post = models.URLField(_("Announcement Post"), blank=True, null=True, help_text="Link to place, where project was announced for the first time")
+    announcement_post = models.URLField(_("Announcement Post URL"), blank=True, null=True, help_text="Link to place, where project was announced for the first time")
 
     # TODO: remove created_by
     created_by = models.ForeignKey(Profile, blank=True, null=True, related_name="creator", on_delete=models.SET_NULL)
