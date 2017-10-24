@@ -51,6 +51,7 @@ logfile
 *.dump
 
 collected_static
+.env
 .env.*
 key.pem
 cert

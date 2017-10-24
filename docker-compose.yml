@@ -1,8 +1,4 @@
-version: '2'
-
-networks:
-  gallifrey:
-    external: true
+version: '3'
 
 volumes:
   database: {}
@@ -17,8 +13,6 @@ services:
       - database:/var/lib/postgresql/data
       - backups:/backups
     env_file: .env
-    networks:
-      - gallifrey
 
   django-a:
     build:
@@ -35,8 +29,6 @@ services:
       - media:/data/media
     command: /start.sh
     env_file: .env
-    networks:
-      - gallifrey
 
   django-b:
     build:
@@ -53,10 +45,6 @@ services:
       - media:/data/media
     command: /start.sh
     env_file: .env
-    networks:
-      - gallifrey
 
   redis:
     build: ./compose/redis
-    networks:
-      - gallifrey
