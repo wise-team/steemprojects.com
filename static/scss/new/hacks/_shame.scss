@@ -1,0 +1,14 @@
+/*
+Eventually, only social login icons should use "icon-*" classes.
+At some point I started using different icons from the pack, but
+I didn't know that they will be removed from it.
+
+This hack was introduced in: https://github.com/noisy/steemprojects.com/issues/49
+*/
+.icon-close::after {
+  @extend .material-icons;
+  content: 'clear';
+  font-size: $base-font-size;
+  position: relative;
+  top: 2px;
+}
