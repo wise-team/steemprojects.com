@@ -1,0 +1,62 @@
+@import "../base/variables";
+
+.m-btn {
+  $m-btn: &;
+
+  @extend .btn;
+
+  margin: 19px 0;
+  padding: 0 15px;
+  font-size: 14px;
+  font-weight: normal;
+  text-decoration: none;
+  text-transform: none;
+  border-radius: 20px;
+  line-height: 40px;
+
+  color: $base-font-color;
+  background-color: $m-btn-background-color;
+  border: solid 1px $m-btn-border-color;
+
+  &:hover {
+    color: $m-btn-font-color-hover;
+    background-color: $m-btn-border-color-hover;
+    border-color: $m-btn-border-color-hover;
+  }
+
+  &__icon {
+    @extend .material-icons;
+    position: relative;
+    top: -2px;
+    margin-right: 5px;
+    font-size: 1.2em;
+
+    &--fav {
+
+      &::before {
+        content: 'favorite_border';
+        color: $gen-red;
+      }
+
+      #{$m-btn}:hover & {
+        &::before {
+          content: 'favorite';
+          color: $m-btn-font-color-hover;
+        }
+      }
+
+      &--is-fav {
+        &::before {
+          content: 'favorite';
+        }
+
+        #{$m-btn}:hover & {
+          &::before {
+            content: 'favorite_border';
+            color: $m-btn-font-color-hover;
+          }
+        }
+      }
+    }
+  }
+}

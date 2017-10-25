@@ -1,5 +1,5 @@
 from django import template
-
+from django.core.urlresolvers import reverse
 
 from package.context_processors import used_packages_list
 
@@ -52,6 +52,27 @@ def usage_button(context):
 
 @register.inclusion_tag('package/templatetags/_fav_button.html', takes_context=True)
 def fav_button(context):
+    response = used_packages_list(context['request'])
+    is_fav = context['package'].pk in response['used_packages_list']
+
+    response.update({
+        "is_fav": is_fav,
+        "title": "Remove from favorites" if is_fav else "Add to favorites",
+        "url": reverse(
+            "usage",
+            args=(
+                context["package"].slug,
+                "remove" if is_fav else "add"
+            )
+        )
+    })
+
+    return response
+
+
+# TODO: refactor fav_button__small, to use fav_button template approach
+@register.inclusion_tag('package/templatetags/_fav_button--small.html', takes_context=True)
+def fav_button__small(context):
     response = used_packages_list(context['request'])
     response['STATIC_URL'] = context['STATIC_URL']
     response['package'] = context['package']

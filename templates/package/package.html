@@ -19,9 +19,12 @@
 {% block body %}
 
 <div class="row">
-    <div class="col-md-12 title-row">
+    <div class="col-md-6 title-row">
         <h2>{{ package.name }} <a href="{% url 'edit_package' package.slug %}"><span class="glyphicon glyphicon-pencil"></span></a></h2>
         <p class="category"><i class="material-icons">format_list_bulleted</i> <a href="{% url "category" package.category.slug %}"> {{ package.category }}</a></p>
+    </div>
+    <div class="col-md-6 action-panel">
+        {% fav_button %}
     </div>
 </div>
 <div class="row">
