@@ -1,7 +1,4 @@
-<a class="fav-link {% if in_favorites %} link-color-reversed{% endif %}"
-   id="usage-link-{{ package.slug }}"
-   href="{% url 'usage' package.slug usage_action %}"
-   title="{{ title }}"
->
-    <i class="heart icon-favorite{% if not in_favorites %}_border{% endif %}"></i>
+<a class="m-btn" href="{{ url }}">
+    <i class="m-btn__icon m-btn__icon--fav {% if is_fav %}m-btn__icon--fav--is-fav{% endif %}"></i>
+    {{ title }}
 </a>
