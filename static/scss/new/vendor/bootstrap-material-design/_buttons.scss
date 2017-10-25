@@ -40,18 +40,18 @@
   // btn-flat
   background: transparent;
   &:not(.btn-raised) {
-    @include variations(unquote(".btn"), unquote(""), color, $mdb-text-color-primary);
+    //@include variations(unquote(".btn"), unquote(""), color, $mdb-text-color-primary);
     box-shadow: none;
 
     &:not(.btn-link) {
       &:hover,
       &:focus {
         // spec: flat/light bg Hover: 20% #999999
-        background-color: rgba(#999999, (20/100));
+        //background-color: rgba(#999999, (20/100));
 
         .theme-dark & {
           // spec: dark bg Hover: 15% #CCCCCC
-          background-color: rgba(#CCCCCC, (15/100));
+          //background-color: rgba(#CCCCCC, (15/100));
         }
       }
     }
