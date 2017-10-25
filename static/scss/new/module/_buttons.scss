@@ -14,12 +14,13 @@
   border-radius: 20px;
   line-height: 40px;
 
-  border: solid 1px $m-btn-border-color;
+  color: $base-font-color;
   background-color: $m-btn-background-color;
+  border: solid 1px $m-btn-border-color;
 
   &:hover {
-    background-color: $m-btn-border-color-hover;
     color: $m-btn-font-color-hover;
+    background-color: $m-btn-border-color-hover;
     border-color: $m-btn-border-color-hover;
   }
 
