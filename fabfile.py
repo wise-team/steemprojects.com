@@ -68,7 +68,11 @@ def env(name="prod"):
     with open(".env.{}".format(name)) as env_file:
         ENV.name = name
         for line in env_file:
-            key, value = line.strip().split("=")
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+
+            key, value = line.split("=")
             if key.startswith("FAB_") and value:
                 ENV.__setattr__(key.replace("FAB_", "").lower(), value)
 
