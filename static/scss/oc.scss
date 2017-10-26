@@ -1,3 +1,5 @@
+@import "new/base/variables";
+
 /*! oc.css */
 
 /* ==========================================================================
@@ -5,9 +7,8 @@
    ========================================================================== */
 
 * {
-    font-family: 'Source Sans Pro', sans-serif;
-	font-weight: 400;
-
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 400;
 }
 
 html {
@@ -16,10 +17,10 @@ html {
 }
 
 body {
-    background-color: #FFF;
-	padding-top: 80px;
-    /* Margin bottom by footer height */
-    margin-bottom: 80px;
+  background-color: $base-background-color;
+  padding-top: 80px;
+  /* Margin bottom by footer height */
+  margin-bottom: 80px;
 }
 
 .footer {
@@ -40,9 +41,9 @@ body {
 }
 
 @media (max-width: 1600px) {
-	.container {
-		padding: 0 20px;
-	}
+  .container {
+    padding: 0 20px;
+  }
 }
 
 .list-group-item:hover {
@@ -117,14 +118,15 @@ a:focus, a:hover  {
 .latest-projects .project-details {
     float: left;
     padding-left: 30px;
-    width: calc(100% - 123px - 32px)
+    width: calc(100% - 123px - 37px)
 }
 
 .latest-projects .project-links {
-    width: 32px;
+    width: 37px;
     text-align: center;
     float: right;
     line-height: 1;
+    padding-left: 5px;
 }
 
 .latest-projects .project-link-icon {
@@ -134,7 +136,6 @@ a:focus, a:hover  {
 
 .latest-projects .project-link-icon:first-child {
     padding-top: 0;
-    margin-top: -5px
 }
 
 .latest-projects .project-link-icon:last-child {

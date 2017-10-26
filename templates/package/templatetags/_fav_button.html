@@ -1,4 +1,13 @@
-<a class="m-btn" href="{{ url }}">
-    <i class="m-btn__icon m-btn__icon--fav {% if is_fav %}m-btn__icon--fav--is-fav{% endif %}"></i>
-    {{ title }}
-</a>
+{% if size == 'small' %}
+    <a class="m-clickable-icon"
+       href="{{ url }}"
+       title="{{ title }}"
+    >
+        <i class="m-clickable-icon__icon m-clickable-icon__icon--fav {% if is_fav %}m-clickable-icon__icon--fav--is-fav{% endif %}"></i>
+    </a>
+{% else %}
+    <a class="m-btn" href="{{ url }}">
+        <i class="m-btn__icon m-btn__icon--fav {% if is_fav %}m-btn__icon--fav--is-fav{% endif %}"></i>
+        {{ title }}
+    </a>
+{% endif %}
