@@ -16,9 +16,8 @@ def build_1(print_out=False):
     quarter_delta = timedelta(90)
     half_year_delta = timedelta(182)
     year_delta = timedelta(365)
-    last_week = now - timedelta(7)
 
-    SearchV2.objects.filter(created__lte=last_week).delete()
+    SearchV2.objects.all().delete()
     for project in Project.objects.filter():
 
         obj, created = SearchV2.objects.get_or_create(
