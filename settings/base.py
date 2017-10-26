@@ -498,3 +498,4 @@ REST_FRAMEWORK = {
 
 import datetime
 DEPLOYMENT_DATETIME = environ.get('DEPLOYMENT_DATETIME', datetime.datetime.utcnow().isoformat())
+GOOGLE_ANALYTICS_PROPERTY_ID = environ.get('GOOGLE_ANALYTICS_PROPERTY_ID')
