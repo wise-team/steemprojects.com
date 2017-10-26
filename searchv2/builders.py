@@ -19,33 +19,33 @@ def build_1(print_out=False):
     last_week = now - timedelta(7)
 
     SearchV2.objects.filter(created__lte=last_week).delete()
-    for package in Project.objects.filter():
+    for project in Project.objects.filter():
 
         obj, created = SearchV2.objects.get_or_create(
             item_type="package",
-            slug=package.slug,
+            slug=project.slug,
         )
-        obj.slug_no_prefix = remove_prefix(package.slug)
-        obj.clean_title = clean_title(remove_prefix(package.slug))
-        obj.title = package.title
-        obj.title_no_prefix = remove_prefix(package.title)
-        obj.description = package.repo_description
-        obj.category = package.category.title
-        obj.absolute_url = package.get_absolute_url()
-        obj.repo_watchers = package.repo_watchers
-        obj.repo_forks = package.repo_forks
-        obj.pypi_downloads = package.pypi_downloads
-        obj.usage = package.usage.count()
-        obj.participants = package.participants
+        obj.slug_no_prefix = remove_prefix(project.slug)
+        obj.clean_title = clean_title(remove_prefix(project.slug))
+        obj.title = project.name
+        obj.title_no_prefix = remove_prefix(project.name)
+        obj.description = project.repo_description
+        obj.category = project.category.title
+        obj.absolute_url = project.get_absolute_url()
+        obj.repo_watchers = project.repo_watchers
+        obj.repo_forks = project.repo_forks
+        obj.pypi_downloads = project.pypi_downloads
+        obj.usage = project.usage.count()
+        obj.participants = project.participants
 
         optional_save = False
         try:
-            obj.last_committed = package.last_updated()
+            obj.last_committed = project.last_updated()
             optional_save = True
         except Commit.DoesNotExist:
             pass
 
-        last_released = package.last_released()
+        last_released = project.last_released()
         if last_released and last_released.upload_time:
             obj.last_released = last_released.upload_time
             optional_save = True
