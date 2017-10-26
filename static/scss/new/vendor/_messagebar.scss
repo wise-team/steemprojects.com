@@ -1,0 +1,66 @@
+@import "../base/variables";
+
+/*
+https://github.com/audreyr/messagebar/blob/gh-pages/src/django.messagebar.css
+*/
+
+/**
+ * MessageBar styles.
+ */
+
+.m-messagebar {
+  font-weight: 700;
+  text-shadow: 0.3px 0.3px 0.3px #FFF;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border: solid 1px;
+  & .container {
+    color: $m-btn-font-color-hover;
+  }
+
+  &--info {
+    background-color: $m-btn-background-color-hover;
+    border-color: $m-btn-background-color-hover;
+  }
+
+  // TODO: define colors with variables
+
+  &--default {
+    background-color: #c4c4c4;
+    border-color: #999;
+  }
+
+  &--debug {
+    background-color: #84b3dc;
+    border-color: #428BCA;
+  }
+
+  &--success {
+    background-color: #a3d7a3;
+    border-color: #5CB85C;
+  }
+
+  &--warning {
+    background-color: #f6cd93;
+    border-color: #F0AD4E;
+  }
+
+  &--error {
+    background-color: #e89996;
+    border-color: #D9534F;
+  }
+
+  &--close-btn {
+    padding: 0;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0);
+    border: 0;
+    -webkit-appearance: none;
+    float: right;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 0.8em;
+    color: $m-btn-font-color-hover;
+    text-shadow: 0 1px 0 #FFF;
+  }
+}
