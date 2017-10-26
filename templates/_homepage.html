@@ -53,16 +53,20 @@
                 </a>
                 <div class="project-links">
                     <div class="project-link-icon">
-                        {% fav_button__small %}
+                        {% fav_button 'small' %}
                     </div>
                     <div class="project-link-icon">
                         {% if package.repo_url %}
-                        <a href="{{ package.repo_url }}" target="_blank" title="{% trans "Open on GitHub"%}"><i class="icon-github"></i></a>
+                            <a class="m-clickable-icon" href="{{ package.repo_url }}">
+                                <i class="m-clickable-icon__icon m-clickable-icon__icon--github"></i>
+                            </a>
                         {% endif %}
                     </div>
                     <div class="project-link-icon">
                         {% if package.url %}
-                        <a href="{{ package.url }}" target="_blank" class="link-color-reversed"><i class="icon-link"></i></a>
+                            <a class="m-clickable-icon" href="{{ package.url }}">
+                                <i class="m-clickable-icon__icon m-clickable-icon__icon--link"></i>
+                            </a>
                         {% endif %}
                     </div>
                 </div>

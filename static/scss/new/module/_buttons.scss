@@ -25,13 +25,13 @@
   }
 
   &__icon {
-    @extend .material-icons;
     position: relative;
     top: -2px;
     margin-right: 5px;
     font-size: 1.2em;
 
     &--fav {
+      @extend .material-icons;
 
       &::before {
         content: 'favorite_border';
@@ -57,6 +57,68 @@
           }
         }
       }
+    }
+  }
+}
+
+.m-clickable-icon {
+  $m-clickable-icon: &;
+
+  display: block;
+  &__icon {
+    position: relative;
+    top: -2px;
+    margin-right: 5px;
+    font-size: 1.2em;
+
+    &--fav {
+      @extend .material-icons;
+
+      &::before {
+        content: 'favorite_border';
+        color: $base-font-color;
+      }
+
+      &:hover {
+        &::before {
+          content: 'favorite_border';
+          color: $gen-red;
+        }
+      }
+
+      &--is-fav {
+        &::before {
+          content: 'favorite';
+          color: $gen-red;
+        }
+
+        &:hover {
+          &::before {
+            content: 'favorite';
+            color: $base-font-color;
+          }
+        }
+      }
+    }
+
+    &--link {
+      @extend .material-icons;
+
+      &::before {
+        content: 'insert_link';
+        color: $base-link-color;
+      }
+
+      &:hover {
+        &::before {
+          color: $base-font-color;
+        }
+      }
+    }
+
+    &--github {
+      @extend .icon-base;
+      @extend .icon-github;
     }
   }
 }
