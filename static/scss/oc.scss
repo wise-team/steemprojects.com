@@ -118,14 +118,15 @@ a:focus, a:hover  {
 .latest-projects .project-details {
     float: left;
     padding-left: 30px;
-    width: calc(100% - 123px - 32px)
+    width: calc(100% - 123px - 37px)
 }
 
 .latest-projects .project-links {
-    width: 32px;
+    width: 37px;
     text-align: center;
     float: right;
     line-height: 1;
+    padding-left: 5px;
 }
 
 .latest-projects .project-link-icon {
