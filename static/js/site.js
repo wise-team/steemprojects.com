@@ -52,8 +52,8 @@ $('input#id_q_p').keyup(function() {
 // initialize scrollable
 $(".scrollable").scrollable();
 
-$(".topbar").topBar({
-  slide: false
+$(".m-messagebar").messageBar({
+  slide: true
 });
 
 $(window).scroll(function(){

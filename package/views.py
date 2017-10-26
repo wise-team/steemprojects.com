@@ -236,12 +236,12 @@ def package_autocomplete(request):
     """
     Provides Package matching based on matches of the beginning
     """
-    titles = []
+    names = []
     q = request.GET.get("q", "")
     if q:
-        titles = (x.title for x in Project.objects.filter(title__istartswith=q))
+        names = (x.name for x in Project.objects.filter(name__istartswith=q))
 
-    response = HttpResponse("\n".join(titles))
+    response = HttpResponse("\n".join(names))
 
     setattr(response, "djangologging.suppress_output", True)
     return response
@@ -265,10 +265,10 @@ def ajax_package_list(request, template_name="package/ajax_package_list.html"):
         _space = "%s %s" % (settings.PACKAGINATOR_SEARCH_PREFIX, q)
         _underscore = '%s_%s' % (settings.PACKAGINATOR_SEARCH_PREFIX, q)
         packages = Project.objects.filter(
-                        Q(title__istartswith=q) |
-                        Q(title__istartswith=_dash) |
-                        Q(title__istartswith=_space) |
-                        Q(title__istartswith=_underscore)
+                        Q(name__istartswith=q) |
+                        Q(name__istartswith=_dash) |
+                        Q(name__istartswith=_space) |
+                        Q(name__istartswith=_underscore)
                     )
 
     packages_already_added_list = []
@@ -353,7 +353,7 @@ def python3_list(request, template_name="package/python3_list.html"):
     packages = Project.objects.filter(version__supports_python3=True).distinct()
     packages = packages.order_by("-pypi_downloads", "-repo_watchers", "name")
 
-    values = "category, category_id, commit, commit_list, created, added_by, added_by_id, documentation_url, dpotw, grid, gridpackage, id, last_fetched, last_modified_by, last_modified_by_id, modified, packageexample, participants, pypi_downloads, pypi_url, repo_description, repo_forks, repo_url, repo_watchers, slug, title, usage, version".split(',')
+    values = "category, category_id, commit, commit_list, created, added_by, added_by_id, documentation_url, dpotw, grid, gridpackage, id, last_fetched, last_modified_by, last_modified_by_id, modified, packageexample, participants, pypi_downloads, pypi_url, repo_description, repo_forks, repo_url, repo_watchers, slug, name, usage, version".split(',')
     values = [x.strip() for x in values]
     if request.GET.get('sort') and request.GET.get('sort') not in values:
         # Some people have cached older versions of this view
