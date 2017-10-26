@@ -1,0 +1,11 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ GOOGLE_ANALYTICS_PROPERTY_ID }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '{{ GOOGLE_ANALYTICS_PROPERTY_ID }}');
+  {% if request.user.is_authenticated %}
+    gtag('set', {'user_id': '{{ request.user.id }}'});
+  {% endif %}
+</script>
