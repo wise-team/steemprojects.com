@@ -51,11 +51,12 @@ def usage_button(context):
 
 
 @register.inclusion_tag('package/templatetags/_fav_button.html', takes_context=True)
-def fav_button(context):
+def fav_button(context, size=None):
     response = used_packages_list(context['request'])
     is_fav = context['package'].pk in response['used_packages_list']
 
     response.update({
+        "size": size,
         "is_fav": is_fav,
         "title": "Remove from favorites" if is_fav else "Add to favorites",
         "url": reverse(
@@ -67,21 +68,4 @@ def fav_button(context):
         )
     })
 
-    return response
-
-
-# TODO: refactor fav_button__small, to use fav_button template approach
-@register.inclusion_tag('package/templatetags/_fav_button--small.html', takes_context=True)
-def fav_button__small(context):
-    response = used_packages_list(context['request'])
-    response['STATIC_URL'] = context['STATIC_URL']
-    response['package'] = context['package']
-    if context['package'].pk in response['used_packages_list']:
-        response['title'] = "Remove from favorites"
-        response['usage_action'] = "remove"
-        response['in_favorites'] = True
-    else:
-        response['title'] = "Add to favorites"
-        response['usage_action'] = "add"
-        response['in_favorites'] = False
     return response
