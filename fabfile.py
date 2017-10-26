@@ -119,6 +119,7 @@ def deploy(branch="master"):
         time.sleep(10)
 
         _build_and_restart("django-b")
+        docker_compose("run django-a python manage.py searchv2_build")
 
 
 def _build_and_restart(service):
