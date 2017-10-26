@@ -124,7 +124,7 @@
         <table class="table">
           <thead>
             <tr>
-              <th>{% trans "Search Weight" %}</th>
+              <th>{% trans "Reputation" %}</th>
               <th>{% trans "Project" %}</th>
               <th>{% trans "Description" %}</th>
             </tr>
@@ -132,9 +132,9 @@
           <tbody>
                 {% verbatim %}
                 <tr ng-repeat="item in items">
-                  <td>{{ item.weight / max_weight * 100 | number:0 }}%</td>
+                  <td>{{ item.weight / max_weight * 100 | number:0 }}</td>
                   <td>
-                      <a ng-href="{{ item.absolute_url }}">{{ item.name }}</a>
+                      <a ng-href="{{ item.absolute_url }}">{{ item.title }}</a>
                   </td>
                   <td>
                     <strong ng-if="item.item_type=='grid'">Grid:</strong>
