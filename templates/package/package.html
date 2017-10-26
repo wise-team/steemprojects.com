@@ -71,7 +71,7 @@
                                 <a class="role-confirm role-confirm-verify" href="{% url 'profile_confirm_role' membership.id 'verify' %}"><i class="material-icons">done</i>Verify this</a>
                                 <a class="role-confirm role-confirm-deny" href="{% url 'profile_confirm_role' membership.id 'deny' %}"><i class="material-icons">clear</i>Deny</a>
                             {% else %}
-                                <i class="material-icons" title="Watch out! This information is not verified by {{ membership.account.profile.username }}.">info_outline</i>
+                                <i class="material-icons" title="Watch out! This information is not verified by {{ membership.account.name }}.">info_outline</i>
                             {% endif %}
                             </span>
                         {% endif %}

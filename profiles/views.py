@@ -24,6 +24,7 @@ from social_auth_local.utils import common_context
 
 
 def profile_detail(request, template_name="profiles/profile.html", github_account=None, steem_account=None, id=None):
+    account = None
     if github_account:
         account = get_object_or_404(Account, account_type__name=Account.TYPE_GITHUB, name=github_account)
         profile = account.profile
@@ -34,14 +35,17 @@ def profile_detail(request, template_name="profiles/profile.html", github_accoun
         user = get_object_or_404(User, pk=id)
         profile = get_object_or_404(Profile, user=user)
 
-    memberships = TeamMembership.objects.filter(account__in=Account.objects.filter(profile=profile))
+    accounts = Account.objects.filter(profile=profile) if profile else [account]
+
+    memberships = TeamMembership.objects.filter(account__in=accounts)
 
     account_types = AccountType.objects.all()
 
     accounts = [
-        Account.objects.get(account_type=account_type, profile=profile)
-        if Account.objects.filter(account_type=account_type, profile=profile)
-        else {"account_type": account_type}
+        Account.objects.get(id__in=[ac.id for ac in accounts], account_type=account_type)
+        if Account.objects.filter(id__in=[ac.id for ac in accounts], account_type=account_type) else
+        {"account_type": account_type}
+
         for account_type in account_types
     ]
 
@@ -49,9 +53,12 @@ def profile_detail(request, template_name="profiles/profile.html", github_accoun
         request,
         template_name,
         {
-            "local_profile": profile,
+            "local_profile": profile or {
+                "username": account and account.name,
+                "my_packages": [],
+            },
             "accounts": accounts,
-            "user": profile.user,
+            "user": profile and profile.user,
             "memberships": memberships,
         },
     )

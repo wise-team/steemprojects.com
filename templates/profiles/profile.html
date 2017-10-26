@@ -48,7 +48,7 @@
                                     <button type="submit" class="role-confirm role-confirm-deny disconnect-account"> <i class="material-icons">clear</i>Disconnect </button>
                                 </form>
                             {% endif %}
-                        {% elif account.profile %}
+                        {% elif account.name %}
                             <a href="{{ account.thirdparty_profile_page }}"><i class="icon-{{ account.account_type.name.lower }}"></i>{{ account.name }}</a>
                             {% if request.user == user %}
                                 <a class="role-confirm role-confirm-verify" href="{% url 'social:begin' account.account_type.social_auth_provider_name %}"><i class="material-icons">done</i>Confirm</a>
