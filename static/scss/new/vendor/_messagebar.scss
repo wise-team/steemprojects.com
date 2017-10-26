@@ -23,6 +23,11 @@ https://github.com/audreyr/messagebar/blob/gh-pages/src/django.messagebar.css
     border-color: $m-btn-background-color-hover;
   }
 
+  &--error {
+    background-color: $gen-red;
+    border-color: $gen-red;
+  }
+
   // TODO: define colors with variables
 
   &--default {
@@ -43,11 +48,6 @@ https://github.com/audreyr/messagebar/blob/gh-pages/src/django.messagebar.css
   &--warning {
     background-color: #f6cd93;
     border-color: #F0AD4E;
-  }
-
-  &--error {
-    background-color: #e89996;
-    border-color: #D9534F;
   }
 
   &--close-btn {
