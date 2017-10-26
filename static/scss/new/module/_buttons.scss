@@ -40,7 +40,6 @@
 
       #{$m-btn}:hover & {
         &::before {
-          content: 'favorite';
           color: $m-btn-font-color-hover;
         }
       }
@@ -52,7 +51,6 @@
 
         #{$m-btn}:hover & {
           &::before {
-            content: 'favorite_border';
             color: $m-btn-font-color-hover;
           }
         }
@@ -81,7 +79,6 @@
 
       &:hover {
         &::before {
-          content: 'favorite_border';
           color: $gen-red;
         }
       }
@@ -94,7 +91,6 @@
 
         &:hover {
           &::before {
-            content: 'favorite';
             color: $base-font-color;
           }
         }

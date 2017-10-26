@@ -246,3 +246,6 @@ def upload_media(media_dir="/tmp"):
             container_id,
         )
     )
+
+    # TODO: add fix for https://github.com/noisy/steemprojects.com/issues/59
+    # files should have proper ownership
