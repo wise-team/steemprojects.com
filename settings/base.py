@@ -78,6 +78,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'dj_pagination.middleware.PaginationMiddleware',
+    'social_auth_local.middleware.SocialAuthLocalExceptionMiddleware',
 ]
 
 TEMPLATES = [
@@ -248,11 +249,18 @@ SUPPORTED_REPO.extend(["bitbucket", "github"])
 
 
 AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_AUTHENTICATION_BACKENDS = [
     'steemconnect.backends.SteemConnectOAuth2',
     'social_core.backends.github.GithubOAuth2',
     # 'social_core.backends.facebook.FacebookOAuth2',
+]
+
+AUTHENTICATION_BACKENDS = SOCIAL_AUTH_AUTHENTICATION_BACKENDS + [
     'django.contrib.auth.backends.ModelBackend',
-)
+]
 
 SOCIAL_AUTH_GITHUB_KEY = GITHUB_APP_ID
 SOCIAL_AUTH_GITHUB_SECRET = GITHUB_API_SECRET
@@ -298,8 +306,8 @@ SOCIAL_AUTH_PIPELINE = (
     # Checks if the current social-account is already associated in the site.
     # 'social_core.pipeline.social_auth.social_user',
 
-
-    'profiles.pipeline.account_already_in_use',
+    # CUSTOM PIPELINE
+    'social_auth_local.pipeline.account_already_in_use',
 
     # CUSTOM PIPELINE
     'social_auth_local.pipeline.require_email',
@@ -315,9 +323,6 @@ SOCIAL_AUTH_PIPELINE = (
     # a similar email address.
     'social_core.pipeline.social_auth.associate_by_email',
 
-    # Associate current auth with a user with the same Profile in the DB.
-    'profiles.views.associate_by_profile_with_github_and_steemconnect',
-
     # Create a user account if we haven't found one yet.
     'social_core.pipeline.user.create_user',
 
@@ -328,7 +333,8 @@ SOCIAL_AUTH_PIPELINE = (
     # specified by settings (and the default ones like access_token, etc).
     'social_core.pipeline.social_auth.load_extra_data',
 
-    'profiles.views.save_profile_pipeline',
+    # CUSTOM PIPELINE
+    'social_auth_local.pipeline.save_profile_pipeline',
 
     # Update the user record with any changed info from the auth service.
     'social_core.pipeline.user.user_details',
