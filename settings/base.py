@@ -307,7 +307,7 @@ SOCIAL_AUTH_PIPELINE = (
     # 'social_core.pipeline.social_auth.social_user',
 
     # CUSTOM PIPELINE
-    'social_auth_local.pipeline.account_already_in_use',
+    'social_auth_local.pipeline.social_user',
 
     # CUSTOM PIPELINE
     'social_auth_local.pipeline.require_email',
