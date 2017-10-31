@@ -1,0 +1,68 @@
+@import "../base/variables";
+
+.m-merge {
+  width: 660px;
+
+  &__title {
+    margin-bottom: 50px;
+  }
+
+  &__profile {
+    float: left;
+  }
+
+  &__accounts {
+    float: left;
+    width: 100%;
+
+  }
+  &__account {
+    float: left;
+    width: 230px;
+    padding: 20px;
+    border: $m-btn-border-width solid $m-btn-border-color;
+
+    & .m-avatar {
+      float: left;
+      &--big {
+        margin: 20px;
+      }
+      &--tiny {
+        margin: 5px;
+      }
+    }
+  }
+
+  &__buttons {
+    width: 100%;
+    float: left;
+    text-align: center;
+    //margin-top: 20px;
+
+    & .m-btn {
+      margin: 20px;
+    }
+  }
+
+  &__form {
+    margin-top: 20px;
+    display: inline-block;
+  }
+
+  &__icon {
+    @extend .material-icons;
+
+    float: left;
+    width: 160px;
+    position: relative;
+    height: 260px;
+    line-height: 260px;
+    text-align: center;
+
+    &::before {
+      content: 'call_merge';
+      //color: $gen-red;
+      font-size: 100px;
+    }
+  }
+}

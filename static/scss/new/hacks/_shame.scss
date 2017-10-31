@@ -1,3 +1,6 @@
+@import "../base/variables";
+
+
 /*
 Eventually, only social login icons should use "icon-*" classes.
 At some point I started using different icons from the pack, but
@@ -11,4 +14,12 @@ This hack was introduced in: https://github.com/noisy/steemprojects.com/issues/4
   font-size: $base-font-size;
   position: relative;
   top: 2px;
+}
+
+/*
+This !important needed to be introduce, because m-merge with now is centered
+with jumbotron, which by default set background color to white.s
+*/
+.m-merge {
+  background-color: $base-background-color !important;
 }

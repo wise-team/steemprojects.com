@@ -56,22 +56,18 @@
                             {% else %}
                                 <i class="material-icons" title="Watch out! {{ local_profile.username }} didn't confirmed ownership of this account.">info_outline</i>
                             {% endif %}
-                        {% else %}
-                            {% if request.user == user %}
-                                <a href="{{ account.thirdparty_profile_page }}"><i class="icon-{{ account.account_type.name.lower }}"></i>{{ account.name }}</a>
-                                <a href="{% url 'social:begin' account.account_type.social_auth_provider_name %}">
-                                    Connect your {{ account.account_type.display_name }} account
-                                </a>
-                            {% endif %}
                         {% endif %}
-
                     </span>
 
                 {% endfor %}
-                <div class="add-more-accounts">
-
-
-                </div>
+                {% for account in accounts_to_add %}
+                    <div class="account">
+                        <i class="icon-{{ account.account_type.name.lower }}"></i>
+                        <a href="{% url 'social:begin' account.account_type.social_auth_provider_name %}">
+                            Connect {% if account.already_connected %}another{% else %}your{% endif %} {{ account.account_type.display_name }} account
+                        </a>
+                    </div>
+                {% endfor %}
             </div>
         </div>
 
