@@ -46,15 +46,20 @@
                 {% if membership.role_confirmed_by_account != False %}
                 <div>
                     <a href="{{ membership.project.get_absolute_url }}">{{ membership.project.name }}</a>
-{#                    - {{ membership.role }}#}
+                    - {{ membership.role }}
                     <span class="status">
 {#                        {% if not membership.role_confirmed_by_project_owner %}#}
 {#                            <span><i class="material-icons" title="Your new role needs to be accepted by a project owner">info_outline</i> Applied</span>#}
 {#                            <a class="role-confirm role-confirm-edit" href="{% url 'profile_confirm_role' membership.id 'deny' %}"><i class="material-icons">edit</i>Edit</a>#}
                         {% if membership.role_confirmed_by_account == None %}
-                            <a class="role-confirm role-confirm-verify" href="{% url 'profile_confirm_role' membership.id 'verify' %}"><i class="material-icons">done</i>Verify this</a>
-{#                            <a class="role-confirm role-confirm-edit" href="{% url 'profile_confirm_role' membership.id 'deny' %}"><i class="material-icons">edit</i>Edit</a>#}
-                            <a class="role-confirm role-confirm-deny" href="{% url 'profile_confirm_role' membership.id 'deny' %}"><i class="material-icons">clear</i>Deny</a>
+                            {% if membership.account.connected %}
+                                <a class="role-confirm role-confirm-verify" href="{% url 'profile_confirm_role' membership.id 'verify' %}"><i class="material-icons">done</i>Verify this</a>
+{#                                <a class="role-confirm role-confirm-edit" href="{% url 'profile_confirm_role' membership.id 'deny' %}"><i class="material-icons">edit</i>Edit</a>#}
+                                <a class="role-confirm role-confirm-deny" href="{% url 'profile_confirm_role' membership.id 'deny' %}"><i class="material-icons">clear</i>Deny</a>
+                            {% else %}
+                                <i class="material-icons" title="You need to first verify your {{ membership.account.account_type.name.lower }} {{ membership.account.name }} account, to verify roles attached to it.">info_outline</i>
+                                <a class="role-confirm role-confirm-deny" href="{% url 'profile_confirm_role' membership.id 'deny' %}"><i class="material-icons">clear</i>Deny</a>
+                            {% endif %}
                         {% elif membership.role_confirmed_by_account %}
                             <span class="role-confirm role-confirm-confirmed"><i class="material-icons">check_circle</i>Verified</span>
                         {% endif %}

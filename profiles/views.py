@@ -128,25 +128,24 @@ def profile_confirm_role(request, membership_id, action):
 
 
 def to_confirm(profile):
-    data_to_confirm = {}
+    data = {
+        'to_confirm': False
+    }
 
-    accounts = Account.objects.filter(profile=profile, user_social_auth=None)
-    if accounts:
-        data_to_confirm['accounts'] = accounts
+    data['to_confirm'] |= Account.objects.filter(profile=profile, user_social_auth=None).exists()
 
-    confirmed_accounts = Account.objects.filter(profile=profile, user_social_auth__isnull=False)
+    data['accounts'] = Account.objects.filter(profile=profile).\
+        order_by('user_social_auth_id')  # connected first
 
-    memberships = TeamMembership.objects.filter(account__in=confirmed_accounts).order_by("id")
-    memberships_to_confirmed = [
+    memberships = TeamMembership.objects.filter(account__profile=profile).order_by("id")
+    data['memberships'] = [
         tm
         for tm in memberships
         if tm.role_confirmed_by_account is None
     ]
+    data['to_confirm'] |= bool(data['memberships'])
 
-    if memberships_to_confirmed:
-        data_to_confirm['memberships'] = memberships
-
-    return data_to_confirm
+    return data
 
 
 @login_required
@@ -154,7 +153,7 @@ def profile_confirm(request, template_name="profiles/profile_confirm.html"):
     profile = get_object_or_404(Profile, user=request.user)
 
     context = to_confirm(profile)
-    if context:
+    if context['to_confirm']:
         return render(
             request,
             template_name,
