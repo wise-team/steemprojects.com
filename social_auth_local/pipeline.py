@@ -77,10 +77,16 @@ def save_profile_pipeline(backend, user, response, details, social, *args, **kwa
 
     if profile:
         account.profile = profile
-    elif created or (not created and not account.profile) or account.profile.user != user:
+    elif created or (
+        not created and not account.profile
+    ) or (
+        account.profile.user is not None and account.profile.user != user
+    ):
         profile = Profile.objects.create(user=user)
         account.profile = profile
-    elif account.profile.user == user:
+    elif account.profile.user == user or \
+            account.profile.user is None:  # if two accounts are linked together with empty profile
+
         profile = account.profile
 
     account.user_social_auth = social
