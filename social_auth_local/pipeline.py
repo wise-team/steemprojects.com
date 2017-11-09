@@ -61,52 +61,6 @@ def require_email(strategy, details, user=None, is_new=False, *args, **kwargs):
             )
 
 
-def associate_by_profile_with_github_and_steemconnect(backend, details, user=None, *args, **kwargs):
-    """
-    Associate current auth with a user with the same Profile in the DB.
-    """
-    pass
-    # if user:
-    #     return None
-
-    # try:
-    #     if backend.name == 'github':
-    #         profile = Profile.objects.get(github_account=details['username'])
-    #         profile.github_account_confirmed = True
-    #     elif backend.name == 'steemconnect':
-    #         profile = Profile.objects.get(steem_account=details['username'])
-    #         profile.steem_account_confirmed = True
-    #     else:
-    #         return None
-    #
-    #     # # simple login or merging
-    #     # if profile.user and user:
-    #     #
-    #     #     if profile.user == user:
-    #     #         return {'user': user, 'is_new': False}
-    #     #     else:
-    #     #
-    #     #         # merge
-    #     #         old_user = profile.user
-    #     #         old_user.profile = None
-    #     #         old_user.save()
-    #     #
-    #     # elif not profile.user and user:
-    #     #     profile.user = user
-    #     #     profile.save()
-    #     #     return {'user': profile.user, 'is_new': False}
-    #     #
-    #     # elif profile.user and user and profile.user != user:
-    #
-    #
-    #
-    # except Profile.DoesNotExist:
-    #     return None
-
-
-# def confirm_account_merge(request):
-
-
 def save_profile_pipeline(backend, user, response, details, social, *args, **kwargs):
     try:
         # profile could be created for a user which previously logged in
@@ -123,17 +77,6 @@ def save_profile_pipeline(backend, user, response, details, social, *args, **kwa
 
     if profile:
         account.profile = profile
-        already_connected_accounts = Account.objects.exclude(
-            id=account.id,
-            user_social_auth=None,
-        ).filter(
-            profile=profile,
-            account_type=account.account_type
-        )
-        # return do_disconnect(request.backend, request.user, association_id,
-        # for account in already_connected_accounts:
-        #     backend.disconnect(user=user, association_id=account.user_social_auth.id)
-
     elif created or (not created and not account.profile) or account.profile.user != user:
         profile = Profile.objects.create(user=user)
         account.profile = profile
