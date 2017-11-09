@@ -6,14 +6,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.edit import UpdateView
-from social_core.pipeline.partial import partial
 from braces.views import LoginRequiredMixin
-
-from django.contrib.auth.signals import user_logged_in
-
-# from social_auth.signals import pre_update
-# from social_auth.backends.contrib.github import GithubBackend
-from package.forms import TeamMembersFormSet
 from package.models import TeamMembership
 from profiles.forms import ProfileForm
 from profiles.models import Profile, Account, AccountType
@@ -35,19 +28,22 @@ def profile_detail(request, template_name="profiles/profile.html", github_accoun
         user = get_object_or_404(User, pk=id)
         profile = get_object_or_404(Profile, user=user)
 
-    accounts = Account.objects.filter(profile=profile) if profile else [account]
-
-    memberships = TeamMembership.objects.filter(account__in=accounts)
-
+    accounts_qs = Account.objects.filter(profile=profile) if profile else Account.objects.filter(id=account.id)
+    memberships = TeamMembership.objects.filter(account__in=accounts_qs)
     account_types = AccountType.objects.all()
 
-    accounts = [
-        Account.objects.get(id__in=[ac.id for ac in accounts], account_type=account_type)
-        if Account.objects.filter(id__in=[ac.id for ac in accounts], account_type=account_type) else
-        {"account_type": account_type}
+    accounts = []
+    accounts_to_add = []
+    for account_type in account_types:
+        account_to_add = {}
 
-        for account_type in account_types
-    ]
+        if accounts_qs.filter(account_type=account_type).exists():
+            accounts.extend(list(accounts_qs.filter(account_type=account_type)))
+            account_to_add['already_connected'] = True
+
+        if profile and profile.user and profile.user == request.user:
+            account_to_add["account_type"] = account_type
+            accounts_to_add.append(account_to_add)
 
     return render(
         request,
@@ -58,6 +54,7 @@ def profile_detail(request, template_name="profiles/profile.html", github_accoun
                 "my_packages": [],
             },
             "accounts": accounts,
+            "accounts_to_add": accounts_to_add,
             "user": profile and profile.user,
             "memberships": memberships,
         },
@@ -131,25 +128,24 @@ def profile_confirm_role(request, membership_id, action):
 
 
 def to_confirm(profile):
-    data_to_confirm = {}
+    data = {
+        'to_confirm': False
+    }
 
-    accounts = Account.objects.filter(profile=profile, user_social_auth=None)
-    if accounts:
-        data_to_confirm['accounts'] = accounts
+    data['to_confirm'] |= Account.objects.filter(profile=profile, user_social_auth=None).exists()
 
-    confirmed_accounts = Account.objects.filter(profile=profile, user_social_auth__isnull=False)
+    data['accounts'] = Account.objects.filter(profile=profile).\
+        order_by('user_social_auth_id')  # connected first
 
-    memberships = TeamMembership.objects.filter(account__in=confirmed_accounts).order_by("id")
-    memberships_to_confirmed = [
+    memberships = TeamMembership.objects.filter(account__profile=profile).order_by("id")
+    data['memberships'] = [
         tm
         for tm in memberships
         if tm.role_confirmed_by_account is None
     ]
+    data['to_confirm'] |= bool(data['memberships'])
 
-    if memberships_to_confirmed:
-        data_to_confirm['memberships'] = memberships
-
-    return data_to_confirm
+    return data
 
 
 @login_required
@@ -157,7 +153,7 @@ def profile_confirm(request, template_name="profiles/profile_confirm.html"):
     profile = get_object_or_404(Profile, user=request.user)
 
     context = to_confirm(profile)
-    if context:
+    if context['to_confirm']:
         return render(
             request,
             template_name,
@@ -180,115 +176,3 @@ class ProfileConfirmView(UpdateView):
         form.save()
         messages.add_message(self.request, messages.INFO, "Profile Saved")
         return HttpResponseRedirect(reverse("profile_detail", kwargs={"github_account": self.get_object()}))
-
-
-
-def associate_by_profile_with_github_and_steemconnect(backend, details, user=None, *args, **kwargs):
-    """
-    Associate current auth with a user with the same Profile in the DB.
-    """
-    pass
-    # if user:
-    #     return None
-
-    # try:
-    #     if backend.name == 'github':
-    #         profile = Profile.objects.get(github_account=details['username'])
-    #         profile.github_account_confirmed = True
-    #     elif backend.name == 'steemconnect':
-    #         profile = Profile.objects.get(steem_account=details['username'])
-    #         profile.steem_account_confirmed = True
-    #     else:
-    #         return None
-    #
-    #     # # simple login or merging
-    #     # if profile.user and user:
-    #     #
-    #     #     if profile.user == user:
-    #     #         return {'user': user, 'is_new': False}
-    #     #     else:
-    #     #
-    #     #         # merge
-    #     #         old_user = profile.user
-    #     #         old_user.profile = None
-    #     #         old_user.save()
-    #     #
-    #     # elif not profile.user and user:
-    #     #     profile.user = user
-    #     #     profile.save()
-    #     #     return {'user': profile.user, 'is_new': False}
-    #     #
-    #     # elif profile.user and user and profile.user != user:
-    #
-    #
-    #
-    # except Profile.DoesNotExist:
-    #     return None
-
-
-def save_profile_pipeline(backend, user, response, details, social, *args, **kwargs):
-    try:
-        # profile could be created for a user which previously logged in
-        # with another backend, but with the same email, because of
-        # 'social_core.pipeline.social_auth.associate_by_email'
-        profile = Profile.objects.get(user=user)
-    except Profile.DoesNotExist:
-        profile = None
-
-    account_name = details['username']
-    account_type = AccountType.objects.get(social_auth_provider_name=backend.name)
-
-    account, created = Account.objects.get_or_create(account_type=account_type, name=account_name)
-
-    if profile:
-        account.profile = profile
-    elif created or (not created and not account.profile) or account.profile.user != user:
-        profile = Profile.objects.create(user=user)
-        account.profile = profile
-    elif account.profile.user == user:
-        profile = account.profile
-
-    account.user_social_auth = social
-    account.save()
-
-    profile.user = user
-    profile.save()
-
-
-@partial
-def confirm_profile(backend, user, response, details, *args, **kwargs):
-    current_partial = kwargs.get('current_partial')
-
-    try:
-        profile = Profile.objects.get(user=user)
-    except Profile.DoesNotExist:
-        return None
-
-    import time
-    time.sleep(5)
-    return backend.redirect(
-        '{0}?partial_token={1}'.format(reverse('profile_edit'), current_partial.token)
-    )
-
-
-@partial
-def require_email(strategy, details, user=None, is_new=False, *args, **kwargs):
-    if kwargs.get('ajax') or user and user.email:
-        return
-    elif is_new and not details.get('email'):
-        email = strategy.request_data().get('email')
-        if email:
-            details['email'] = email
-        else:
-            current_partial = kwargs.get('current_partial')
-
-            import time
-            time.sleep(5)
-            return strategy.redirect(
-                '/steemconnect/email?partial_token={0}'.format(current_partial.token)
-            )
-
-
-
-from rest_framework.response import Response
-from rest_framework.views import APIView

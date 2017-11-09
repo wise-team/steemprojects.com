@@ -16,7 +16,7 @@
 
   color: $base-font-color;
   background-color: $m-btn-background-color;
-  border: solid 1px $m-btn-border-color;
+  border: solid $m-btn-border-width $m-btn-border-color;
 
   &:hover {
     color: $m-btn-font-color-hover;

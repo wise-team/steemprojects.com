@@ -1,0 +1,71 @@
+@import "../base/variables";
+
+.m-avatar {
+  $m-avatar: &;
+
+  position: relative;
+
+  &--big {
+    width: 150px;
+    text-align: center;
+
+    & .#{m-avatar}__nickname-link {
+      font-size: 22px;
+    }
+  }
+
+  &--tiny {
+    text-align: center;
+
+    & .#{m-avatar}__image{
+      float: left;
+      margin-right: 10px;
+    }
+
+    & .#{m-avatar}__nickname-link {
+      float: left;
+      line-height: 30px;
+      font-size: 16px;
+    }
+  }
+
+  &__nickname-link {
+    color: $base-link-color;
+  }
+
+  &__image{
+    border-radius: 50%;
+  }
+
+  &__account-type-icon {
+    @extend .icon-base;
+    margin-right: 10px;
+
+    .#{m-avatar}--big & {
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-size: 24px;
+
+      &--steem {
+        font-size: 22px;
+      }
+      &--github {
+        font-size: 24px;
+      }
+    }
+
+    .#{m-avatar}--tiny & {
+      float: left;
+      font-size: 30px;
+    }
+
+    &--steem {
+      @extend .icon-steem;
+    }
+
+    &--github {
+      @extend .icon-github;
+    }
+  }
+}

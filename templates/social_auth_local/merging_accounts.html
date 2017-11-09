@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% load i18n static %}
+{% load profile_tags %}
+
+{% block head_title %}{% trans "Merging accounts..." %}{% endblock %}
+
+{% block body %}
+<div class="jumbotron m-merge">
+    <h1 class="m-merge__title">Another user is already logged in</h1>
+    <div class="m-merge__accounts">
+        <div class="m-merge__account">
+            {% with account=logged_in_profile.account_set.all.0 %}
+                {% avatar account 'big' %}
+            {% endwith %}
+            {% for account in logged_in_profile.account_set.all %}
+                {% if forloop.counter0 %}
+                    {% avatar account 'tiny' %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <i class="m-merge__icon"></i>
+        <div class="m-merge__account">
+            {% with account=logging_in_profile.account_set.all.0 %}
+                {% avatar account 'big' %}
+            {% endwith %}
+            {% for account in logging_in_profile.account_set.all %}
+                {% if forloop.counter0 %}
+                    {% avatar account 'tiny' %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="m-merge__buttons">
+        <form class="m-merge__form" action="{% url 'social:complete' backend=partial_backend_name %}" method="post" role="form">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <input type="hidden" name="partial_token" value="{{ partial_token }}">
+            <input type="hidden" name="merge" value="yes">
+            <button class="m-btn" type="submit">Merge accounts</button>
+        </form>
+        <form class="m-merge__form" action="{% url 'social:complete' backend=partial_backend_name %}" method="post" role="form">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <input type="hidden" name="partial_token" value="{{ partial_token }}">
+            <input type="hidden" name="merge" value="no">
+            <button class="m-btn" type="submit">Login as {{ logging_in_profile.username }}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
