@@ -61,12 +61,14 @@
 
                 {% endfor %}
                 {% for account in accounts_to_add %}
+                    {% if not account.already_connected %}
                     <div class="account">
                         <i class="icon-{{ account.account_type.name.lower }}"></i>
                         <a href="{% url 'social:begin' account.account_type.social_auth_provider_name %}">
-                            Connect {% if account.already_connected %}another{% else %}your{% endif %} {{ account.account_type.display_name }} account
+                            Connect your {{ account.account_type.display_name }} account
                         </a>
                     </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
