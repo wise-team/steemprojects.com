@@ -8,7 +8,7 @@ from django.views.generic.base import TemplateView, RedirectView
 from django.contrib import admin
 
 from profiles.views import profile_detail
-from social_auth_local.views import require_email, validation_sent
+from social_auth_local.views import require_email, validation_sent, merging_accounts
 
 admin.autodiscover()
 
@@ -24,6 +24,7 @@ urlpatterns = [
     url('^auth/', include('social_django.urls', namespace='social')),
     url(r'^auth/email/$', require_email, name='require_email'),
     url(r'^auth/email-sent/', validation_sent, name='validation_sent'),
+    url(r'^auth/merging_accounts/', merging_accounts, name='merging_accounts'),
     # url('', include('social_auth.urls')),
     url(r"^$", homepage, name="home"),
     url(r"^health_check/$", health_check_view, name="health_check"),

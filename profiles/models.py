@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -161,6 +162,30 @@ class Profile(BaseModel):
         if getattr(settings, 'RESTRICT_GRID_EDITORS', False):
             return self._is_staff_or_verified() or self.user.has_perm('grid.change_element')
         return True
+
+    def merge(self, profile):
+        for account in profile.account_set.all():
+            account.profile = self
+
+            if account.user_social_auth:
+                account.user_social_auth.user = self.user
+                account.user_social_auth.save()
+
+        from package.models import Project
+
+        change = False
+        for project in Project.objects.filter(usage=profile.user):
+            if self.user not in project.usage.all():
+                project.usage.add(self.user)
+                change = True
+
+        if change:
+            cache.delete("sitewide_used_packages_list_{}".format(self.user.pk))
+
+        # TODO: add merge of verified_by, and email
+
+        profile.user.delete()
+        profile.delete()
 
 
 class Account(BaseModel):

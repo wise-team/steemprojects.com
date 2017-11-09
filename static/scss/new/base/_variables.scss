@@ -16,10 +16,12 @@
   //$m-btn-font-color: $base-font-color; // by default
   $m-btn-border-color: $steem-blue;
   $m-btn-background-color: $base-background-color;
+  $m-btn-border-width: 1px;
 
-  $m-btn-font-color-hover: $steem-white;
-  $m-btn-border-color-hover: $steem-blue;
-  $m-btn-background-color-hover: $steem-blue;
+    //hover
+    $m-btn-font-color-hover: $steem-white;
+    $m-btn-border-color-hover: $steem-blue;
+    $m-btn-background-color-hover: $steem-blue;
 
 
   // Font
@@ -36,13 +38,15 @@
 //  $base-background-color: $eos-blackish;
 //  $base-font-color: $eos-white;
 //  $base-link-color: $eos-orange;
+//  $m-btn-border-width: 2px;
 //
 //  $m-btn-font-color: $base-font-color; // by default
 //  $m-btn-border-color: $base-font-color;
 //  $m-btn-background-color: $base-background-color;
 //
-//  $m-btn-font-color-hover: $eos-white;
-//  $m-btn-border-color-hover: $eos-orange;
-//  $m-btn-background-color-hover: $eos-orange;
-
-
+//    //hover
+//    $m-btn-font-color-hover: $eos-white;
+//    $m-btn-border-color-hover: $eos-orange;
+//    $m-btn-background-color-hover: $eos-orange;
+//
+//
