@@ -29,7 +29,7 @@ def profile_detail(request, template_name="profiles/profile.html", github_accoun
         profile = get_object_or_404(Profile, user=user)
 
     accounts_qs = Account.objects.filter(profile=profile) if profile else Account.objects.filter(id=account.id)
-    memberships = TeamMembership.objects.filter(account__in=accounts_qs)
+    memberships = TeamMembership.objects.filter(account__in=accounts_qs, project__is_published=True)
     account_types = AccountType.objects.all()
 
     accounts = []

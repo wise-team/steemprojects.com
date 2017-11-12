@@ -9,6 +9,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.db.models.query import QuerySet
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.utils.safestring import mark_safe
@@ -50,6 +51,11 @@ class Category(BaseModel):
     @models.permalink
     def get_absolute_url(self):
         return ("category", [self.slug])
+
+
+class ProjectQuerySet(QuerySet):
+    def published(self):
+        return self.filter(is_published=True)
 
 
 class Project(BaseModel):
@@ -111,13 +117,18 @@ class Project(BaseModel):
     team_members = models.ManyToManyField(Account, through='TeamMembership', blank=True, related_name="team_member_of", through_fields=("project", "account"))
     contributors = models.ManyToManyField(Account, blank=True, related_name="contribiuted_to")
     usage = models.ManyToManyField(User, blank=True)
-    added_by = models.ForeignKey(User, blank=True, null=True, related_name="added_by", on_delete=models.SET_NULL)
+    draft_added_by = models.ForeignKey(User, blank=True, null=True, related_name="drafted_projects", on_delete=models.SET_NULL)
+    is_awaiting_approval = models.BooleanField(blank=True, null=None, default=False)
+    is_published = models.BooleanField(blank=True, null=None, default=False)
+    approvers = models.ManyToManyField(User, blank=True, related_name='approved_projects')
     last_modified_by = models.ForeignKey(User, blank=True, null=True, related_name="modifier", on_delete=models.SET_NULL)
     last_fetched = models.DateTimeField(blank=True, null=True, default=timezone.now)
     documentation_url = models.URLField(_("Documentation URL"), blank=True, null=True, default="")
 
     commit_list = models.TextField(_("Commit List"), blank=True)
     main_img = models.ForeignKey('ProjectImage', null=True, blank=True, related_name='main_img_proj')
+
+    objects = ProjectQuerySet.as_manager()
 
     @property
     def img(self):
@@ -127,6 +138,23 @@ class Project(BaseModel):
             return self.images.order_by("id").first().img
         else:
             return None
+
+    @property
+    def is_draft(self):
+        return not self.is_published
+
+    def can_be_published(self, publisher):
+        return publisher.is_staff or publisher.profile.is_trusted
+
+    def publish(self, publisher):
+        if not self.can_be_published(publisher):
+            raise PermissionError()
+
+        self.is_published = True
+        self.is_awaiting_approval = False
+        self.approvers.add(publisher)
+        self.save()
+
 
     @property
     def pypi_name(self):
