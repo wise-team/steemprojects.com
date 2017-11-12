@@ -5,11 +5,13 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
+from django.core.mail import send_mass_mail, mail_managers
 from django.core.urlresolvers import reverse
 from django.db.models import Q, Count
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
+from django.utils.html import escape
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -149,6 +151,36 @@ def update_package(request, slug):
 
 
 @login_required
+def project_approval(request, slug, action):
+
+    project = get_object_or_404(Project, slug=slug)
+    project.is_awaiting_approval = action == 'request'
+    project.save()
+
+    if action == 'request':
+        mail_managers(
+            escape('New project added by @{} awaiting approval - {}'.format(
+                project.created_by.username,
+                project.name
+            )),
+            'Project: {}'.format(request.build_absolute_uri(reverse('package', kwargs={'slug': project.slug})))
+        )
+    return HttpResponseRedirect(reverse("package", kwargs={"slug": project.slug}))
+
+
+@login_required
+def publish_project(request, slug):
+    project = get_object_or_404(Project, slug=slug)
+    try:
+        project.publish(publisher=request.user)
+        messages.add_message(request, messages.INFO, 'Project is published!')
+        return HttpResponseRedirect(reverse("package", kwargs={"slug": project.slug}))
+
+    except PermissionError:
+        return HttpResponseForbidden("permission denied")
+
+
+@login_required
 def edit_timeline(request, slug, template_name="package/timeline_form.html"):
     project = get_object_or_404(Project, slug=slug)
     if not request.user.profile.can_edit_package(project):
@@ -249,7 +281,7 @@ def package_autocomplete(request):
 
 def category(request, slug, template_name="package/category.html"):
     category = get_object_or_404(Category, slug=slug)
-    packages = category.project_set.select_related().annotate(usage_count=Count("usage")).order_by("-repo_watchers", "name")
+    packages = category.project_set.published().select_related().annotate(usage_count=Count("usage")).order_by("-repo_watchers", "name")
     return render(request, template_name, {
         "category": category,
         "packages": packages,
@@ -411,6 +443,25 @@ def package_detail(request, slug, template_name="package/package.html"):
 
     if request.GET.get("message"):
         messages.add_message(request, messages.INFO, request.GET.get("message"))
+
+    if package.is_draft:
+
+        if package.is_awaiting_approval:
+            messages.add_message(
+                request,
+                messages.INFO,
+                'This project is waiting for approval.',
+                extra_tags='data-stick'
+            )
+        else:
+            messages.add_message(
+                request,
+                messages.WARNING,
+                'Information about this project is not published yet. This is a draft!<br>' +
+                'Add as much information about this project as you can. Add logo and some screenshots, add at least few timeline events.<br> ' +
+                'When you will decide it is ready, submit a project for approval by <a href="https://google.com/">trusted users of SteemProjects</a>. Also, learn <a href="">how you can become a trusted user</a>.',
+                extra_tags='draft data-stick'
+            )
 
     proj_imgs = []
     if package.main_img:

@@ -1,6 +1,6 @@
 from random import sample
 
-from django.db.models import Count
+from django.db.models import Count, Case, When
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -34,11 +34,13 @@ def get_feed():
 def homepage(request, template_name="homepage.html"):
 
     categories = []
-    for category in Category.objects.annotate(package_count=Count("project")):
+    for category in Category.objects.annotate(
+        project_count=Count(Case(When(project__is_published=True, then=1)))
+    ):
         element = {
             "title": category.title,
             "description": category.description,
-            "count": category.package_count,
+            "count": category.project_count,
             "slug": category.slug,
             "title_plural": category.title_plural,
         }
@@ -91,7 +93,7 @@ def homepage(request, template_name="homepage.html"):
 
     return render(request,
         template_name, {
-            "latest_packages": Project.objects.all().order_by('-created')[:6],
+            "latest_packages": Project.objects.published().order_by('-created')[:6],
             "random_packages": random_packages,
             "potw": potw,
             "gotw": gotw,

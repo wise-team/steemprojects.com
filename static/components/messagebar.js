@@ -45,7 +45,10 @@
       // call them like so: this.yourOtherFunction(this.element, this.settings).
       var $element = $(this.element);
       $element.data("messageBar-settings", this.settings);
-      $element.on("click", this.close);
+
+      if (! $element.data('stick')) {
+          $element.on("click", this.close);
+      }
       if (this.settings.autoclose) {
         var self = this;
         window.setTimeout(function () { self.close.apply($element); }, this.settings.autoclose);
