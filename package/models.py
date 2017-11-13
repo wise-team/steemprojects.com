@@ -120,6 +120,7 @@ class Project(BaseModel):
     draft_added_by = models.ForeignKey(User, blank=True, null=True, related_name="drafted_projects", on_delete=models.SET_NULL)
     is_awaiting_approval = models.BooleanField(blank=True, null=None, default=False)
     is_published = models.BooleanField(blank=True, null=None, default=False)
+    publication_time = models.DateTimeField(_("Publication time"), blank=True, null=True, default=None)
     approvers = models.ManyToManyField(User, blank=True, related_name='approved_projects')
     last_modified_by = models.ForeignKey(User, blank=True, null=True, related_name="modifier", on_delete=models.SET_NULL)
     last_fetched = models.DateTimeField(blank=True, null=True, default=timezone.now)
@@ -153,6 +154,7 @@ class Project(BaseModel):
         self.is_published = True
         self.is_awaiting_approval = False
         self.approvers.add(publisher)
+        self.publication_time = datetime.now()
         self.save()
 
 

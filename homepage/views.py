@@ -93,7 +93,7 @@ def homepage(request, template_name="homepage.html"):
 
     return render(request,
         template_name, {
-            "latest_packages": Project.objects.published().order_by('-created')[:6],
+            "latest_packages": Project.objects.published().order_by('-publication_time')[:6],
             "random_packages": random_packages,
             "potw": potw,
             "gotw": gotw,
