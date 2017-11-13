@@ -10,18 +10,16 @@ from core.models import BaseModel
 
 
 class Profile(BaseModel):
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, default=None)
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
     email = models.EmailField(_("Email"), null=True, blank=True)
     verified_by = models.ForeignKey("Profile", blank=True, null=True, default=None, related_name="verifier_of")
 
     def __str__(self):
-        steem = self.steem_account.name if self.steem_account else '-'
-        github = self.github_account.name if self.github_account else '-'
-        try:
-            user = self.user.pk if self.user else '-'
-            return "id:{}, steem:{}, github:{}".format(user, steem, github)
-        except User.DoesNotExist:
-            return "id:99, steem:{}, github:{}".format(steem, github)
+        return "id:{}, steem:{}, github:{}".format(
+            self.user.pk if self.user else '-',
+            self.steem_account.name if self.steem_account else '-',
+            self.github_account.name if self.github_account else '-',
+        )
 
     @property
     def is_trusted(self):
