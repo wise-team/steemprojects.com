@@ -32,9 +32,19 @@
 <body class="{% block body_class %}{% endblock %}" ng-controller="SearchCtrl" ng-init="init_search('{{ request.GET.q }}', '{% url 'apiv4:searchv2-list' %}', {{ MAX_WEIGHT }})">
 
 {% for message in messages %}
-    <div class="m-messagebar {% if message.tags %}m-messagebar--{{ message.tags }}{% endif %}" id="message_{{ forloop.counter }}">
+    <div class="m-messagebar{% for tag in message.tags.split %} m-messagebar--{{ tag }}{% endfor %}" id="message_{{ forloop.counter }}"
+        {% for tag in message.tags.split %}{% if 'data-' in tag %}{{ tag }}="true" {% endif %}{% endfor %}"
+    >
         <div class="container">
-            {{ message }} <button type="button" class="m-messagebar--close-btn" data-dismiss="message" title="Dismiss">&times;</button>
+            {{ message|safe }} {% if 'data-stick' not in message.tags.split %}<button type="button" class="m-messagebar--close-btn" data-dismiss="message" title="Dismiss">&times;</button>{% endif %}
+        </div>
+    </div>
+{% endfor %}
+
+{% for project in projects_to_approve %}
+    <div class="m-messagebar m-messagebar--info" data-stick="true">
+        <div class="container">
+            Project <a href="{% url 'package' project.slug %}">{{ project.name }}</a> is waiting for approval.
         </div>
     </div>
 {% endfor %}

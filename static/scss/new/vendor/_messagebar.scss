@@ -14,6 +14,16 @@ https://github.com/audreyr/messagebar/blob/gh-pages/src/django.messagebar.css
   padding-top: 10px;
   padding-bottom: 10px;
   border: solid 1px;
+
+  a {
+    text-decoration: underline;
+    color: $m-btn-font-color-hover;
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+      color: $m-btn-font-color-hover;
+    }
+  }
   & .container {
     color: $m-btn-font-color-hover;
   }
@@ -46,7 +56,7 @@ https://github.com/audreyr/messagebar/blob/gh-pages/src/django.messagebar.css
   }
 
   &--warning {
-    background-color: #f6cd93;
+    background-color: #E3B23C;
     border-color: #F0AD4E;
   }
 

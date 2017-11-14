@@ -22,6 +22,10 @@ class Profile(BaseModel):
         )
 
     @property
+    def is_trusted(self):
+        return self.user.is_staff or self.user.is_superuser or self.verified_by is not None
+
+    @property
     def steem_account(self):
         return self.account_set.filter(account_type__name=Account.TYPE_STEEM, profile=self).first()
 

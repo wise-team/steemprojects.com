@@ -111,7 +111,8 @@ TEMPLATES = [
                 # Your stuff: custom template context processors go here
                 "package.context_processors.used_packages_list",
                 "package.context_processors.deployment",
-                "package.context_processors.google_analytics",
+                "package.context_processors.staff_action_required",
+                "package.context_processors.trusted_user_action_required",
                 "grid.context_processors.grid_headers",
                 "core.context_processors.current_path",
                 "profiles.context_processors.lazy_profile",

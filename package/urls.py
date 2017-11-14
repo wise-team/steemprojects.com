@@ -17,6 +17,8 @@ from package.views import (
     github_webhook,
     edit_timeline,
     edit_images,
+    project_approval,
+    publish_project,
 )
 
 urlpatterns = [
@@ -64,6 +66,18 @@ urlpatterns = [
         regex="^(?P<slug>[-\w]+)/fetch-data/$",
         view=update_package,
         name="fetch_package_data",
+    ),
+
+    url(
+        regex="^(?P<slug>[-\w]+)/approval/(?P<action>request|cancel)/$",
+        view=project_approval,
+        name="project_approval",
+    ),
+
+    url(
+        regex="^(?P<slug>[-\w]+)/publish/$",
+        view=publish_project,
+        name="publish_project",
     ),
 
     url(

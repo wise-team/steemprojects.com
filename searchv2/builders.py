@@ -18,7 +18,12 @@ def build_1(print_out=False):
     year_delta = timedelta(365)
 
     SearchV2.objects.all().delete()
-    for project in Project.objects.filter():
+    published_projects = Project.objects.published()
+
+    if not published_projects.exists():
+        return
+
+    for project in published_projects:
 
         obj, created = SearchV2.objects.get_or_create(
             item_type="package",

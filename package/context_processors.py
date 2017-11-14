@@ -1,5 +1,10 @@
+from collections import defaultdict
+
 from django.core.cache import cache
 from django.conf import settings
+from django.urls.base import reverse
+
+from package.models import Project
 
 
 def used_packages_list(request):
@@ -31,3 +36,25 @@ def google_analytics(request):
             'GOOGLE_ANALYTICS_PROPERTY_ID': ga_prop_id,
         }
     return {}
+
+
+def staff_action_required(request):
+    return {
+
+    }
+
+
+def trusted_user_action_required(request):
+
+    ctx = defaultdict(list)
+
+    if request.user.is_staff or (hasattr(request.user, 'profile') and request.user.profile.is_trusted):
+        projects_to_approve = Project.objects.filter(is_awaiting_approval=True)
+        for project in projects_to_approve[:2]:
+            if request.path not in [
+                reverse("package", kwargs={"slug": project.slug})
+                for project in projects_to_approve
+            ]:
+                ctx['projects_to_approve'].append(project)
+
+    return ctx
