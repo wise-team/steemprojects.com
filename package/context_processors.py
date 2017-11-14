@@ -50,7 +50,7 @@ def trusted_user_action_required(request):
 
     if request.user.is_staff or (hasattr(request.user, 'profile') and request.user.profile.is_trusted):
         projects_to_approve = Project.objects.filter(is_awaiting_approval=True)
-        for project in projects_to_approve:
+        for project in projects_to_approve[:2]:
             if request.path not in [
                 reverse("package", kwargs={"slug": project.slug})
                 for project in projects_to_approve

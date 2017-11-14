@@ -13,8 +13,9 @@ class PackageAdmin(VersionAdmin):
 
     save_on_top = True
     search_fields = ("name",)
-    list_filter = ("category",)
-    list_display = ("name", "created", "status", "slug")
+    list_filter = ("category", "is_published", "is_awaiting_approval")
+    list_display = ("name", "created", "status", "slug", "is_published", "is_awaiting_approval")
+    readonly_fields = ("publication_time",)
     date_hierarchy = "created"
     inlines = [
         PackageExampleInline,
@@ -38,6 +39,8 @@ class PackageAdmin(VersionAdmin):
                 "draft_added_by",
                 "approvers",
                 "last_modified_by",
+                "is_published",
+                "publication_time",
                 "is_awaiting_approval",
             )
         }),
