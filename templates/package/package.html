@@ -24,8 +24,28 @@
         <p class="category"><i class="material-icons">format_list_bulleted</i> <a href="{% url "category" package.category.slug %}"> {{ package.category }}</a></p>
     </div>
     <div class="col-md-6 m-action-panel">
-        {% fav_button %}
+        {% if request.user.is_authenticated and package.is_draft %}
+            {% if user.is_staff or user.profile.is_trusted %}
+                <a class="m-btn" href="{% url 'publish_project' package.slug %}">
+                    Publish
+                </a>
+            {% else %}
+                {% if package.is_awaiting_approval %}
+                    <a class="m-btn" href="{% url 'project_approval' package.slug 'cancel' %}">
+                        Cancel approval request
+                    </a>
+                {% else %}
+                    <a class="m-btn" href="{% url 'project_approval' package.slug 'request' %}">
+                        Submit for approval
+                    </a>
+                {% endif %}
+
+            {% endif %}
+        {% else %}
+            {% fav_button %}
+        {% endif %}
     </div>
+
 </div>
 <div class="row">
     <div class="col-md-4">
