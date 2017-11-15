@@ -19,9 +19,19 @@
 {% block body %}
 
 <div class="row">
-    <div class="col-md-6 title-row">
-        <h2>{{ package.name }} <a href="{% url 'edit_package' package.slug %}"><span class="glyphicon glyphicon-pencil"></span></a></h2>
-        <p class="category"><i class="material-icons">format_list_bulleted</i> <a href="{% url "category" package.category.slug %}"> {{ package.category }}</a></p>
+    <div class="col-md-6 title-row m-title-panel">
+        <h1 class="m-title-panel__title">{{ package.name }}</h1>
+        <a class="m-title-panel__link" href="{% url 'edit_package' package.slug %}">
+            <i class="m-title-panel__edit-icon"></i>
+        </a>
+        <span class="m-title-panel__status">{{ package.get_status_display }}</span>
+
+{#        <i class="material-icons" title="{{  }}">help_outline</i>#}
+
+        <p class="category">
+            <i class="material-icons">format_list_bulleted</i>
+            <a href="{% url "category" package.category.slug %}"> {{ package.category }}</a>
+        </p>
     </div>
     <div class="col-md-6 m-action-panel">
         {% if request.user.is_authenticated and package.is_draft %}

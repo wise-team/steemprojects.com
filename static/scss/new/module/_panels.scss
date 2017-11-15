@@ -1,3 +1,29 @@
+@import "../base/variables";
+
 .m-action-panel {
   text-align: right;
+}
+
+.m-title-panel {
+  &__title {
+    font-size: 22px;
+    display: inline-block;
+    //padding-right: 10px;
+  }
+
+  &__link > * {
+    color: $base-link-color;
+  }
+  &__edit-icon {
+    @extend .glyphicon;
+    @extend .glyphicon-pencil;
+    width: 40px;
+    text-align: center;
+  }
+
+  &__status {
+    color: $m-btn-font-color-hover;
+    background-color: $m-btn-background-color-hover;
+    padding: 0 3px;
+  }
 }
