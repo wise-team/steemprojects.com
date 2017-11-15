@@ -61,7 +61,7 @@
                 <p><a href="{{ package.announcement_post }}">{{ package.announcement_post|truncatechars:"60" }}</a></p>
             </div>
         {% endif %}
-        {% if package.grids.length %}
+        {% if package.grids|length %}
             <div class="grids">
                 <h3>Comparision grids aasdad</h3>
                 <div>
@@ -111,12 +111,24 @@
                     </sup>
                 </h3>
                 <div>
-                    {% for contributor in not_team_contributors %}
+                    {% for contributor in not_team_contributors|slice:"10" %}
                         <div class="contributor">
                             <img class="img-circle" src="{{ contributor.avatar_small }}">
                             <a class="name" href="{{ contributor.profile_page }}">{{ contributor.name }}</a>
                         </div>
                     {% endfor %}
+                    {% if not_team_contributors|length > 10 %}
+                        <a class="more">and {{ not_team_contributors|length|add:"-10" }} more...</a>
+
+                        <div class="more-contributors">
+                            {% for contributor in not_team_contributors|slice:"10:" %}
+                                <div class="contributor">
+                                    <img class="img-circle" src="{{ contributor.avatar_small }}">
+                                    <a class="name" href="{{ contributor.profile_page }}">{{ contributor.name }}</a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         {% endif %}
@@ -291,6 +303,12 @@
                   };
             });
 
+        });
+
+        var more = $('.more');
+        more.click(function(e){
+            e.preventDefault();
+            more.closest('.contributors').toggleClass('show-more');
         });
 
     });
