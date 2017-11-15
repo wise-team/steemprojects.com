@@ -1,0 +1,32 @@
+.m-repo-section {
+  &__column {
+    float: left;
+    width: 40px;
+
+    &--wide {
+      width: 115px;
+    }
+    &--first {
+      width: 30px;
+    }
+
+    &--centered {
+      text-align: center;
+    }
+  }
+
+  &__chart {
+    margin-top: 4px;
+  }
+
+  &__icon {
+    font-size: 18px;
+    cursor: pointer;
+
+    &--small {
+      font-size: 18px;
+      position: relative;
+      top: -3px;
+    }
+  }
+}

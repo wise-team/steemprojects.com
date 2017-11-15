@@ -55,6 +55,26 @@
     font-size: 16px;
     color: #4aa1f1;
 }
+
+.contributors .more {
+    font-size: 16px;
+    float: left;
+    height: 36px;
+    line-height: 32px;
+    cursor: pointer;
+}
+.contributors .more-contributors {
+    display: none;
+}
+
+.contributors.show-more .more {
+    display: none;
+}
+
+.contributors.show-more .more-contributors {
+    display: initial;
+}
+
 .contributor.team-member a.name{
     padding: 0 0 0 10px;
     font-size: 18px;
@@ -62,10 +82,6 @@
 
 .contributor a.name:hover{
     text-decoration: none;
-}
-
-.development i.material-icons {
-    font-size: 14px;
 }
 
 .title-row p {

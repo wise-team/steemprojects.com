@@ -29,23 +29,39 @@
                 <input type="hidden" name="temp" id="temp" value="" />
                 {% csrf_token %}
             </div>
+
             <div class="col-sm-1">
                 <div class="field-label">{{ form.name.label }}<span class="required">*</span></div>
-                <div class="field-label">{{ form.announcement_post.label }}</div>
-                <div class="field-label">{{ form.description.label }}</div>
             </div>
             <div class="col-sm-3">
                 <div class="field">{{ form.name }}</div>
-                <div class="field">{{ form.announcement_post }}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-1">
+                <div class="field-label">{{ form.description.label }}</div>
+            </div>
+            <div class="col-sm-7">
                 <div class="field">{{ form.description }}</div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-sm-1">
                 <div class="field-label">{{ form.url.label }}</div>
-                <div class="field-label">{{ form.repo_url.label }}</div>
+                <div class="field-label">{{ form.announcement_post.label }}</div>
             </div>
             <div class="col-sm-3">
                 <div class="field">{{ form.url }}</div>
+                <div class="field">{{ form.announcement_post }}</div>
+            </div>
+            <div class="col-sm-1">
+                <div class="field-label">{{ form.repo_url.label }}</div>
+                <div class="field-label">{{ form.contact_url.label }}</div>
+            </div>
+            <div class="col-sm-3">
+                <div class="field"></div>
                 <div class="field">{{ form.repo_url }}</div>
+                <div class="field">{{ form.contact_url }}</div>
             </div>
             <div class="col-sm-4">
             </div>
@@ -139,7 +155,7 @@
         </div>
         <div class="row">
             <div class="col-sm-1 col-sm-offset-1">
-                <input class="btn btn-default sp-btn sp-btn-action" type="submit" name="add" value="Save draft">
+                <input class="btn btn-default sp-btn sp-btn-action" type="submit" name="add" value="Save {% if package.is_draft %}draft{% else %}project{% endif %}">
             </div>
         </div>
     </form>
