@@ -13,7 +13,10 @@
 {% block body %}
     <h2>{{ package.name }}'s images</h2>
 
-    <p id="package-form-message"></p>
+    <p id="package-form-message">
+        We do not have image cropping tool yet. Suggested ratio for images is 16:9 (for example: 640×360, 1024×576, 1280×720, <b>1920x1080</b>)<br>
+        Images with different ratio are scaled with <a href="https://www.w3schools.com/cssref/css3_pr_background-size.asp">cover property</a>. First image is used on main page.
+    </p>
     <form action="{{ request.path }}" method="post" enctype="multipart/form-data" id="package-form">
         {% csrf_token %}
         {{ formset.management_form }}

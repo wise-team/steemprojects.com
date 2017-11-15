@@ -71,6 +71,12 @@
                 <p><a href="{{ package.announcement_post }}">{{ package.announcement_post|truncatechars:"60" }}</a></p>
             </div>
         {% endif %}
+        {% if package.contact_url %}
+            <div class="contact">
+                <h3>Contact</h3>
+                <p><a href="{{ package.contact_url }}" target="_blank">{{ package.contact_url }}</a></p>
+            </div>
+        {% endif %}
         {% if package.grids|length %}
             <div class="grids">
                 <h3>Comparision grids aasdad</h3>
