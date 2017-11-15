@@ -51,7 +51,7 @@ def add_package(request, template_name="package/package_form.html"):
 
     if form.is_valid() and formset.is_valid():
         new_package = form.save()
-        new_package.added_by = request.user
+        new_package.draft_added_by = request.user
         new_package.last_modified_by = request.user
         new_package.save()
         #new_package.fetch_metadata()
@@ -126,7 +126,9 @@ def edit_package(request, slug, template_name="package/package_form.html"):
                     membership.role = data['role']
                     membership.save()
 
-        messages.add_message(request, messages.INFO, 'Project updated successfully')
+        if package.is_published:
+            messages.add_message(request, messages.INFO, 'Project updated successfully')
+
         return HttpResponseRedirect(reverse("package", kwargs={"slug": modified_package.slug}))
 
     return render(request, template_name, {
