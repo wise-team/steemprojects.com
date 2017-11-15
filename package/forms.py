@@ -33,6 +33,9 @@ class PackageForm(ModelForm):
         self.fields['description'].widget = Textarea(attrs={
             "placeholder": "Write few sentences about this projects. What problem does it solve? Who is it for?"
         })
+        self.fields['contact_url'].widget = TextInput(attrs={
+            "placeholder": "Link to channel on steemit.chat, discord, slack, etc"
+        })
 
     def save(self):
         instance = super(PackageForm, self).save(commit=False)
@@ -52,7 +55,7 @@ class PackageForm(ModelForm):
 
     class Meta:
         model = Project
-        fields = ["name", 'url', 'announcement_post', 'description', 'status', 'repo_url', 'repo_url', 'category']
+        fields = ["name", 'url', 'announcement_post', 'description', 'status', 'repo_url', 'repo_url', 'category', 'contact_url']
 
 
 class PackageExampleForm(ModelForm):

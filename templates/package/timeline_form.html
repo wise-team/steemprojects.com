@@ -11,26 +11,36 @@
 {% endblock %}
 
 {% block body %}
-    <h2>{{ package.name }}'s Timeline</h2>
+    <div class="col-md-12">
+        <h2>{{ package.name }}'s Timeline</h2>
+    </div>
 
-    <p id="package-form-message"></p>
-    <h3>Timeline Events <div id="formset-add-new-form-btn" class="btn btn-default sp-btn sp-btn-normal">Add New Event</div></h3>
-    <form action="{{ request.path }}" method="post" id="package-form">
-        {% csrf_token %}
-        {{ formset.management_form }}
-        <div id="event-forms">
-            {% for form in formset reversed %}
-                <div class="event-form">
-                    {{ form }} <span class="rm-btn te-entry icon-close"></span>
-                </div>
-            {% endfor %}
-        </div>
-        <input class="btn btn-default sp-btn sp-btn-normal" type="submit" name="add" value="{{ action }} {% trans "timeline" %}">
-    </form>
+    <div id="package-form-message" class="col-md-6">
+        <p>Timeline is designed to give a user quick information about important things which happen in the project lately and in the past. People are more comfortable using applications which give <b>frequent updates</b> - communication with a users is a key!</p>
 
-    <div id="empty-form" style="display:none;">
-        <div class="event-form">
-            {{ formset.empty_form }} <span class="rm-btn te-form icon-close"></span>
+        <p>In the future users of SteemProjects will be able to receive weekly newsletters with updates from their favorite projects. If timeline event url will be a link to Steemit, users will be able to help monetize a project by <a href="https://github.com/noisy/steemprojects.com/issues/40" target="_blank">smart autoupvotes</a>.</p>
+
+        <p>Next major release of SteemProject <a href="https://github.com/noisy/steemprojects.com/issues/29" target="_blank">will have a tool to automatically add new updates about the project</a> (from Steemit posts or github releases), based on criteria defined by project members.</p>
+    </div>
+    <div class="col-md-12">
+        <h3>Timeline Events <div id="formset-add-new-form-btn" class="btn btn-default sp-btn sp-btn-normal">Add New Event</div></h3>
+        <form action="{{ request.path }}" method="post" id="package-form">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <div id="event-forms">
+                {% for form in formset reversed %}
+                    <div class="event-form">
+                        {{ form }} <span class="rm-btn te-entry icon-close"></span>
+                    </div>
+                {% endfor %}
+            </div>
+            <input class="btn btn-default sp-btn sp-btn-normal" type="submit" name="add" value="{{ action }} {% trans "timeline" %}">
+        </form>
+
+        <div id="empty-form" style="display:none;">
+            <div class="event-form">
+                {{ formset.empty_form }} <span class="rm-btn te-form icon-close"></span>
+            </div>
         </div>
     </div>
 
