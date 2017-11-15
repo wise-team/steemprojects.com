@@ -114,6 +114,7 @@ class Profile(BaseModel):
             tm_accounts = project.team_members.all()
 
             return self._is_staff_or_verified() or \
+                   (self.user == project.draft_added_by and project.is_draft) or \
                    any([
                        account.connected and account in tm_accounts
                        for account in self.account_set.all()

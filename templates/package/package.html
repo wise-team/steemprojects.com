@@ -50,25 +50,27 @@
 <div class="row">
     <div class="col-md-4">
         {% if package.url %}
-        <div class="website">
-            <h3>Project Website</h3>
-            <p><a href="{{ package.url }}" target="_blank">{{ package.url }}</a></p>
-        </div>
+            <div class="website">
+                <h3>Project Website</h3>
+                <p><a href="{{ package.url }}" target="_blank">{{ package.url }}</a></p>
+            </div>
         {% endif %}
         {% if package.announcement_post %}
-        <div class="announcement">
-            <h3>Announcement</h3>
-            <p><a href="{{ package.announcement_post }}">{{ package.announcement_post|truncatechars:"60" }}</a></p>
-        </div>
-        {% endif %}
-        <div class="grids">
-            <h3>Comparision grids</h3>
-            <div>
-            {% for grid in package.grids %}
-                <a href="{% url 'grid' grid.slug %}" title="{{ grid.description }}">{{ grid }}</a> &nbsp;
-            {% endfor %}
+            <div class="announcement">
+                <h3>Announcement</h3>
+                <p><a href="{{ package.announcement_post }}">{{ package.announcement_post|truncatechars:"60" }}</a></p>
             </div>
-        </div>
+        {% endif %}
+        {% if package.grids.length %}
+            <div class="grids">
+                <h3>Comparision grids aasdad</h3>
+                <div>
+                {% for grid in package.grids %}
+                    <a href="{% url 'grid' grid.slug %}" title="{{ grid.description }}">{{ grid }}</a> &nbsp;- test
+                {% endfor %}
+                </div>
+            </div>
+        {% endif %}
     </div>
 
     <div class="col-md-4">
@@ -102,43 +104,57 @@
         </div>
         {% endif %}
         {% if not_team_contributors|length %}
-        <div class="contributors clearfix">
-            <h3>Contributors
-                <sup>
-                    <i class="material-icons" title="{% trans "Contributors - volunteers which are officially not in the team, but helped because they wanted. Very often this is possible only if project is open-source." %}">info_outline</i>
-                </sup>
-            </h3>
-            <div>
-                {% for contributor in not_team_contributors %}
-                    <div class="contributor">
-                        <img class="img-circle" src="{{ contributor.avatar_small }}">
-                        <a class="name" href="{{ contributor.profile_page }}">{{ contributor.name }}</a>
-                    </div>
-                {% endfor %}
+            <div class="contributors clearfix">
+                <h3>Contributors
+                    <sup>
+                        <i class="material-icons" title="{% trans "Contributors - volunteers which are officially not in the team, but helped because they wanted. Very often this is possible only if project is open-source." %}">info_outline</i>
+                    </sup>
+                </h3>
+                <div>
+                    {% for contributor in not_team_contributors %}
+                        <div class="contributor">
+                            <img class="img-circle" src="{{ contributor.avatar_small }}">
+                            <a class="name" href="{{ contributor.profile_page }}">{{ contributor.name }}</a>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
         {% endif %}
 
         <div class="development clearfix">
-            <h3>Development Stats
-                <a href="{% url 'fetch_package_data' package.slug %}" title="{% trans "Fetch latest data" %}">
-                    <i class="material-icons">sync</i>
-                </a>
+            <h3>Development
+{#                <a href="{% url 'fetch_package_data' package.slug %}" title="{% trans "Fetch latest data" %}">#}
+{#                    <i class="material-icons">sync</i>#}
+{#                </a>#}
             </h3>
             {% if package.repo_url %}
-            <div>
+            <div class="m-repo-section">
                 {% if repo.title == "Github" %}
+                    <div class="m-repo-section__column m-repo-section__column--first">
+                        <a class="m-repo-section__link" href="{{ package.repo_url }}" target="_blank">
+                            <i class="m-repo-section__icon icon-github"></i>
+                        </a>
+                    </div>
+                    <div class="m-repo-section__column m-repo-section__column--wide">
+                        <div class="m-repo-section__text">Commits</div>
+                        <img class="m-repo-section__chart" src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{package.commits_over_52}}&chco=666666&chbh=1,1,1&chds=0,20" />
+                    </div>
+                    <div class="m-repo-section__column m-repo-section__column--centered">
+                        <i class="m-repo-section__icon--small material-icons">star_border</i>
+                        <div class="m-repo-section__text">{{ package.repo_watchers }}</div>
+                    </div>
+                    <div class="m-repo-section__column m-repo-section__column--centered">
+                        <i class="m-repo-section__icon--small material-icons">call_split</i>
+                        <div class="m-repo-section__text">{{ package.repo_forks }}</div>
+                    </div>
                     <p>
-                        {% if package.last_fetched %}
-                            Last fetched: {{ package.last_fetched|timesince }} ago
-                        {% endif %}
+{#                        {% if package.last_fetched %}#}
+{#                            Last fetched: {{ package.last_fetched|timesince }} ago#}
+{#                        {% endif %}#}
                     </p>
-                    <img src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{package.commits_over_52}}&chco=666666&chbh=1,1,1&chds=0,20" />
                 {% else %}
                     <p>No detail information. Only github repositories are right now supported on SteemProjects</p>
                 {% endif %}
-
-
             </div>
             {% else %}
             <div>No information :( This project is not open-source <sup><a href="https://www.youtube.com/watch?v=1ehpgbb3XD0" target="_blank"><i class="material-icons">info_outline</i></a></sup></div>
@@ -148,11 +164,17 @@
     <div class="col-md-4">
         <div class="clearfix" style="width: calc(33vw - 60px)">
             <ul id="image-gallery" class="gallery list-unstyled cS-hidden">
-                {% for img in project_imgs %}
-                    <li data-thumb="{{ img.url }}">
-                        <img class="slide-sp" src="{{ img.url }}"/>
+                {% if not project_imgs %}
+                    <li>
+                        <img class="slide-sp" src="https://via.placeholder.com/1600x900?text=Please add logo and screenshots"/>
                     </li>
-                {% endfor %}
+                {% else %}
+                    {% for img in project_imgs %}
+                        <li data-thumb="{{ img.url }}">
+                            <img class="slide-sp" src="{{ img.url }}"/>
+                        </li>
+                    {% endfor %}
+                {% endif %}
             </ul>
         </div>
         {% if can_edit_package %}
