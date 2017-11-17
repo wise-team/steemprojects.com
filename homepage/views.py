@@ -104,7 +104,9 @@ def homepage(request, template_name="homepage.html"):
             "package_count": package_count,
             "py3_compat": Project.objects.filter(version__supports_python3=True).select_related().distinct().count(),
             "open_source_count": Project.objects.exclude(repo_url__isnull=True).exclude(repo_url="").count(),
-            "latest_python3": Version.objects.filter(supports_python3=True).select_related("package").distinct().order_by("-created")[0:5]
+            "latest_python3": Version.objects.filter(supports_python3=True).select_related("package").distinct().order_by("-created")[0:5],
+            "drafts_count": Project.objects.filter(is_published=False).count(),
+            "awaiting_projects_count": Project.objects.filter(is_awaiting_approval=True).count(),
         }
     )
 

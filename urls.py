@@ -7,6 +7,8 @@ from django.views.generic.base import TemplateView, RedirectView
 
 from django.contrib import admin
 
+from core.views import StaticPageView
+from package.models import TeamMembership
 from profiles.views import profile_detail
 from social_auth_local.views import require_email, validation_sent, merging_accounts
 
@@ -49,7 +51,17 @@ urlpatterns = [
     url(r"^terms/$", TemplateView.as_view(template_name='pages/terms.html'), name="terms"),
     url(r"^faq/$", TemplateView.as_view(template_name='pages/faq.html'), name="faq"),
     url(r"^syndication/$", TemplateView.as_view(template_name='pages/syndication.html'), name="syndication"),
-    url(r"^contribute/$", TemplateView.as_view(template_name='pages/contribute.html'), name="contribute"),
+    url(
+        r"^contribute/$",
+        StaticPageView.as_view(
+            template_name='pages/contribute.html',
+            context={
+                "membership_in_steemprojects": TeamMembership.objects.filter(project__name="Steem Projects"),
+            },
+        ),
+
+        name="contribute"
+    ),
     url(r"^help/$", TemplateView.as_view(template_name='pages/help.html'), name="help"),
     url(r"^sitemap\.xml$", SitemapView.as_view(), name="sitemap"),
 
