@@ -30,7 +30,7 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}" ng-controller="SearchCtrl" ng-init="init_search('{{ request.GET.q }}', '{% url 'apiv4:searchv2-list' %}', {{ MAX_WEIGHT }})">
-
+{% block messages%}{% endblock %}
 {% for message in messages %}
     <div class="m-messagebar{% for tag in message.tags.split %} m-messagebar--{{ tag }}{% endfor %}" id="message_{{ forloop.counter }}"
         {% for tag in message.tags.split %}{% if 'data-' in tag %}{{ tag }}="true" {% endif %}{% endfor %}"

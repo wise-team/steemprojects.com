@@ -13,7 +13,8 @@ https://github.com/audreyr/messagebar/blob/gh-pages/src/django.messagebar.css
   text-shadow: 0.3px 0.3px 0.3px #FFF;
   padding-top: 10px;
   padding-bottom: 10px;
-  border: solid 1px;
+  border-bottom: solid 1px;
+  border-color: $base-background-color;
 
   a {
     text-decoration: underline;
@@ -30,34 +31,28 @@ https://github.com/audreyr/messagebar/blob/gh-pages/src/django.messagebar.css
 
   &--info {
     background-color: $m-btn-background-color-hover;
-    border-color: $m-btn-background-color-hover;
   }
 
   &--error {
     background-color: $gen-red;
-    border-color: $gen-red;
   }
 
   // TODO: define colors with variables
 
   &--default {
     background-color: #c4c4c4;
-    border-color: #999;
   }
 
   &--debug {
     background-color: #84b3dc;
-    border-color: #428BCA;
   }
 
   &--success {
     background-color: #a3d7a3;
-    border-color: #5CB85C;
   }
 
   &--warning {
     background-color: #E3B23C;
-    border-color: #F0AD4E;
   }
 
   &--close-btn {

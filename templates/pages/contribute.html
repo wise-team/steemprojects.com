@@ -6,19 +6,35 @@
 
 {% block body %}
 
-<h2>Contributing to this site</h2>
+<h2>Contributing to Steem Projects</h2>
 
 <p>
 
-This is an entirely volunteer driven effort. That includes coding time and hosting costs. If you wish to become a sponsor of this project, please feel free to contact me at <a href="mailto:pydanny@gmail.com">pydanny@gmail.com</a>.
-
+This website is an entirely volunteer driven effort. That includes coding time and hosting costs. If you wish to help or show your gratitude, there are plenty of ways in which you can do that:
+    <ul>
+        <li>Make sure that entries about your favorites projects are in the good shape, edit them if they don't</li>
+        <li>If your favorite project is not listed, you can help by adding it. <a href="">Here is guideline which says how to do that properly</a>.</li>
+        <li>Did you found a bug? If it is not listed <a href="https://github.com/noisy/steemprojects.com/issues" target="_blank">on our github</a>, please let us know about it!</li>
+        <li>Are you a developer? Great! We always keep a list of issues with a label <a href="https://github.com/noisy/steemprojects.com/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22" target="_blank">good first issue</a>. You can help us by resolving one of them :)</li>
+        <li>Do you own a Steem-related project? Add a signature to your post about a possibility of adding your project to user's favourite projects.</li>
+        <li>Add SteemProjects to your favorite projects :)</li>
+        <li>Follow our team-members on Steemit:<br>
+            <ul>
+                {% for m in membership_in_steemprojects %}
+                    <li><a href="{{ m.account.thirdparty_profile_page }}">@{{ m.account.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li>Send a generous donation to our <a href="https://steemit.com/@steemprojects">@steemprojects</a> account :)</li>
+        <li>Share a link to SteemProjects every time you would like to show how active our community is</li>
+    </ul>
 </p>
-
-
-<h3>Contributing code</h3>
-
-<p>This project has had over <a href="https://djangopackages.readthedocs.io/en/latest/contributors.html">30 contributors</a> whose work has seen this project move forward in leaps and bounds. If you want help out, please read the <a href="https://djangopackages.readthedocs.io/en/latest/contributing.html">contributing instructions</a>. You
-should also read the <a href="https://djangopackages.readthedocs.io/en/latest/faq.html#installation">Installation Section of the Django Packages FAQ</a>.
-</p>
+{##}
+{##}
+{#<h3>Contributing code</h3>#}
+{##}
+{#<p>This project has had over <a href="https://djangopackages.readthedocs.io/en/latest/contributors.html">30 contributors</a> whose work has seen this project move forward in leaps and bounds. If you want help out, please read the <a href="https://djangopackages.readthedocs.io/en/latest/contributing.html">contributing instructions</a>. You#}
+{#should also read the <a href="https://djangopackages.readthedocs.io/en/latest/faq.html#installation">Installation Section of the Django Packages FAQ</a>.#}
+{#</p>#}
 
 {% endblock body %}
