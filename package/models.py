@@ -57,6 +57,9 @@ class ProjectQuerySet(QuerySet):
     def published(self):
         return self.filter(is_published=True)
 
+    def drafts(self):
+        return self.filter(is_published=False)
+
 
 class Project(BaseModel):
     NONE_STATUS = ""
