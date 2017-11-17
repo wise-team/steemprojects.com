@@ -9,6 +9,7 @@ from grid.models import Grid
 
 ITEM_TYPE_CHOICES = (
     ('package', 'Package'),
+    ('draft', 'Draft'),
     ('grid', 'Grid'),
 )
 
