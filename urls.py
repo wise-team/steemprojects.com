@@ -30,8 +30,6 @@ urlpatterns = [
     # url('', include('social_auth.urls')),
     url(r"^$", homepage, name="home"),
     url(r"^health_check/$", health_check_view, name="health_check"),
-    # url(r"^404$", error_404_view, name="404"),
-    # url(r"^500$", error_500_view, name="500"),
     url(settings.ADMIN_URL_BASE, include(admin.site.urls)),
     url(r"^profiles/", include("profiles.urls")),
     url(r"^@(?P<steem_account>[-\.\w]+)", lambda request, steem_account: redirect('steem_profile_detail', steem_account, permanent=True)),
@@ -88,12 +86,15 @@ urlpatterns = [
 
     # reports
     # url(r'^reports/', include('reports.urls', namespace='reports')),
+
+    url(r"^error/$", lambda request: 1/0),
 ]
 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# handler404 = 'mysite.views.my_custom_page_not_found_view'
 handler500 = 'homepage.views.error_500_view'
-# handler403 = 'mysite.views.my_custom_permission_denied_view'
-# handler400 = 'mysite.views.my_custom_bad_request_view'
+handler404 = 'homepage.views.error_404_view'
+# handler404 = ''
+# handler403 = ''
+# handler400 = ''

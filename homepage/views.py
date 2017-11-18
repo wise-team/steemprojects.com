@@ -110,25 +110,8 @@ def homepage(request, template_name="homepage.html"):
         }
     )
 
-#
-# def error_500_view(request):
-#     with open("templates/500.html") as f:
-#         text = f.read()
-#     response = HttpResponse(text)
-#     response.status_code = 500
-#     return response
-
-
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-
 
 def error_500_view(request):
-    # response = render_to_response(
-    #     'templates/500.html',
-    #     {},
-    #     context_instance=RequestContext(request)
-    # )
     response = render(request, "500.html")
     response.status_code = 500
     return response
