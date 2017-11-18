@@ -112,9 +112,7 @@ def homepage(request, template_name="homepage.html"):
 
 
 def error_500_view(request):
-    with open("templates/500.html") as f:
-        text = f.read()
-    response = HttpResponse(text)
+    response = render(request, "500.html")
     response.status_code = 500
     return response
 
