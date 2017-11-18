@@ -92,3 +92,8 @@ urlpatterns = [
 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# handler404 = 'mysite.views.my_custom_page_not_found_view'
+handler500 = 'homepage.views.error_500_view'
+# handler403 = 'mysite.views.my_custom_permission_denied_view'
+# handler400 = 'mysite.views.my_custom_bad_request_view'
