@@ -3,23 +3,31 @@
 {% load i18n %}
 
 {% block head_title %}{% trans "Not Found" %}{% endblock %}
+{% block messages %}{% endblock %}
 
 {% block body %}
 <div class="row">
   <div class="col-12">
-    <h2>{% trans "Not Found" %}</h2>
+    <div style="max-width: 488px; height: 476px; margin: 50px auto 100px auto;">
+        <h2>{% trans "Not Found" %}</h2>
 
-    <p>
-    {% trans "We can't find it!  Oh no!  The page isn't here!" %}
-    </p>
+        <p>
+            {% trans "We can't find it!  Oh no!  The page isn't here!" %}
+        </p>
 
-    <p>
-   {% trans "If it's our fault, would you please do us a favor and" %} <a href="http://github.com/opencomparison/opencomparison/issues">{% trans "create a ticket?" %}</a></div>
-    </p>            
+        <p>
+            {% trans "If it's our fault, would you please do us a favor and" %} <a href="https://github.com/noisy/steemprojects.com/issues/new" target="_blank">{% trans "create a ticket?" %}</a>
+        </p>
 
-    <img src="{{ STATIC_URL }}img/logo_501x316.png" />
+        <video style="width: 488px; height: 476px;" width="488" autoplay loop>
+            <source src="{{ STATIC_URL }}video/404.mp4" type="video/mp4">
+            <source src="{{ STATIC_URL }}video/404.webm" type="video/webm">
+            <source src="{{ STATIC_URL }}video/404.ogg" type="video/ogg">
+            <img style="width: 488px; height: 476px;" src="{{ STATIC_URL }}video/404.gif">
+        </video>
+    </div>
 
-  </div>        
+  </div>
 </div>
-    
+
 {% endblock %}
