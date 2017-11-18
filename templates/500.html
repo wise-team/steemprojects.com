@@ -29,6 +29,22 @@
         </div>
     </div>
 
+    <div style="max-width: 320px; height: 400px; margin: 50px auto 100px auto;">
+        <h1>Error</h1>
+        <p>It looks like @noisy screwed up something...</p>
+        <video style="width: 320px; height: 240px;" width="320" autoplay onended="showDialog()">
+            <source src="{{ STATIC_URL }}video/error_reaction.mp4" type="video/mp4">
+            <source src="{{ STATIC_URL }}video/error_reaction.webm" type="video/webm">
+            <source src="{{ STATIC_URL }}video/error_reaction.ogg" type="video/ogg">
+            <img style="width: 320px; height: 240px;" src="{{ STATIC_URL }}video/error_reaction.gif">
+        </video>
+        {% if request.sentry.id %}
+            <p>Crash report was already sent to him. It look's like he already have a clue what might be the problem, but you can help him by <a href="javascript:showDialog()">telling what just happen from your perspective.</a></p>
+        {% else %}
+            <p>Usually in cases like that, crash-report is automatically sent directly to <a href="https://steemit.com/@noisy">@noisy</a>. But this time he screwed up something so badly, that even crash-raporting-tool failed :(<br><br>Could you make him a favor and contact <a href="https://steemit.chat/direct/noisy">him directly on steemit.chat</a>, to tell what just happen from your perspective?</p>
+        {% endif %}
+    </div>
+
     <!-- Start of footer -->
     <div class="footer">
         <div class="container">
@@ -47,16 +63,23 @@
     <script src="https://cdn.ravenjs.com/2.1.0/raven.min.js"></script>
     {% if request.sentry.id %}
         <script>
-            Raven.showReportDialog({
-                eventId: '{{ request.sentry.id }}',
-                dsn: '{{ SENTRY_PUBLIC_DSN }}',
-                {% if request.user.is_authenticated %}
-                user: {
-                    name: request.user.username,
-                    email: request.user.email,
+            var was_displayed = false;
+            function showDialog(){
+                if (!was_displayed){
+                    was_displayed = true;
+                    Raven.showReportDialog({
+                        eventId: '{{ request.sentry.id }}',
+                        dsn: '{{ SENTRY_PUBLIC_DSN }}',
+                        {% if request.user.is_authenticated %}
+                        user: {
+                            name: '{{ request.user.username }}',
+                            email: '{{ request.user.email }}',
+                        }
+                        {% endif %}
+                    });
+
                 }
-                {% endif %}
-            });
+            }
         </script>
     {% endif %}
 </body>
