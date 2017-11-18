@@ -87,7 +87,9 @@ urlpatterns = [
     # reports
     # url(r'^reports/', include('reports.urls', namespace='reports')),
 
-    url(r"^error/$", lambda request: 1/0),
+    url(r"^error/$", lambda request: 1/0),  # should trigger sentry
+    url(r"^500/$", error_500_view),
+    url(r"^404/$", error_404_view),
 ]
 
 
@@ -95,6 +97,5 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler500 = 'homepage.views.error_500_view'
 handler404 = 'homepage.views.error_404_view'
-# handler404 = ''
 # handler403 = ''
 # handler400 = ''
