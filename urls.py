@@ -88,6 +88,7 @@ urlpatterns = [
     # url(r'^reports/', include('reports.urls', namespace='reports')),
 
     url(r"^error/$", lambda request: 1/0),
+    # url(r"^error/$", error_500_view),
 ]
 
 
