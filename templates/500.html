@@ -29,8 +29,6 @@
         </div>
     </div>
 
-    test: {{ SENTRY_PUBLIC_DSN }}
-
     <!-- Start of footer -->
     <div class="footer">
         <div class="container">
@@ -46,7 +44,7 @@
         </div>
     </div>
 
-    <script src="https://cdn.ravenjs.com/2.1.0/raven.min.js"></script>{{ SENTRY_PUBLIC_DSN }}
+    <script src="https://cdn.ravenjs.com/2.1.0/raven.min.js"></script>
     {% if request.sentry.id %}
         <script>
             Raven.showReportDialog({
