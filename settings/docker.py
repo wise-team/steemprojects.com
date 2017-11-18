@@ -51,7 +51,7 @@ RAVEN_MIDDLEWARE = ['raven.contrib.django.raven_compat.middleware.SentryResponse
 MIDDLEWARE = RAVEN_MIDDLEWARE + MIDDLEWARE
 SENTRY_DSN = env('DJANGO_SENTRY_DSN')
 import re;
-SENTRY_PUBLIC_DSN = re.sub(r':\w*', '', SENTRY_DSN)
+SENTRY_PUBLIC_DSN = re.sub(r':\w+', '', SENTRY_DSN)
 
 SENTRY_CLIENT = env('DJANGO_SENTRY_CLIENT', default='raven.contrib.django.raven_compat.DjangoClient')
 LOGGING = {
