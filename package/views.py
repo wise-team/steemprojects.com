@@ -429,6 +429,7 @@ def package_detail(request, slug, template_name="package/package.html"):
 
     package = get_object_or_404(Project, slug=slug)
     no_development = package.no_development
+    error = 10 / 0
     try:
         if package.category == Category.objects.get(slug='projects'):
             # projects get a bye because they are a website
