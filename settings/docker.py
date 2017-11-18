@@ -41,9 +41,6 @@ SITE_TITLE = environ.get('SITE_TITLE')
 FRAMEWORK_TITLE = environ.get('FRAMEWORK_TITLE')
 
 
-
-
-
 ########### Permissions
 RESTRICT_PACKAGE_EDITORS = True
 RESTRICT_GRID_EDITORS = True
@@ -53,6 +50,9 @@ INSTALLED_APPS += ('raven.contrib.django.raven_compat', )
 RAVEN_MIDDLEWARE = ['raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware']
 MIDDLEWARE = RAVEN_MIDDLEWARE + MIDDLEWARE
 SENTRY_DSN = env('DJANGO_SENTRY_DSN')
+import re;
+SENTRY_PUBLIC_DSN = re.sub(r':\w*', '', SENTRY_DSN)
+
 SENTRY_CLIENT = env('DJANGO_SENTRY_CLIENT', default='raven.contrib.django.raven_compat.DjangoClient')
 LOGGING = {
     'version': 1,
