@@ -1,5 +1,6 @@
 from random import sample
 
+from django.conf import settings
 from django.db.models import Count, Case, When
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -112,7 +113,7 @@ def homepage(request, template_name="homepage.html"):
 
 
 def error_500_view(request):
-    response = render(request, "500.html")
+    response = render(request, "500.html", context={'SENTRY_PUBLIC_DSN': getattr(settings, 'SENTRY_PUBLIC_DSN', '')})
     response.status_code = 500
     return response
 
