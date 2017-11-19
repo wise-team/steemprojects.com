@@ -6,6 +6,6 @@
 
   gtag('config', '{{ GOOGLE_ANALYTICS_PROPERTY_ID }}');
   {% if request.user.is_authenticated %}
-    gtag('set', {'user_id': '{{ request.user.id }}'});
+  gtag('set', {'user_id': '{{ request.user.id }}'});
   {% endif %}
 </script>
