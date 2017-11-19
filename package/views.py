@@ -162,7 +162,7 @@ def project_approval(request, slug, action):
     if action == 'request':
         mail_managers(
             escape('New project added by @{} awaiting approval - {}'.format(
-                project.created_by.username,
+                project.draft_added_by.username,
                 project.name
             )),
             'Project: {}'.format(request.build_absolute_uri(reverse('package', kwargs={'slug': project.slug})))

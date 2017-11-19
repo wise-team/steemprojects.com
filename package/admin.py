@@ -28,7 +28,6 @@ class PackageAdmin(VersionAdmin):
                 "description",
                 "announcement_post",
                 "main_img",
-                "created_by",
                 "status",
                 "slug",
                 "category",
