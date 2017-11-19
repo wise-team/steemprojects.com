@@ -461,7 +461,9 @@ def package_detail(request, slug, template_name="package/package.html"):
                 messages.WARNING,
                 'Information about this project is not published yet. This is a draft!<br>' +
                 'Add as much information about this project as you can. Add logo and some screenshots, add at least few timeline events.<br> ' +
-                'When you will decide it is ready, submit a project for approval by <a href="https://google.com/">trusted users of SteemProjects</a>. Also, learn <a href="">how you can become a trusted user</a>.',
+                'When you will decide it is ready, submit a project for approval.',
+                #' by <a href="https://google.com/">trusted users of SteemProjects</a>.'
+                # 'Also, learn <a href="">how you can become a trusted user</a>.',
                 extra_tags='draft data-stick'
             )
 
