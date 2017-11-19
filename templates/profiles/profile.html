@@ -22,7 +22,7 @@
                 {% for membership in memberships|dictsort:"id" %}
                     {% if membership.role_confirmed_by_account != False %}
                     <p>
-                        <a href="{{ membership.project.get_absolute_url }}">{{ membership.project.name }}</a> - {{ membership.role }}
+                        <a href="{{ membership.project.get_absolute_url }}">{{ membership.project.name }}</a>{% if membership.project.is_draft %} (draft){% endif %} - {{ membership.role }}
                         {% if membership.role_confirmed_by_account == None %}
                             {% if request.user == user %}
                                 {% if membership.account.connected %}
