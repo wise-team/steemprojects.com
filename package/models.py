@@ -105,9 +105,6 @@ class Project(BaseModel):
     description = models.TextField(_("Description"), blank=True, null=True, default="")
     announcement_post = models.URLField(_("Announcement Post URL"), blank=True, null=True, help_text="Link to place, where project was announced for the first time")
     contact_url = models.URLField(_("Contact URL"), blank=True, null=True, default=None)
-
-    # TODO: remove created_by
-    created_by = models.ForeignKey(Profile, blank=True, null=True, related_name="creator", on_delete=models.SET_NULL)
     slug = models.SlugField(_("Slug"), help_text="Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens. Values will be converted to lowercase.", unique=True)
     category = models.ForeignKey(Category, verbose_name="Category")
     repo_description = models.TextField(_("Repo Description"), blank=True)
