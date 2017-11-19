@@ -4,6 +4,7 @@ from django.db.models import Max
 
 from searchv2.models import SearchV2
 
+
 def core_values(request):
     """
     A nice pun. But this is how we stick handy data everywhere.
@@ -28,3 +29,16 @@ def current_path(request):
     if request.path.strip() != reverse('logout'):
         context['current_path'] = request.path
     return context
+
+
+def google_analytics(request):
+    """
+    Use the variables returned in this function to
+    render your Google Analytics tracking code template.
+    """
+    ga_prop_id = getattr(settings, 'GOOGLE_ANALYTICS_PROPERTY_ID', '')
+    if not settings.DEBUG and ga_prop_id:
+        return {
+            'GOOGLE_ANALYTICS_PROPERTY_ID': ga_prop_id,
+        }
+    return {}

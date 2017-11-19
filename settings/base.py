@@ -119,6 +119,7 @@ TEMPLATES = [
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
                 "core.context_processors.core_values",
+                "core.context_processors.google_analytics",
             ],
         },
     },
