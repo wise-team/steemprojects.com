@@ -38,6 +38,7 @@ TIME_ZONE = "US/Eastern"
 LANGUAGE_CODE = "en-us"
 
 SITE_ID = 1
+SITE_URL = environ.get('SITE_URL')
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -135,6 +136,7 @@ PROJECT_APPS = [
     "searchv2",
     "apiv3",
     "social_auth_local",
+    "im",
 ]
 
 PREREQ_APPS = [
@@ -507,3 +509,10 @@ REST_FRAMEWORK = {
 import datetime
 DEPLOYMENT_DATETIME = environ.get('DEPLOYMENT_DATETIME', datetime.datetime.utcnow().isoformat())
 GOOGLE_ANALYTICS_PROPERTY_ID = environ.get('GOOGLE_ANALYTICS_PROPERTY_ID')
+
+
+ROCKET_CHAT_LOGIN = environ.get('ROCKET_CHAT_LOGIN')
+ROCKET_CHAT_PASSWORD = environ.get('ROCKET_CHAT_PASSWORD')
+ROCKET_CHAT_URL = environ.get('ROCKET_CHAT_URL')
+
+

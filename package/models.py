@@ -55,7 +55,7 @@ class Category(BaseModel):
 
 class ProjectQuerySet(QuerySet):
     def published(self):
-        return self.filter(is_published=True)
+        return self.filter(is_published=True).none()
 
     def drafts(self):
         return self.filter(is_published=False)
