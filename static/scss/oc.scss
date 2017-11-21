@@ -412,10 +412,7 @@ h3, .h3 {
  * Glyphicon colors
  */
 
-.glyphicon-pencil {
-    display: none;
-}
-.row:hover .glyphicon-pencil {
+.row .glyphicon-pencil {
     display: inline;
     color: #4aa1f1;
     font-size: 15px;

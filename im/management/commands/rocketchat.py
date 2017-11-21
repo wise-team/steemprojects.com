@@ -95,7 +95,7 @@ class Command(NoArgsCommand):
 
             ans = input('##### Send PM to @{}? [y/n/q]: '.format(steem_name))
             if ans.lower() == 'y':
-                res = rocket.chat_post_message(text=message, channel="@lenka")
+                res = rocket.chat_post_message(text=message, channel="@{}".format(steem_name))
                 print(str(res.json()))
             elif ans.lower() == 'q':
                 return
