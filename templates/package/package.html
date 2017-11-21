@@ -34,6 +34,8 @@
         </p>
     </div>
     <div class="col-md-6 m-action-panel">
+        {% fav_button %}
+
         {% if request.user.is_authenticated and package.is_draft %}
             {% if user.is_staff or user.profile.is_trusted %}
                 <a class="m-btn" href="{% url 'publish_project' package.slug %}">
@@ -51,8 +53,6 @@
                 {% endif %}
 
             {% endif %}
-        {% else %}
-            {% fav_button %}
         {% endif %}
     </div>
 
