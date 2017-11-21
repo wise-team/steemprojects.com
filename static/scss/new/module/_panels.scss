@@ -2,6 +2,13 @@
 
 .m-action-panel {
   text-align: right;
+
+  .m-btn {
+    margin-right: 10px;
+  }
+  .m-btn:last-child {
+    margin-right: 0px;
+  }
 }
 
 .m-title-panel {
