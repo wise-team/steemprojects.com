@@ -32,6 +32,7 @@ shortuuid==0.4.3
 six==1.10.0
 whitenoise==3.2.2
 Pillow==4.2.1
+rocketchat-API==0.6.3
 
 # Redis support
 django-redis==4.6.0
@@ -40,3 +41,5 @@ opbeat==3.5.2
 newrelic==2.74.0.54
 raven==5.32.0
 django-anymail==0.6.1
+
+
