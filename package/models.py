@@ -55,7 +55,7 @@ class Category(BaseModel):
 
 class ProjectQuerySet(QuerySet):
     def published(self):
-        return self.filter(is_published=True).none()
+        return self.filter(name="Steem Projects") #filter(is_published=True)
 
     def drafts(self):
         return self.filter(is_published=False)
