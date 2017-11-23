@@ -3,7 +3,12 @@ import logging.config
 from time import sleep
 
 from django.conf import settings
-from django.core.management.base import NoArgsCommand
+
+try:
+    from django.core.management.base import NoArgsCommand
+except ImportError:
+    from django.core.management import BaseCommand as NoArgsCommand
+
 from django.core.mail import send_mail
 
 from github3 import login as github_login
@@ -45,7 +50,7 @@ class Command(NoArgsCommand):
                     package.fetch_metadata(fetch_pypi=False)
                     package.fetch_commits()
                 except Exception as e:
-                    raise PackageUpdaterException(e, package.title)
+                    raise PackageUpdaterException(e, package.name)
             except PackageUpdaterException:
                 pass  # We've already caught the error so let's move on now
 
