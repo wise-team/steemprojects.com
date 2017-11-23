@@ -41,7 +41,8 @@ def homepage(request, template_name="homepage.html"):
         element = {
             "title": category.title,
             "description": category.description,
-            "count": category.project_count,
+            # "count": category.project_count,
+            "count": 0,
             "slug": category.slug,
             "title_plural": category.title_plural,
         }
