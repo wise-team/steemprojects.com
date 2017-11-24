@@ -109,7 +109,7 @@ def deploy(branch="master"):
     _copy_secrets()
     with ENV.cd(ENV.project_dir):
 
-        docker_compose("run postgres backup before-deploy-at-{}.sqlc".format(ENV.DEPLOYMENT_DATETIME))
+        docker_compose("run postgres backup before-deploy-at-{}".format(ENV.DEPLOYMENT_DATETIME))
 
         ENV.run("git fetch --all")
         ENV.run("git checkout -f origin/{} -b {}".format(branch, deployment_branch))
