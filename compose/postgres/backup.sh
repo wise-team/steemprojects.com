@@ -23,8 +23,8 @@ else
     FILENAME=backup_$(date +'%Y_%m_%dT%H_%M_%S')
 fi
 
-pg_dump -h postgres -U $POSTGRES_USER > /backups/$(FILENAME).sql
-pg_dump -h postgres -U $POSTGRES_USER --format=c --file /backups/$(FILENAME).sqlc
+pg_dump -h postgres -U $POSTGRES_USER > /backups/${FILENAME}.sql
+pg_dump -h postgres -U $POSTGRES_USER --format=c --file /backups/${FILENAME}.sqlc
 
 
 echo "successfully created backup $FILENAME"
