@@ -38,6 +38,8 @@ class Command(NoArgsCommand):
         github = github_login(token=settings.GITHUB_TOKEN)
 
         for index, package in enumerate(Project.objects.iterator()):
+            logging.info("{} ...".format(package.name))
+            print("{} ...".format(package.name))
 
             # Simple attempt to deal with Github rate limiting
             while True:
