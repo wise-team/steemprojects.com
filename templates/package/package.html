@@ -190,12 +190,11 @@
         </div>
     </div>
     <div class="col-md-4">
-{#        <div class="clearfix" style="width: calc(33vw - 60px)">#}
         <div class="m-gallery" >
             <ul id="image-gallery" class="cS-hidden">
                 {% if not project_imgs %}
                     <li>
-                        <img class="m-gallery__image" src="https://via.placeholder.com/1600x900?text=Please add logo and screenshots"/>
+                        <img class="m-gallery__image" src="{{ STATIC_URL }}img/please_add_images.png"/>
                     </li>
                 {% else %}
                     {% for img in project_imgs %}
