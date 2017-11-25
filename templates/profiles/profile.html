@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load profile_tags %}
+{% load package_tags %}
 {% load crispy_forms_tags %}
 
 {% block head_title %}Profile for {{ local_profile.username }}{% endblock %}
@@ -100,7 +101,7 @@
                 <tbody>
                   {% for package in user|package_usage %}
                     <tr>
-                        <td><i class="heart icon-favorite"></i></td>
+                        <td>{% fav_button 'small' %}</td>
                         <td><a href="{{ package.get_absolute_url }}">{{ package.name }}</a></td>
                     </tr>
                   {% endfor %}
