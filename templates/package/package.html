@@ -190,16 +190,17 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="clearfix" style="width: calc(33vw - 60px)">
-            <ul id="image-gallery" class="gallery list-unstyled cS-hidden">
+{#        <div class="clearfix" style="width: calc(33vw - 60px)">#}
+        <div class="m-gallery" >
+            <ul id="image-gallery" class="cS-hidden">
                 {% if not project_imgs %}
                     <li>
-                        <img class="slide-sp" src="https://via.placeholder.com/1600x900?text=Please add logo and screenshots"/>
+                        <img class="m-gallery__image" src="https://via.placeholder.com/1600x900?text=Please add logo and screenshots"/>
                     </li>
                 {% else %}
                     {% for img in project_imgs %}
                         <li data-thumb="{{ img.url }}">
-                            <img class="slide-sp" src="{{ img.url }}"/>
+                            <img class="m-gallery__image" src="{{ img.url }}"/>
                         </li>
                     {% endfor %}
                 {% endif %}
@@ -247,38 +248,8 @@
 
 {% block extra_body %}
 <script src="{{ STATIC_URL }}js/lightslider.js"></script>
-<style>
-    ul{
-        list-style: none outside none;
-        padding-left: 0;
-        margin: 0;
-    }
-    .content-slider li{
-        background-color: #ed3020;
-        text-align: center;
-        color: #FFF;
-    }
-    .content-slider h3 {
-        margin: 0;
-        padding: 70px 0;
-    }
-    ul.lSPager.lSGallery img {
-        width: 3.2vw !important;
-        height: 1.8vw !important;
-        object-fit: cover;
-    }
-    img.slide-sp {
-        width:calc(33vw - 60px);
-        height: calc((33vw - 60px)*(9/16));
-        object-fit: cover;
-    }
-</style>
 <script>
      $(document).ready(function() {
-        $("#content-slider").lightSlider({
-            loop:true,
-            keyPress:true
-        });
         $('#image-gallery').lightSlider({
             gallery:true,
             item:1,
