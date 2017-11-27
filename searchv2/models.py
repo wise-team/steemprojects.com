@@ -9,7 +9,6 @@ from grid.models import Grid
 
 ITEM_TYPE_CHOICES = (
     ('package', 'Package'),
-    ('draft', 'Draft'),
     ('grid', 'Grid'),
 )
 
@@ -30,7 +29,11 @@ class SearchV2(BaseModel):
     """
 
     weight = models.IntegerField(_("Weight"), default=0)
+
     item_type = models.CharField(_("Item Type"), max_length=40, choices=ITEM_TYPE_CHOICES)
+    item_id = models.IntegerField(_("Item ID"))
+
+    is_draft = models.BooleanField(_("Is draft"), default=False)
     title = models.CharField(_("Title"), max_length=100, db_index=True)
     title_no_prefix = models.CharField(_("No Prefix Title"), max_length=100, db_index=True)
     slug = models.SlugField(_("Slug"), db_index=True)
@@ -51,6 +54,7 @@ class SearchV2(BaseModel):
     class Meta:
         ordering = ['-weight', ]
         verbose_name_plural = 'SearchV2s'
+        unique_together = ('item_type', 'item_id',)
 
     def __str__(self):
         return "{0}:{1}".format(self.weight, self.title)

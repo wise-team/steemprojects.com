@@ -140,8 +140,8 @@
                       <a ng-href="{{ item.absolute_url }}">{{ item.title }}</a>
                   </td>
                   <td>
-                    <strong ng-if="item.item_type=='grid'">Grid:</strong>
-                    <strong ng-if="item.item_type=='draft'">Draft:</strong>
+                    <strong ng-if="item.item_type=='grid'">Grid&nbsp;</strong>
+                    <strong ng-if="item.is_draft">Draft&nbsp;</strong>
                     {{ item.description }}
                   </td>
                 </tr>
