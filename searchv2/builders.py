@@ -23,8 +23,8 @@ def build_1(print_out=False):
         return
 
     for project_type, projects in [
-        ('package', Project.objects.published()),
-        ('draft', Project.objects.drafts())
+        ('package', Project.objects.filter(is_published=True)),
+        ('draft', Project.objects.filter(is_published=False))
     ]:
 
         for project in projects:
