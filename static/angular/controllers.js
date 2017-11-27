@@ -1,4 +1,6 @@
-function SearchCtrl($scope, $http) {
+var steemprojects = angular.module('steemprojects', []);
+
+steemprojects.controller('SearchCtrl', function SearchCtrl($scope, $http) {
   $scope.model = {};
 
   $scope.init_search = function(q, url, max_weight){
@@ -11,8 +13,8 @@ function SearchCtrl($scope, $http) {
   $scope.search = function(model, url){
     // core search page search function
     if (model.q.length){
-        $http.get(url + '?q='+model.q).success(function(data) {
-          $scope.items = data;
+        $http.get(url + '?q='+model.q).then(function(data) {
+          $scope.items = data.data;
         });
     } else {
         $scope.items = [];
@@ -22,8 +24,8 @@ function SearchCtrl($scope, $http) {
 
   $scope.get_python3_packages = function(url){
     console.log("what")
-    $http.get(url).success(function(data) {
+    $http.get(url).then(function(data) {
         $scope.python3_packages = data.results;
     });
   };
-}
+});
