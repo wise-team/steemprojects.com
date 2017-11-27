@@ -22,6 +22,7 @@ from package.models import Category, Project, PackageExample, ProjectImage, Team
 from package.repos import get_all_repos
 from package.forms import TeamMembersFormSet
 from profiles.models import Profile, Account, AccountType
+from searchv2.builders import rebuild_project_search_index
 
 from .utils import quote_plus
 
@@ -54,6 +55,7 @@ def add_package(request, template_name="package/package_form.html"):
         new_package.draft_added_by = request.user
         new_package.last_modified_by = request.user
         new_package.save()
+        rebuild_project_search_index(new_package)
         #new_package.fetch_metadata()
         #new_package.fetch_commits()
 
@@ -109,6 +111,7 @@ def edit_package(request, slug, template_name="package/package_form.html"):
         modified_package = form.save()
         modified_package.last_modified_by = request.user
         modified_package.save()
+        rebuild_project_search_index(modified_package)
 
         for inlineform in formset:
             if hasattr(inlineform, 'cleaned_data') and inlineform.cleaned_data:
@@ -175,6 +178,7 @@ def publish_project(request, slug):
     project = get_object_or_404(Project, slug=slug)
     try:
         project.publish(publisher=request.user)
+        rebuild_project_search_index(project)
         messages.add_message(request, messages.INFO, 'Project is published!')
         return HttpResponseRedirect(reverse("package", kwargs={"slug": project.slug}))
 

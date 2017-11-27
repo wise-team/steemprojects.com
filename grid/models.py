@@ -23,6 +23,7 @@ class Grid(BaseModel):
     title = models.CharField(_('Title'), max_length=100)
     slug = models.SlugField(_('Slug'), help_text="Slugs will be lowercased", unique=True)
     description = models.TextField(_('Description'), blank=True, help_text="Lines are broken and urls are urlized")
+    is_draft = models.BooleanField(_('Is Draft'), default=True)
     is_locked = models.BooleanField(_('Is Locked'), default=False, help_text="Moderators can lock grid access")
     packages = models.ManyToManyField(Project, through="GridPackage")
     header = models.BooleanField(_("Header tab?"), default=False, help_text="If checked then displayed on homepage header")
