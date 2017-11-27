@@ -40,7 +40,7 @@ body {
   padding: 0 60px;
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 1599px) {
   .container {
     padding: 0 20px;
   }
@@ -706,4 +706,8 @@ body .container .jumbotron h2 {
 
 .main-container {
     margin-bottom: 150px;
+}
+
+.navbar-right {
+  margin-right: 0;
 }
