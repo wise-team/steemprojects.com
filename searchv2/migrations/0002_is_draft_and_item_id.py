@@ -5,6 +5,11 @@ from __future__ import unicode_literals
 from django.db import migrations, models
 
 
+def clear_searchv2(apps, schema_editor):
+    SearchV2 = apps.get_model('searchv2', 'SearchV2')
+    SearchV2.objects.all().delete()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -12,6 +17,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(clear_searchv2),
         migrations.AddField(
             model_name='searchv2',
             name='is_draft',
