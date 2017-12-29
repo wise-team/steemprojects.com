@@ -37,11 +37,7 @@
         {% fav_button %}
 
         {% if request.user.is_authenticated and package.is_draft %}
-            {% if user.is_staff or user.profile.is_trusted %}
-                <a class="m-btn" href="{% url 'publish_project' package.slug %}">
-                    Publish
-                </a>
-            {% else %}
+            {% if can_edit_package %}
                 {% if package.is_awaiting_approval %}
                     <a class="m-btn" href="{% url 'project_approval' package.slug 'cancel' %}">
                         Cancel approval request
@@ -51,7 +47,12 @@
                         Submit for approval
                     </a>
                 {% endif %}
+            {% endif %}
 
+            {% if user.is_staff or user.profile.is_trusted %}
+                <a class="m-btn" href="{% url 'publish_project' package.slug %}">
+                    Publish
+                </a>
             {% endif %}
         {% endif %}
     </div>
