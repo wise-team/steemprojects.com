@@ -287,7 +287,7 @@ def package_autocomplete(request):
 
 def category(request, slug, template_name="package/category.html"):
     category = get_object_or_404(Category, slug=slug)
-    packages = category.project_set.drafts().select_related().annotate(usage_count=Count("usage")).order_by("-repo_watchers", "name")
+    packages = category.project_set.published().select_related().annotate(usage_count=Count("usage")).order_by("-repo_watchers", "name")
     return render(request, template_name, {
         "category": category,
         "packages": packages,
