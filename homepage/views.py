@@ -36,7 +36,7 @@ def homepage(request, template_name="homepage.html"):
 
     categories = []
     for category in Category.objects.annotate(
-        project_count=Count(Case(When(project__is_published=False, then=1)))
+        project_count=Count(Case(When(project__is_published=True, then=1)))
     ):
         element = {
             "title": category.title,
@@ -94,7 +94,7 @@ def homepage(request, template_name="homepage.html"):
 
     return render(request,
         template_name, {
-            "latest_packages": Project.objects.filter(name="Steem Projects"),  # Project.objects.published().order_by('-publication_time')[:6],
+            "latest_packages": Project.objects.published().order_by('-publication_time')[:7],
             "random_packages": random_packages,
             "potw": potw,
             "gotw": gotw,
