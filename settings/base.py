@@ -137,6 +137,7 @@ PROJECT_APPS = [
     "apiv3",
     "social_auth_local",
     "im",
+    'timeline_event_inserter',
 ]
 
 PREREQ_APPS = [
