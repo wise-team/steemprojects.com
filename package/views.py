@@ -474,9 +474,9 @@ def package_detail(request, slug, template_name="package/package.html"):
     proj_imgs = []
     if package.main_img:
         proj_imgs.append(package.main_img)
-        proj_imgs.extend(ProjectImage.objects.exclude(pk=package.main_img.pk).filter(project=package))
+        proj_imgs.extend(ProjectImage.objects.exclude(pk=package.main_img.pk).filter(project=package).order_by('img'))
     else:
-        proj_imgs.extend(ProjectImage.objects.filter(project=package))
+        proj_imgs.extend(ProjectImage.objects.filter(project=package).order_by('img'))
 
     all_github_accounts_of_teammambers = [
         ac.pk
