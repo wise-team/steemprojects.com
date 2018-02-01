@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from social_django.models import UserSocialAuth
 
 from core.models import BaseModel
+from profiles.accounts import get_account_handler
 
 
 class Profile(BaseModel):
@@ -241,6 +242,21 @@ class Account(BaseModel):
     @property
     def avatar_big(self):
         return self.account_type.link_to_avatar_with_params.format(account_name=self.name, size=150)
+
+    @staticmethod
+    def syntize_name(account_type, account_name):
+        account_name = account_name.strip().lower()
+        if account_type == 'STEEM':
+            if account_name.startswith('@'):
+                account_name = account_name[1:]
+
+        return account_name
+
+    @staticmethod
+    def is_exist(account_type, account_name):
+        handler = get_account_handler(account_type)
+        account = handler.get_account(account_name)
+        return bool(account)
 
 
 class AccountType(BaseModel):
