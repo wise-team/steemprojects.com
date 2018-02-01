@@ -115,6 +115,11 @@
                                 <span class="field role">{{ form.role }}</span>
                                 <span class="rm-btn tm-form"><i class="icon-close"></i>Remove</span>
                             </div>
+                            {% if form.non_field_errors %}
+                                <ul>
+                                    {{ form.non_field_errors.as_ul }}
+                                </ul>
+                            {% endif %}
                         </div>
                     {% endif %}
                 </div>
