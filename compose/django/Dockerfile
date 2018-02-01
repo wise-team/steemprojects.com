@@ -15,7 +15,7 @@ RUN pip install steem
 
 RUN pip install -r /requirements.txt \
     && groupadd -r django \
-    && useradd -r -g django django
+    && useradd -m -r -g django django
 
 RUN apt-get update
 RUN apt-get install -y ruby-dev rubygems
