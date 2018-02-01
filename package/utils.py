@@ -4,7 +4,6 @@ from requests.compat import quote
 
 from django.conf import settings
 from django.db import models
-from steem import Steem
 
 
 #this is gross, but requests doesn't import quote_plus into compat,
