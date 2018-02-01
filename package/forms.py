@@ -8,7 +8,7 @@ from django.template.defaultfilters import slugify
 from django.forms.formsets import formset_factory
 from django import forms
 
-from package.utils import account_exists
+from profiles.models import Account
 
 
 def package_help_text():
@@ -117,8 +117,15 @@ class InlineTeamMemberForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(InlineTeamMemberForm, self).clean()
-        if not account_exists(cleaned_data.get("account_name"), cleaned_data.get("account_type")):
-            raise ValidationError("Such account does not exist")
+
+        account_name = Account.syntize_name(cleaned_data.get("account_type"), cleaned_data.get("account_name"))
+
+        if not Account.is_exist(cleaned_data.get("account_type"), account_name):
+            raise ValidationError("{} account '{}' does not exist".format(
+                cleaned_data.get("account_type"), cleaned_data.get("account_name")
+            ))
+
+        cleaned_data['account_name'] = account_name
 
         return cleaned_data
 

@@ -4,6 +4,7 @@ from requests.compat import quote
 
 from django.conf import settings
 from django.db import models
+from steem import Steem
 
 
 #this is gross, but requests doesn't import quote_plus into compat,
@@ -71,9 +72,3 @@ def normalize_license(license):
     if len(license.strip()) > 20:
         return "Custom"
     return license.strip()
-
-
-def account_exists(account_name, account_type):
-    print(account_name)
-    print(account_type)
-    return True
