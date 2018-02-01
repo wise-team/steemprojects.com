@@ -11,6 +11,10 @@ class PackageExampleInline(admin.TabularInline):
 
 class PackageAdmin(VersionAdmin):
 
+    def render_change_form(self, request, context, *args, **kwargs):
+        context['adminform'].form.fields['main_img'].queryset = ProjectImage.objects.filter(project_id=kwargs['obj'].id)
+        return super(PackageAdmin, self).render_change_form(request, context, args, kwargs)
+
     save_on_top = True
     search_fields = ("name",)
     list_filter = ("category", "is_published", "is_awaiting_approval")

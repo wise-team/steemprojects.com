@@ -515,4 +515,4 @@ ROCKET_CHAT_LOGIN = environ.get('ROCKET_CHAT_LOGIN')
 ROCKET_CHAT_PASSWORD = environ.get('ROCKET_CHAT_PASSWORD')
 ROCKET_CHAT_URL = environ.get('ROCKET_CHAT_URL')
 
-
+STEEM_NODES = [node.strip() for node in environ.get('STEEM_NODES').split(',')]
