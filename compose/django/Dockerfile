@@ -5,6 +5,14 @@ ENV PYTHONUNBUFFERED 1
 # Requirements have to be pulled and installed here, otherwise caching won't work
 COPY ./requirements.txt /requirements.txt
 
+RUN apt-get update && apt-get install -y libssl-dev
+
+RUN pip install setuptools
+RUN pip install scrypt
+RUN pip install wheel
+RUN pip install pytest
+RUN pip install steem
+
 RUN pip install -r /requirements.txt \
     && groupadd -r django \
     && useradd -r -g django django
