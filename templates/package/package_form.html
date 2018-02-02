@@ -83,12 +83,7 @@
                                 </div>
                                 <div class="contributor team-member entry">
                                     <div class="">
-                                        {% if form.account_type.value == 'STEEM' %}
-                                            <img class="img-circle" src="https://img.steemconnect.com/@{{ form.account_name.value }}?s=30">
-                                        {% elif form.account_type.value == 'GITHUB' %}
-                                            <img class="img-circle" src="https://github.com/{{ form.account_name.value }}.png?size=30">
-                                        {% endif %}
-
+                                        <img class="img-circle" src="{{ form.avatar_small.value}}" style="width:30px;height:30px">
                                         {% if form.role_confirmed_by_account.value == False %}<strike style="color: grey">{% endif %}
                                             {{ form.account_name.value }} - {{ form.role.value }}
                                         {% if form.role_confirmed_by_account.value == False%}</strike>&nbsp;&nbsp;(membership rejected){% endif %}
