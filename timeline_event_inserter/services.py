@@ -2,8 +2,7 @@ import sys
 
 from package.models import TimelineEvent, Project
 from timeline_event_inserter.models import TimelineEventInserterRule, TimelineEventInserterRulebook
-from timeline_event_inserter import rules as rules_module
-
+from timeline_event_inserter import rules
 
 class SteemService:
     def get_posts(self, since_block=None):
@@ -11,7 +10,7 @@ class SteemService:
 
 
 class SteemTimelineEventInserter:
-    RULES_MODULE_NAME = 'timeline_event_inserter.rules_module'
+    RULES_MODULE_NAME = 'timeline_event_inserter.rules'
     steem_service = SteemService()
 
     @staticmethod
