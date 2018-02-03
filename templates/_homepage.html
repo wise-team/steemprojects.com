@@ -3,17 +3,20 @@
 
 <div class="homepage">
     <!-- GRIDs -->
-    <div class="col-sm-2 compare-tools">
+    <div class="col-sm-12 col-lg-2 col-lg-2-mod compare-tools clearfix">
         <h1><i class="material-icons">swap_horiz</i>Compare tools</h1>
         <div class="list-group">
             {% for grid in grid_headers %}
-            <a class="list-group-item compare-grid-item" href="{% url 'grid' grid.slug %}" title="{{ grid.description }}">
-                {{ grid.title|truncatechars:"30" }}
-            </a>
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-12 tool-item">
+                    <a class="list-group-item compare-grid-item" href="{% url 'grid' grid.slug %}" title="{{ grid.description }}">
+                        {{ grid.title|truncatechars:"30" }}
+                    </a>
+                </div>
             {% endfor %}
         </div>
     </div>
-    <div class="col-sm-4 categories">
+
+    <div class="col-sm-4 col-lg-4 col-lg-4-mod categories">
         <h1><i class="material-icons">format_list_bulleted</i>Categories</h1>
         <div class="list-group">
         <!-- start Categories panel -->
@@ -28,7 +31,7 @@
         <!-- end Categories panel -->
         </div>
     </div>
-    <div class="col-sm-6 latest-projects">
+    <div class="col-sm-8 col-lg-6 col-lg-6-mod latest-projects">
         <h1><i class="material-icons">notifications_none</i>Latest projects</h1>
         <div class="list-group">
         {% for package in latest_packages %}
