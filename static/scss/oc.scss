@@ -739,3 +739,26 @@ body .container .jumbotron h2 {
 .vis-panel.vis-center {
   border-top-width: 0 !important;
 }
+
+.compare-tools {
+  .tool-item {
+    padding: 0;
+    @media (max-width: 573px) {
+      width: 100%;
+    }
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .col-lg-2-mod {
+    width: calc(16.6666666667% + 2.8%);
+  }
+
+  .col-lg-4-mod {
+    width: calc(33.3333333333% - 1.4%);
+  }
+
+  .col-lg-6-mod {
+    width: calc(50% - 1.4%);
+  }
+}
