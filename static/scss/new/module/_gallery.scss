@@ -1,3 +1,8 @@
+$container-padding: 20px;
+$container-lg-padding: 60px;
+$column-padding: 15px;
+
+
 .m-gallery {
     @extend .clearfix;
 
@@ -14,9 +19,9 @@
     }
 
     /* Custom, iPhone Retina */
-    @media only screen and (min-width : 320px) {
+    @media only screen and (max-width : 319px) {
         margin-top: 20px;
-        width: calc(100vw - (30px + 10px + 15px));
+        width: 100%;
 
         .lSPager.lSGallery img {
             width: 9.6vw !important;
@@ -24,8 +29,25 @@
         }
 
         &__image {
-            width: calc(100vw - (30px + 30px));
-            height: calc((100vw - (30px + 30px))*(9/16));
+            width: 100%;
+            height: calc(100vw * (9/16)); // this is far from perfect, since it doesn't work well
+                                          // with body min-with:320px, when viewport is smaller than 320px
+        }
+    }
+
+    /* Custom, iPhone Retina */
+    @media only screen and (min-width : 320px) and (max-width : 1199px) {
+        margin-top: 20px;
+        width: calc(100vw - (2 * #{$container-padding}));
+
+        .lSPager.lSGallery img {
+            width: 9.6vw !important;
+            height: 5.4vw !important;
+        }
+
+        &__image {
+            width: calc(100vw - (2 * #{$container-padding}));
+            height: calc((100vw - (2 * #{$container-padding}))*(9/16));
         }
     }
 
@@ -35,8 +57,42 @@
     //@media only screen and (min-width : 768px) {}
 
     /* Medium Devices, Desktops */
-    @media only screen and (min-width : 992px) {
-        width: calc(33vw - 30px);
+    //@media only screen and (min-width : 992px) {}
+
+/*
+    How it is calculated for Large Devices and Wide Screens:
+
+
+    <---------------------------------------------CONTAINER----------------------------------------------->
+    <------->                                 CONTAINER PADDINGS                                  <------->
+    <---------------------------------> <-----------COLUMNS-----------> <--------------------------------->
+       <---->                     <---> <--->   COLUMN PADDINGS   <---> <--->                     <--->
+
+                                                                            <--COLUMN WORK WIDTH-->
+    |  |    |                     |    |    |                     |    |    |                     |   |   |
+    |       |                     |    |    |                     |    |    |                     |       |
+    |  |    |                     |    |    |                     |    |    |                     |   |   |
+    |       |                     |    |    |                     |    |    |                     |       |
+    |  |    |                     |    |    |                     |    |    |                     |   |   |
+    |       |                     |    |    |                     |    |    |                     |       |
+    |  |    |                     |    |    |                     |    |    |                     |   |   |
+    |       |                     |    |    |                     |    |    |                     |       |
+    |  |    |                     |    |    |                     |    |    |                     |   |   |
+    |       |                     |    |    |                     |    |    |                     |       |
+    |  |    |                     |    |    |                     |    |    |                     |   |   |
+    |       |                     |    |    |                     |    |    |                     |       |
+
+    Note: Paddings of outer columns are overlapped (partially or completely) by paddings of container, so:
+
+    column-work-width : 33.3vw - ((2*$container-padding + 4*$column-padding)/3)
+
+*/
+
+    /* Large Devices */
+    @media only screen and (min-width : 1200px) {
+        $column-work-width-diff: (2*$container-padding + 4*$column-padding)/3;
+
+        width: calc(33.3vw - #{$column-work-width-diff});
 
         .lSPager.lSGallery img {
             width: 3.2vw !important;
@@ -44,23 +100,21 @@
         }
 
         &__image {
-            width: calc(33vw - 30px);
-            height: calc((33vw - 30px)*(9/16));
+            width: calc(33.3vw - #{$column-work-width-diff});
+            height: calc((33.3vw - #{$column-work-width-diff})*(9/16));
         }
     }
 
-    /* Large Devices */
-    //@media only screen and (min-width : 1200px) {}
-
     /* Wide Screens */
     @media only screen and (min-width : 1600px) {
-        width: calc(33vw - 60px);
+        $column-work-width-diff: (2*$container-lg-padding + 4*$column-padding)/3;
+
+        width: calc(33.3vw - #{$column-work-width-diff});
 
         &__image {
-            width: calc(33vw - 60px);
-            height: calc((33vw - 60px)*(9/16));
+            width: calc(33.3vw - #{$column-work-width-diff});
+            height: calc((33.3vw - #{$column-work-width-diff})*(9/16));
         }
-
     }
 
 }
