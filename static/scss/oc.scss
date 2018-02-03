@@ -26,7 +26,6 @@ body {
 .footer {
   position: absolute;
   bottom: 0;
-  height: 80px;
 }
 
 /**
@@ -43,6 +42,10 @@ body {
 @media (max-width: 1599px) {
   .container {
     padding: 0 20px;
+  }
+  .footer .container {
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
 
@@ -336,17 +339,38 @@ h3, .h3 {
     background-color: #dcdfe2;
     clear: both;
     width: 100%;
-    text-align: center;
     font-size: 12px;
 }
+
 .footer .container {
-    padding: 19px 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.footer-buttons {
+    padding: 9px 0;
 }
 
 .footer-items {
     margin: 11px 0;
+    padding: 0;
     text-align: right;
+    line-height: 42px;
 }
+
+@media (max-width: 991px) {
+    .footer {
+        text-align: center
+    }
+
+    .footer-items {
+        margin: 0;
+        padding: 9px 0;
+        text-align: center;
+        line-height: initial;
+    }
+}
+
 .footer-item {
     margin: 0 10px;
 }

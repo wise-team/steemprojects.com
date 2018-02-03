@@ -155,17 +155,29 @@
 <!-- Start of footer -->
 <div class="footer">
     <div class="container">
-        <div class="col-sm-2">
+        <div class="col-sm-12 col-md-2 footer-buttons">
             <a class="btn btn-default sp-btn sp-btn-normal" href="{% url 'contribute' %}">{% trans "Contribute" %}</a>
         </div>
-        <div class="col-sm-10 footer-items">
+        <div class="hidden-xs hidden-sm col-md-10 footer-items">
           <span class="footer-item">&copy; {% now "Y" %} <a href="https://steemit.com/@noisy" target="_blank">Krzysztof Szumny - @noisy</a></span>
           <span class="footer-item"><a href="https://github.com/noisy/steemprojects.com" target="_blank">Repo</a></span>
           <span class="footer-item"><a href="{% url 'faq' %}">{% trans "FAQ" %}</a></span>
           <span class="footer-item"><a href="{% url 'terms' %}">{% trans "Terms" %}</a></span>
+        </div>
+
+        <div class="visible-xs-block visible-sm-block col-sm-12 footer-items">
+          <span class="footer-item">&copy; {% now "Y" %} <a href="https://steemit.com/@noisy" target="_blank">Krzysztof Szumny - @noisy</a></span>
+        </div>
+
+        <div class="visible-xs-block visible-sm-block col-sm-12 footer-items">
+          <span class="footer-item"><a href="https://github.com/noisy/steemprojects.com" target="_blank">Repo</a></span>
+          <span class="footer-item"><a href="{% url 'faq' %}">{% trans "FAQ" %}</a></span>
+          <span class="footer-item"><a href="{% url 'terms' %}">{% trans "Terms" %}</a></span>
+        </div>
+
 {#          <span class="footer-item"><a href="https://djangopackages.readthedocs.io/en/latest/apiv3_docs.html">{% trans "API" %}</a></span>#}
 {#          <span class="footer-item"><a href="{% url 'syndication' %}">{% trans "RSS / Atom" %}</a></span>#}
-        </div>
+
     </div>
 </div>
 <!-- End of footer -->
