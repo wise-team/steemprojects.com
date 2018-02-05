@@ -38,7 +38,9 @@ $column-padding: 15px;
     /* Custom, iPhone Retina */
     @media only screen and (min-width : 320px) and (max-width : 1199px) {
         margin-top: 20px;
-        width: calc(100vw - (2 * #{$container-padding}));
+        $column-work-width-diff: (2*$container-padding + 2*$column-padding);
+
+        width: calc(100vw - #{$column-work-width-diff});
 
         .lSPager.lSGallery img {
             width: 9.6vw !important;
@@ -46,8 +48,8 @@ $column-padding: 15px;
         }
 
         &__image {
-            width: calc(100vw - (2 * #{$container-padding}));
-            height: calc((100vw - (2 * #{$container-padding}))*(9/16));
+            width: calc(100vw - #{$column-work-width-diff});
+            height: calc((100vw - #{$column-work-width-diff})*(9/16));
         }
     }
 
@@ -63,34 +65,32 @@ $column-padding: 15px;
     How it is calculated for Large Devices and Wide Screens:
 
 
-    <---------------------------------------------CONTAINER----------------------------------------------->
-    <------->                                 CONTAINER PADDINGS                                  <------->
-    <---------------------------------> <-----------COLUMNS-----------> <--------------------------------->
-       <---->                     <---> <--->   COLUMN PADDINGS   <---> <--->                     <--->
+    <---------------------------------------------------CONTAINER-------------------------------------------------->
+    <------->                                      CONTAINER PADDINGS                                      <------->
+            <------------------------------> <-----------COLUMNS-----------> <----------------------------->
+            <---->                     <---> <--->   COLUMN PADDINGS   <---> <--->                     <--->
 
                                                                             <--COLUMN WORK WIDTH-->
-    |  |    |                     |    |    |                     |    |    |                     |   |   |
-    |       |                     |    |    |                     |    |    |                     |       |
-    |  |    |                     |    |    |                     |    |    |                     |   |   |
-    |       |                     |    |    |                     |    |    |                     |       |
-    |  |    |                     |    |    |                     |    |    |                     |   |   |
-    |       |                     |    |    |                     |    |    |                     |       |
-    |  |    |                     |    |    |                     |    |    |                     |   |   |
-    |       |                     |    |    |                     |    |    |                     |       |
-    |  |    |                     |    |    |                     |    |    |                     |   |   |
-    |       |                     |    |    |                     |    |    |                     |       |
-    |  |    |                     |    |    |                     |    |    |                     |   |   |
-    |       |                     |    |    |                     |    |    |                     |       |
+    |       |    |                     |    |    |                     |    |    |                     |   |       |
+    |       |    |                     |    |    |                     |    |    |                     |   |       |
+    |       |    |                     |    |    |                     |    |    |                     |   |       |
+    |       |    |                     |    |    |                     |    |    |                     |   |       |
+    |       |    |                     |    |    |                     |    |    |                     |   |       |
+    |       |    |                     |    |    |                     |    |    |                     |   |       |
+    |       |    |                     |    |    |                     |    |    |                     |   |       |
+    |       |    |                     |    |    |                     |    |    |                     |   |       |
+    |       |    |                     |    |    |                     |    |    |                     |   |       |
+    |       |    |                     |    |    |                     |    |    |                     |   |       |
+    |       |    |                     |    |    |                     |    |    |                     |   |       |
+    |       |    |                     |    |    |                     |    |    |                     |   |       |
 
-    Note: Paddings of outer columns are overlapped (partially or completely) by paddings of container, so:
-
-    column-work-width : 33.3vw - ((2*$container-padding + 4*$column-padding)/3)
+    column-work-width : 33.3vw - ((2*$container-padding + 6*$column-padding)/3)
 
 */
 
     /* Large Devices */
     @media only screen and (min-width : 1200px) {
-        $column-work-width-diff: (2*$container-padding + 4*$column-padding)/3;
+        $column-work-width-diff: (2*$container-padding + 6*$column-padding)/3;
 
         width: calc(33.3vw - #{$column-work-width-diff});
 
@@ -107,7 +107,7 @@ $column-padding: 15px;
 
     /* Wide Screens */
     @media only screen and (min-width : 1600px) {
-        $column-work-width-diff: (2*$container-lg-padding + 4*$column-padding)/3;
+        $column-work-width-diff: (2*$container-lg-padding + 6*$column-padding)/3;
 
         width: calc(33.3vw - #{$column-work-width-diff});
 

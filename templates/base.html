@@ -55,38 +55,67 @@
 
 <div class="header">
     <div class="container">
-        <!-- Start of navbar -->
-        <div class="navbar">
+        <nav class="m-navbar">
+            <div class="navbar-header col-sm-12 col-md-3 col-lg-2 col-lg-2-mod">
+                <label for="navbar-toggle-cbox" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="m-navbar--toggle-menu-btn"></span>
+                </label>
+                <label for="navbar-toggle-cbox2" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="m-navbar--toggle-search-btn"></span>
+                </label>
 
-            <!-- Logo and title -->
-            <a class="navbar-brand col-sm-2" href="{% url 'home' %}">
-                <img src="{{ STATIC_URL }}img/logo_steemprojects.svg" />
-            </a>
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <img class="m-navbar--brand-image" src="{{ STATIC_URL }}img/logo_steemprojects.svg" />
+                </a>
+            </div>
 
-            <!-- Main nav -->
-            <ul class="nav navbar-nav navbar-right hidden-xs">
-                <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
-                <li><a href="{% url 'faq' %}">{% trans "FAQ" %}</a></li>
-                {% if request.user.is_authenticated %}
-                    <li>{{ profile.account.name }}<a href="{{ profile.get_absolute_url }}">{{ profile.username }}</a></li>
-                    {% if request.user.is_staff %}
-                        <li><a href="{% url 'admin:index' %}">{% trans "Admin" %}</a></li>
-                    {% endif %}
-                    <li><a href="{% url 'logout' %}">{% trans "Log out" %}</a></li>
-                {% else %}
-                    <li><a href="{% url 'login' %}{% if current_path %}?next={{ current_path }}{% endif %}">{% trans "Log in" %}</a></li>
-                {% endif %}
-                <li><a class="btn btn-default sp-btn sp-btn-normal" href="{% url 'add_package' %}">{% trans "Add project" %}</a></li>
-            </ul>
+            <div class="col-sm-12 col-md-9 col-lg-10 col-lg-10-mod">
+                <input type="checkbox" id="navbar-toggle-cbox">
+                <input type="checkbox" id="navbar-toggle-cbox2">
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="m-navbar--item"><a class="m-navbar--item-text" href="{% url 'home' %}">{% trans "Home" %}</a></li>
+                        <li class="m-navbar--item"><a class="m-navbar--item-text"  href="{% url 'faq' %}">{% trans "FAQ" %}</a></li>
 
-            <!-- Search form -->
-            <form action="{% url 'search' %}"  class="navbar-form pull-left hidden-xs">
-              <input id="search_input" type="text" name="q" class="col-12 form-control" style="width: 240px;" id="search-2" ng-model="model.q" ng-keyup="search(model, '{% url 'apiv4:searchv2-list' %}')" placeholder="Search for projects" autocomplete="off">
-              <button type="submit" id="search_button" class="material-icons">search</button>
-            </form>
+                        {% if request.user.is_authenticated %}
+                            <li class="m-navbar--item"><a class="m-navbar--item-text" href="{{ profile.get_absolute_url }}">{{ profile.username }}</a></li>
 
-        </div>
-        <!-- End of navbar -->
+                            {% if request.user.is_staff %}
+                                <li class="m-navbar--item"><a class="m-navbar--item-text" href="{% url 'admin:index' %}">{% trans "Admin" %}</a></li>
+                            {% endif %}
+
+                            <li class="m-navbar--item"><a class="m-navbar--item-text" href="{% url 'logout' %}">{% trans "Log out" %}</a></li>
+                        {% else %}
+                            <li class="m-navbar--item"><a class="m-navbar--item-text" href="{% url 'login' %}{% if current_path %}?next={{ current_path }}{% endif %}">{% trans "Log in" %}</a></li>
+                        {% endif %}
+
+                        <li class="m-navbar--item hidden-md hidden-lg">
+                            <a class="m-navbar--item-text" href="{% url 'add_package' %}">{% trans "Add project" %}</a>
+                        </li>
+                        <li class="m-navbar--item hidden-xs hidden-sm">
+                            <a class="m-navbar--item-btn" href="{% url 'add_package' %}">{% trans "Add project" %}</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="navbar2" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="m-navbar--item">
+                            <form action="{% url 'search' %}"  class="m-navbar--form pull-left">
+                                <input id="search_input"
+                                       type="text"
+                                       name="q"
+                                       class="col-12 m-navbar--form-control"
+                                       ng-model="model.q"
+                                       ng-keyup="search(model, '{% url 'apiv4:searchv2-list' %}')"
+                                       placeholder="Search for projects" autocomplete="off"
+                                >
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
     </div>
 </div>
 

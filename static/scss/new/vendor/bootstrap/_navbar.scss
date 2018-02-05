@@ -66,7 +66,8 @@
     box-shadow: none;
 
     &.collapse {
-      display: block !important;
+      display: inline-block !important;
+      float: right;
       height: auto !important;
       padding-bottom: 0; // Override default setting
       overflow: visible !important;
