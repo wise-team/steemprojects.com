@@ -18,8 +18,6 @@ html {
 
 body {
   background-color: $base-background-color;
-  padding-top: 80px;
-  /* Margin bottom by footer height */
   margin-bottom: 80px;
 }
 
@@ -210,62 +208,6 @@ a:focus, a:hover  {
 .topbar-default {
   background-color: #86e3d0;
   border-bottom: 1px solid #5BC0DE;
-}
-
-/**
- * Remove logo border in IE.
- */
-
-.navbar-brand > img {
-    border: 0;
-}
-
-/**
- * "Django Packages" (or other title) text.
- */
-
-.navbar-brand > h1 {
-    display: inline;
-    margin: 0 0 0 14px;
-    font-size: 27px;
-    font-weight: 700;
-    color: #121212;
-    vertical-align: middle;
-}
-
-/**
- * Override Bootstrap v3's nav bar top/bottom margins.
- */
-
-/* TODO */
-
-/**
- * Override nav bar color, margin, padding.
- */
-
-.navbar {
-    font-weight: 400;
-    background-color: #fff;
-    margin-bottom: 0;
-    padding: 0;
-    background: none;
-}
-
-.navbar .navbar-brand {
-	height: auto;
-	width: auto;
-	padding: 20px 15px;
-	transition: all .4s;
-}
-
-/**
- * Vertically center nav elements.
- */
-
-@media screen and (min-width: 768px) {
-  .navbar-form {
-    margin-top: 13px;
-  }
 }
 
 /**
@@ -529,10 +471,6 @@ h3, .h3 {
     color: #fff;
 }
 
-.navbar .btn.btn-default.sp-btn {
-    border-color: #4aa1f1;
-}
-
 .footer .btn.btn-default.sp-btn.sp-btn-normal {
     margin: 0;
     border-color: #3e4f5e;
@@ -551,65 +489,6 @@ h3, .h3 {
 
 /*-----------------*/
 
-.header {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 80px;
-	background: #fff;
-	z-index: 2;
-	box-shadow: 0 3px 20px rgba(0,0,0,.1);
-	transition: all .4s;
-}
-
-.scrolled .header {
-	height: 60px;
-}
-
-.scrolled .navbar .navbar-brand {
-	padding: 12px 15px;
-}
-
-.form-control:focus {
-	box-shadow: none;
-	background: #f0f4f7;
-}
-
-.navbar .navbar-form .form-control,
-.navbar .navbar-form .form-group .form-control {
-    height: 40px;
-    padding: 7px;
-}
-
-.navbar .navbar-form {
-	border: 0;
-	margin-left: 30px;
-	transition: all .4s;
-}
-
-.scrolled .navbar .navbar-form {
-	margin-top: 10px;
-}
-
-
-.navbar .navbar-nav>li>a {
-	color: inherit;
-	line-height: 80px;
-	padding: 0 15px;
-	transition: all .3s;
-}
-
-.scrolled .navbar .navbar-nav>li>a {
-	line-height: 60px;
-}
-
-@media (min-width: 768px) {
-	.navbar-nav>li {
-	   /* float: left; */
-	   display: inline-block;
-	}
-}
 
 .homepage .list-group .list-group-item h4 {
 	font-size: 16px;
@@ -732,10 +611,6 @@ body .container .jumbotron h2 {
     margin-bottom: 150px;
 }
 
-.navbar-right {
-  margin-right: 0;
-}
-
 .vis-panel.vis-center {
   border-top-width: 0 !important;
 }
@@ -749,16 +624,25 @@ body .container .jumbotron h2 {
   }
 }
 
-@media (min-width: 1200px) and (max-width: 1400px) {
+@media (min-width: 1200px) and (max-width: 1410px) {
   .col-lg-2-mod {
-    width: calc(16.6666666667% + 2.8%);
+    width: calc(16.6666666667% + 3%);
   }
 
   .col-lg-4-mod {
-    width: calc(33.3333333333% - 1.4%);
+    width: calc(33.3333333333% - 1.6%);
   }
 
   .col-lg-6-mod {
     width: calc(50% - 1.4%);
   }
+
+  .col-lg-10-mod {
+    width: calc(83.3333333333% - 3%);
+  }
+}
+
+.row {
+  margin-left: 0;
+  margin-right: 0;
 }
