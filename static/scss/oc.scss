@@ -276,7 +276,7 @@ h3, .h3 {
 
 .row .glyphicon-pencil {
     display: inline;
-    color: #4aa1f1;
+    color: $base-link-color;
     font-size: 15px;
 }
 .glyphicon-trash { color: #8B876E; }
@@ -406,23 +406,25 @@ label {
 }
 
 input {
-	min-height: 40px;
-	border: 0;
-	padding: 0 10px;
-	border-bottom: 1px solid #3e4f5e;
-	transition: all .3s;
+    min-height: 40px;
+    border: 0;
+    padding: 0 10px;
+    border-bottom: 1px solid $base-form-border-color;
+    transition: all .3s;
 }
 
 textarea {
-	border: 1px solid #3e4f5e;
-	padding: 10px;
-	transition: all .3s;
+    border-bottom: 1px solid $base-form-border-color;
+    padding: 10px;
+    transition: all .3s;
 }
 
 input:focus,
-textarea:focus {
-	border-color: #4aa1f1;
-	background: #f0f4f7;
+textarea:focus,
+select:focus {
+    border: 1px solid $base-form-border-color-focus;
+    border-bottom-color: $base-form-border-bottom-color-focus;
+    background-color: $base-form-background-color-focus;
 }
 
 .fieldWrapper {
@@ -430,17 +432,12 @@ textarea:focus {
 }
 
 select {
-	height: 40px;
-	border: 0;
-	border-bottom: 1px solid #3e4f5e;
-	padding: 0 10px;
-	cursor: pointer;
-	transition: all .3s;
-}
-
-select:focus {
-	border-color: #4aa1f1;
-	background: #f0f4f7;
+    height: 40px;
+    border: 0;
+    border-bottom: 1px solid $base-form-border-color;
+    padding: 0 10px;
+    cursor: pointer;
+    transition: all .3s;
 }
 
 input::-webkit-input-placeholder,
@@ -464,6 +461,7 @@ textarea:-moz-placeholder {
 }
 
 body .container .jumbotron {
+    background-color: $base-background-color;
     position: absolute;
     top: 40%;
     left:50%;

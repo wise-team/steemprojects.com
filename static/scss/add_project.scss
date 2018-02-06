@@ -1,3 +1,5 @@
+@import "new/base/variables";
+
 .img-circle {
     margin: 5px;
 }
@@ -21,27 +23,45 @@
     text-align: right;
 }
 
-.project-form .field input,
-.project-form .field textarea,
-.project-form .field select
-{
-    width: 100%;
-    background-color: #FFF;
-    height: 40px;
-    margin-bottom: 20px;
+
+.project-form {
+    .field {
+        input,
+        textarea,
+        select
+        {
+            width: 100%;
+            background-color: $base-form-background-color;
+            height: 40px;
+            margin-bottom: 20px;
+            &:focus {
+                background-color: $base-form-background-color-focus;
+            }
+        }
+    }
 }
+
 .project-form .field select {
     width: 180px;
     float: left;
 }
 
+
 .project-form .field textarea
 {
     height: 60px;
     resize: none;
-    border: none;
-    border-bottom: solid 1px rgb(62, 79, 94);
+    border: 0;
+    border-bottom: 1px solid $base-form-border-color;
 }
+
+.project-form .field textarea:focus
+{
+    background-color: $base-form-background-color-focus;
+    border: 1px solid $base-form-border-color-focus;
+    border-bottom: 1px solid $base-form-border-color-focus;
+}
+
 
 .project-form .team-member.form .field input,
 .project-form .team-member.form .field select
