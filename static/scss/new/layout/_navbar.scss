@@ -12,8 +12,8 @@ $navbar-nav-padding: $container-padding + $column-padding;
     @extend .navbar;
     @extend .navbar-static-top;
 
-    font-weight: 400;
-    background-color: #fff;
+    //font-weight: 400;
+    //background-color: #fff;
     margin-bottom: 0;
     padding: 0;
     background: none;
@@ -26,8 +26,9 @@ $navbar-nav-padding: $container-padding + $column-padding;
         transition: all .4s;
     }
 
-    &--brand-image {
-      height: 35px;
+    &__brand-image {
+        height: 35px;
+        content:url("/static/img/#{$base-brand-image}");
     }
 
     .navbar-nav {
@@ -51,18 +52,21 @@ $navbar-nav-padding: $container-padding + $column-padding;
     }
 
     &--form-control {
+        background-color: $base-form-background-color;
         padding: 7px 0;
         box-shadow: none;
         -webkit-box-shadow: none;
-        border-bottom-color: #D2D2D2;
+        border-bottom-color: $base-form-border-color;
         &:hover,
         &:focus
         {
-            border-bottom-color: #D2D2D2;
+            border-bottom-color: $base-form-border-color;
         }
         &:focus
         {
-            border-bottom-color: #D2D2D2;
+            background-color: $base-form-background-color-focus;
+            border: 1px solid $base-form-border-color-focus;
+            border-bottom-color: $base-form-border-bottom-color-focus;
             padding: 7px;
         }
     }
@@ -178,10 +182,10 @@ $navbar-nav-padding: $container-padding + $column-padding;
 
 @media (max-width: 991px) {
     #navbar-toggle-cbox:checked ~ #navbar {
-        background-color: #f0f4f7;
+        background-color: $base-hover-background;
     }
 
     #navbar-toggle-cbox2:checked ~ #navbar2 {
-        //background-color: #f0f4f7;
+
     }
 }

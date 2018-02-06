@@ -65,7 +65,7 @@
                 </label>
 
                 <a class="navbar-brand" href="{% url 'home' %}">
-                    <img class="m-navbar--brand-image" src="{{ STATIC_URL }}img/logo_steemprojects.svg" />
+                    <img class="m-navbar__brand-image"/>
                 </a>
             </div>
 
@@ -182,10 +182,10 @@
 </div>
 
 <!-- Start of footer -->
-<div class="footer">
+<div class="footer m-footer">
     <div class="container">
         <div class="col-sm-12 col-md-2 footer-buttons">
-            <a class="btn btn-default sp-btn sp-btn-normal" href="{% url 'contribute' %}">{% trans "Contribute" %}</a>
+            <a class="m-btn" href="{% url 'contribute' %}">{% trans "Contribute" %}</a>
         </div>
         <div class="hidden-xs hidden-sm col-md-10 footer-items">
           <span class="footer-item">&copy; {% now "Y" %} <a href="https://steemit.com/@noisy" target="_blank">Krzysztof Szumny - @noisy</a></span>
