@@ -21,10 +21,6 @@ body {
   margin-bottom: 80px;
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
-}
 
 /**
  * Use a container that's as large as will fit.
@@ -41,19 +37,15 @@ body {
   .container {
     padding: 0 20px;
   }
-  .footer .container {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
 }
 
 .list-group-item:hover {
     cursor: pointer;
 }
 
-.latest-projects .list-group-item:hover, .latest-projects .list-group-item:focus {
-    background-color: #f0f4f7;
-}
+//.latest-projects .list-group-item:hover, .latest-projects .list-group-item:focus {
+//    background-color: #f0f4f7;
+//}
 
 .list-group .list-group-item {
     padding: 0 10px;
@@ -64,37 +56,12 @@ body {
 }
 
 a {
-	color: #4aa1f1;
+	color: $base-link-color;
 	transition: all .3s;
 }
 a:focus, a:hover  {
-	color: #3e4f5e;
+	color: $base-font-color;
 	text-decoration: none;
-}
-.homepage h1 {
-    color: #3e4f5e;
-    font-size: 24px;
-}
-.homepage h1 i {
-    color: #4aa1f1;
-    position: relative;
-    top: 4px;
-    left: 8px;
-    padding-right: 15px;
-}
-
-.homepage .list-group .list-group-item h4 {
-    font-size: 14px;
-    font-weight: 400;
-    margin: 0
-}
-
-.category-count {
-    padding-left: 10px;
-    color: #7e93a0;
-    font-size: 12px;
-    position: relative;
-    top: -1px;
 }
 
 .categories .list-group-item {
@@ -107,19 +74,6 @@ a:focus, a:hover  {
     font-size: 13px;
     color: #7e93a0;
     padding: 2px 0 14px 0;
-}
-
-.latest-projects .project-img {
-    float: left;
-    width: 123px;
-    height: 71px;
-    object-fit: cover;
-}
-
-.latest-projects .project-details {
-    float: left;
-    padding-left: 30px;
-    width: calc(100% - 123px - 37px)
 }
 
 .latest-projects .project-links {
@@ -174,13 +128,6 @@ a:focus, a:hover  {
 }
 .latest-projects .list-group .list-group-item:last-child {
     border-bottom: none;
-}
-
-.latest-projects .project-details h3.list-group-item-heading {
-    line-height: 1;
-    font-size: 16px;
-    font-weight: 400;
-    margin-bottom: 3px;
 }
 
 .latest-projects .project-details .list-group-item-text.description {
@@ -273,57 +220,6 @@ h3, .h3 {
     font-weight: 700;
 }
 
-/**
- * Footer bar
- */
-
-.footer {
-    background-color: #dcdfe2;
-    clear: both;
-    width: 100%;
-    font-size: 12px;
-}
-
-.footer .container {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-.footer-buttons {
-    padding: 9px 0;
-}
-
-.footer-items {
-    margin: 11px 0;
-    padding: 0;
-    text-align: right;
-    line-height: 42px;
-}
-
-@media (max-width: 991px) {
-    .footer {
-        text-align: center
-    }
-
-    .footer-items {
-        margin: 0;
-        padding: 9px 0;
-        text-align: center;
-        line-height: initial;
-    }
-}
-
-.footer-item {
-    margin: 0 10px;
-}
-
-.footer a {
-    color: #3e4f5e;
-}
-
-.footer a:hover {
-    text-decoration: none;
-}
 
 /**
  * Grid: editable cell highlighting
@@ -471,28 +367,9 @@ h3, .h3 {
     color: #fff;
 }
 
-.footer .btn.btn-default.sp-btn.sp-btn-normal {
-    margin: 0;
-    border-color: #3e4f5e;
-}
-
-.footer .btn.btn-default.sp-btn.sp-btn-normal:hover {
-    background-color: #4aa1f1;
-    border-color: #4aa1f1;
-    color: #fff;
-}
 
 .img-circle {
     border-radius: 50%;
-}
-
-
-/*-----------------*/
-
-
-.homepage .list-group .list-group-item h4 {
-	font-size: 16px;
-	color: #3e4f5e;
 }
 
 .latest-projects .list-group .list-group-item {
@@ -518,10 +395,6 @@ h3, .h3 {
 
 h1, .h1 {
 	margin-bottom: 20px;
-}
-
-.latest-projects .project-img {
-	box-shadow: 0 3px 7px rgba(0,0,0,.1);
 }
 
 .main-screenshot {

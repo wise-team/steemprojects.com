@@ -69,3 +69,9 @@ def fav_button(context, size=None):
     })
 
     return response
+
+
+@register.inclusion_tag('package/templatetags/_project_tile.html', takes_context=True)
+def project_tile(context, package):
+    context['package'] = package
+    return context

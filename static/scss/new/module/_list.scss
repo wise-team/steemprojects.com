@@ -1,0 +1,93 @@
+.m-list {
+    $m-list: &;
+
+    &__title {
+        color: $base-font-color;
+        font-size: 24px;
+    }
+
+    &__icon {
+        @extend .material-icons;
+
+        color: $base-icon-color;
+        position: relative;
+        top: 4px;
+        left: 8px;
+        padding-right: 15px;
+    }
+
+    &__list-group {
+        @extend .list-group;
+    }
+
+    &__list-group-item {
+        position: relative;
+        display: block;
+        margin-bottom: -1px;
+        padding: 0 10px;
+        line-height: 40px;
+        font-size: 11pt;
+        font-weight: 400;
+        color: $base-font-color;
+        &:hover {
+            background-color: $base-hover-background;
+            color: $base-font-color;
+        }
+    }
+
+    &__list-group-item-heading {
+        font-size: 16px;
+        color: $base-font-color;
+        font-weight: 400;
+        margin: 0;
+        line-height: 29px;
+    }
+
+    &__list-group-item-text {
+        margin-bottom: 0;
+        line-height: 1.3;
+        font-size: 13px;
+        color: $second-font-color;
+        padding: 2px 0 14px 0;
+    }
+
+
+    &__header-counter {
+        padding-left: 10px;
+        color: $second-font-color;
+        font-size: 12px;
+        position: relative;
+        top: -1px;
+    }
+
+    &--categories {
+        #{$m-list}__list-group-item {
+            //height: 67px;
+        }
+
+        #{$m-list}__icon::before {
+            content: 'format_list_bulleted';
+
+        }
+    }
+
+    &--latest-projects {
+        #{$m-list}__list-group-item {
+            position: relative; // TODO: remove! right now project-tile--category
+                    // depends on this 'relative'
+            padding: 15px 0 15px 15px;
+            overflow: hidden;
+            border-bottom: 1px $base-border-style $third-font-color;
+        }
+
+        #{$m-list}__icon::before {
+            content: 'notifications_none';
+        }
+    }
+
+    &--compare {
+        #{$m-list}__icon::before {
+            content: 'swap_horiz';
+        }
+    }
+}
