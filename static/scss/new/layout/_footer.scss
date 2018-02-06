@@ -1,86 +1,47 @@
 .m-footer {
-    .m-btn {
-        margin: 0;
-        background-color: $base-footer-button-background-color;
-        border-color: $base-footer-button-border-color;
-    }
-}
+    position: absolute;
+    bottom: 0;
 
-
-.footer {
-  position: absolute;
-  bottom: 0;
-}
-
-
-@media (max-width: 1599px) {
-  .footer .container {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-}
-
-/**
- * Footer bar
- */
-
-.footer {
-    //background-color: #dcdfe2;
     background-color: $base-footer-background-color;
     clear: both;
     width: 100%;
     font-size: 12px;
-}
 
-.footer .container {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
+    .container {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
 
-.footer-buttons {
-    padding: 9px 0;
-}
-
-.footer-items {
-    margin: 11px 0;
-    padding: 0;
-    text-align: right;
-    line-height: 42px;
-}
-
-@media (max-width: 991px) {
-    .footer {
+    @media (max-width: 991px) {
         text-align: center
     }
 
-    .footer-items {
-        margin: 0;
-        padding: 9px 0;
-        text-align: center;
-        line-height: initial;
+    &__btn {
+        @extend .m-btn;
+        margin: 10px 0;
+        background-color: $base-footer-button-background-color;
+        border-color: $base-footer-button-border-color;
     }
-}
 
-.footer-item {
-    margin: 0 10px;
-}
+    &__items {
+        margin: 11px 0;
+        padding: 0;
+        text-align: right;
+        line-height: 42px;
 
-.footer a {
-    color: $base-font-color;
-}
+        @media (max-width: 991px) {
+            margin: 0;
+            padding: 9px 0;
+            text-align: center;
+            line-height: initial;
+        }
+    }
 
-.footer a:hover {
-    text-decoration: none;
-}
+    &__item {
+        margin: 0 10px;
+    }
 
-
-.footer .btn.btn-default.sp-btn.sp-btn-normal {
-    margin: 0;
-    border-color: #3e4f5e;
-}
-
-.footer .btn.btn-default.sp-btn.sp-btn-normal:hover {
-    background-color: #4aa1f1;
-    border-color: #4aa1f1;
-    color: #fff;
+    &__link {
+        color: $base-font-color;
+    }
 }
