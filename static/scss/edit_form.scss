@@ -1,3 +1,5 @@
+@import "new/base/variables";
+
 label[for^="id_form-"][for$="-DELETE"],
 input[id^="id_form-"][id$="-DELETE"] {
     display: none;
@@ -22,7 +24,7 @@ input[id^="id_form-"][id$="-DELETE"] {
 #formset-add-new-form-btn {
     height: 30px;
     border-radius: 15px;
-    line-height: 28px;
+    line-height: 28px - $m-btn-border-width;
     padding: 0 10px;
     margin: 10px 0;
     font-size: 14px;

@@ -1,3 +1,5 @@
+@import "new/base/variables";
+
 #package-editlink,
 #package-gridname {
     display: inline;
@@ -53,7 +55,7 @@
 .contributor a.name{
     padding: 0 10px;
     font-size: 16px;
-    color: #4aa1f1;
+    color: $base-link-color;
 }
 
 .contributors .more {

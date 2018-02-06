@@ -1,3 +1,5 @@
+@import "new/base/variables";
+
 #timeline {
     min-height: 145px;
 }
@@ -9,7 +11,7 @@
 #timeline a {
     display: block;
     font-size: 16px;
-    color: #4aa1f1;
+    color: $base-link-color;
 }
 
 #timeline a:hover {

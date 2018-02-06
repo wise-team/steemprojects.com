@@ -44,9 +44,9 @@
 //
 //  // Forms
 //  $base-form-background-color: $steem-white;
-//  $base-form-background-color-focus: none;
+//  $base-form-background-color-focus: initial;
 //  $base-form-border-color: $steem-gray-lighter;
-//  $base-form-border-color-focus: none;
+//  $base-form-border-color-focus: initial;
 //  $base-form-border-bottom-color-focus: $steem-gray-lighter;
 //
 //  // Footer
@@ -75,7 +75,7 @@
 
   $m-btn-font-color: $base-font-color; // by default
   $m-btn-border-color: $base-font-color;
-  $m-btn-background-color: none;
+  $m-btn-background-color: initial;
 
     //hover
     $m-btn-font-color-hover: $eos-white;
@@ -107,5 +107,5 @@
   // Footer
   $base-footer-background-color: $eos-shark;
   $base-footer-color: $eos-shark;
-  $base-footer-button-background-color: none;
+  $base-footer-button-background-color: initial;
   $base-footer-button-border-color:$eos-white;
