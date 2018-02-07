@@ -11,8 +11,8 @@ def core_values(request):
     """
 
     data = {
-        'SITE_TITLE': getattr(settings, "SITE_TITLE", "Django Packages"),
-        'FRAMEWORK_TITLE': getattr(settings, "FRAMEWORK_TITLE", "Django"),
+        'SITE_TITLE': getattr(settings, "SITE_TITLE"),
+        'FRAMEWORK_TITLE': getattr(settings, "FRAMEWORK_TITLE"),
         'MAX_WEIGHT': SearchV2.objects.all().aggregate(Max('weight'))['weight__max']
         }
     return data
