@@ -96,6 +96,7 @@ def edit_package(request, slug, template_name="package/package_form.html"):
             'account_name': tm.account.name,
             'account_type': tm.account.type,
             'role_confirmed_by_account': tm.role_confirmed_by_account,
+            'avatar_small': tm.account.avatar_small,
             'initialized': True,
         }
         for tm in package.teammembership_set.all()
