@@ -8,7 +8,7 @@ from django.template.defaultfilters import slugify
 from django.forms.formsets import formset_factory
 from django import forms
 
-from profiles.models import Account
+from profiles.models import Account, AccountType
 
 
 def package_help_text():
@@ -92,6 +92,7 @@ class InlineTeamMemberForm(forms.Form):
         required=True
     )
     account_type = forms.CharField(widget=forms.Select(choices=ACCOUNT_TYPE_CHOICES))
+    avatar_small = forms.CharField(widget=forms.HiddenInput(), required=False)
     role = forms.CharField(
         max_length=40,
         widget=forms.TextInput(attrs={'placeholder': 'ex. CEO, developer, designer, advisor'}),
