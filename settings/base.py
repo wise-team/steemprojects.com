@@ -191,7 +191,6 @@ URCHIN_ID = ""
 
 DEFAULT_FROM_EMAIL = 'Steem Projects <steemprojects-noreply@steemprojects.com>'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_SUBJECT_PREFIX = '[Steem Projects] '
 try:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = 'smtp.sendgrid.net'
@@ -204,8 +203,6 @@ try:
 except Exception as e:
     EMAIL_HOST = 'localhost'
     EMAIL_PORT = 1025
-
-EMAIL_SUBJECT_PREFIX = '[Cartwheel Web]'
 
 EMAIL_SENDER_DOMAIN = env('MAILGUN_SENDER_DOMAIN')
 
