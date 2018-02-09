@@ -6,21 +6,6 @@
    Site customizations
    ========================================================================== */
 
-* {
-  font-family: 'Source Sans Pro', sans-serif;
-  font-weight: 400;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  background-color: $base-background-color;
-  margin-bottom: 80px;
-}
-
 
 /**
  * Use a container that's as large as will fit.
@@ -53,15 +38,6 @@ body {
     font-size: 11pt;
     font-weight: 400;
     color: #3e4f5e;
-}
-
-a {
-	color: $base-link-color;
-	transition: all .3s;
-}
-a:focus, a:hover  {
-	color: $base-font-color;
-	text-decoration: none;
 }
 
 .categories .list-group-item {
@@ -401,63 +377,8 @@ h1, .h1 {
 	box-shadow: 0 5px 14px rgba(0,0,0,.1);
 }
 
-label {
-	color: #7e93a0;
-}
-
-input {
-    min-height: 40px;
-    border: 0;
-    padding: 0 10px;
-    border-bottom: 1px solid $base-form-border-color;
-    transition: all .3s;
-}
-
-textarea {
-    border-bottom: 1px solid $base-form-border-color;
-    padding: 10px;
-    transition: all .3s;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-    border: 1px solid $base-form-border-color-focus;
-    border-bottom-color: $base-form-border-bottom-color-focus;
-    background-color: $base-form-background-color-focus;
-}
-
 .fieldWrapper {
 	margin-bottom: 15px;
-}
-
-select {
-    height: 40px;
-    border: 0;
-    border-bottom: 1px solid $base-form-border-color;
-    padding: 0 10px;
-    cursor: pointer;
-    transition: all .3s;
-}
-
-input::-webkit-input-placeholder,
-textarea::-webkit-input-placeholder {
-	color: #7e93a0;
-}
-
-input:-moz-placeholder,
-textarea:-moz-placeholder {
-	color: #7e93a0;
-}
-
-input::-moz-placeholder,
-textarea:-moz-placeholder {
-	color: #7e93a0;
-}
-
-input:-ms-input-placeholder,
-textarea:-moz-placeholder {
-	color: #7e93a0;
 }
 
 body .container .jumbotron {
@@ -493,27 +414,4 @@ body .container .jumbotron h2 {
       width: 100%;
     }
   }
-}
-
-@media (min-width: 1200px) and (max-width: 1410px) {
-  .col-lg-2-mod {
-    width: calc(16.6666666667% + 3%);
-  }
-
-  .col-lg-4-mod {
-    width: calc(33.3333333333% - 1.6%);
-  }
-
-  .col-lg-6-mod {
-    width: calc(50% - 1.4%);
-  }
-
-  .col-lg-10-mod {
-    width: calc(83.3333333333% - 3%);
-  }
-}
-
-.row {
-  margin-left: 0;
-  margin-right: 0;
 }
