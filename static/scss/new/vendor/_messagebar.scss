@@ -25,6 +25,11 @@ https://github.com/audreyr/messagebar/blob/gh-pages/src/django.messagebar.css
       color: $m-btn-font-color-hover;
     }
   }
+
+  i {
+    color: $m-btn-font-color-hover;
+  }
+
   & .container {
     color: $m-btn-font-color-hover;
   }

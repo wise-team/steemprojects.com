@@ -27,7 +27,7 @@ SECRET_KEY = environ.get('SECRET_KEY', '')
 
 ########## SITE
 SITE_TITLE = environ.get('SITE_TITLE')
-FRAMEWORK_TITLE = environ.get('FRAMEWORK_TITLE')
+FRAMEWORK_NAME = environ.get('FRAMEWORK_NAME')
 
 
 # Anymail with Mailgun
