@@ -1,0 +1,52 @@
+$eos-white: #fff;
+$eos-blackish: #111114;
+$eos-orange: #f88a2f;
+$eos-gray: #8d8e90;
+$eos-gray-lighter: #d2d2d2;
+$eos-shark: #1c1d21;
+
+$gen-red: #f00;
+
+$base-background-color: $eos-blackish;
+$base-font-color: $eos-white;
+$second-font-color: $eos-gray;
+$third-font-color: $eos-gray-lighter;
+$base-link-color: $eos-orange;
+$m-btn-border-width: 2px;
+
+$m-btn-font-color: $base-font-color; // by default
+$m-btn-border-color: $base-font-color;
+$m-btn-background-color: initial;
+
+//hover
+$m-btn-font-color-hover: $eos-white;
+$m-btn-border-color-hover: $eos-orange;
+$m-btn-background-color-hover: $eos-orange;
+
+// Icons
+$base-icon-color: $eos-orange;
+
+// Borders
+$base-border-style: dotted;
+
+// Backgrounds
+$base-hover-background: $eos-shark;
+
+// Font
+$base-font-family: 'Source Sans Pro', sans-serif;
+
+// Images
+$base-brand-image: "logo_eosprojects.png";
+
+// Forms
+$base-form-background-color: $eos-blackish;
+$base-form-background-color-focus: $eos-shark;
+$base-form-border-color: $eos-gray-lighter;
+$base-form-border-color-focus: $eos-orange;
+$base-form-border-bottom-color-focus: $eos-orange;
+
+// Footer
+$base-footer-background-color: $eos-shark;
+$base-footer-color: $eos-shark;
+$base-footer-button-background-color: initial;
+$base-footer-button-border-color:$eos-white;

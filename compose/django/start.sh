@@ -1,4 +1,5 @@
 #!/bin/sh
+./bin/apply_theme.sh
 sass --update --force static/scss:static/css
 python manage.py migrate
 python /app/manage.py collectstatic --noinput

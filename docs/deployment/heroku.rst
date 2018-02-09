@@ -53,7 +53,7 @@ Do the following:
     heroku config:add GITHUB_API_SECRET=CUSTOM
     heroku config:add GITHUB_APP_ID=CUSTOM
     heroku config:add SITE_TITLE=Django Packages
-    heroku config:add FRAMEWORK_TITLE=Django
-    heroku config:add AWS_ACCESS_KEY_ID=CUSTOM 
+    heroku config:add FRAMEWORK_NAME=Django
+    heroku config:add AWS_ACCESS_KEY_ID=CUSTOM
     heroku config:add AWS_SECRET_ACCESS_KEY=CUSTOM
-    heroku config:add AWS_STORAGE_BUCKET_NAME=CUSTOM    
+    heroku config:add AWS_STORAGE_BUCKET_NAME=CUSTOM
