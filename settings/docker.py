@@ -21,6 +21,14 @@ CACHES = {
     }
 }
 
+########## SECRET
+SECRET_KEY = environ.get('SECRET_KEY', '')
+
+
+########## SITE
+SITE_TITLE = environ.get('SITE_TITLE')
+FRAMEWORK_NAME = environ.get('FRAMEWORK_NAME')
+
 
 # Anymail with Mailgun
 INSTALLED_APPS += ("anymail", )
@@ -29,16 +37,7 @@ ANYMAIL = {
     "MAILGUN_SENDER_DOMAIN": EMAIL_SENDER_DOMAIN,
 }
 EMAIL_BACKEND = "anymail.backends.mailgun.MailgunBackend"
-EMAIL_SUBJECT_PREFIX = environ.get('EMAIL_SUBJECT_PREFIX', '[Steem Projects] ')
-
-
-########## SECRET
-SECRET_KEY = environ.get('SECRET_KEY', '')
-
-
-########## SITE
-SITE_TITLE = environ.get('SITE_TITLE')
-FRAMEWORK_TITLE = environ.get('FRAMEWORK_TITLE')
+EMAIL_SUBJECT_PREFIX = environ.get('EMAIL_SUBJECT_PREFIX', '[{}] '.format(SITE_TITLE))
 
 
 ########### Permissions

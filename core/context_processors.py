@@ -11,10 +11,12 @@ def core_values(request):
     """
 
     data = {
-        'SITE_TITLE': getattr(settings, "SITE_TITLE", "Django Packages"),
-        'FRAMEWORK_TITLE': getattr(settings, "FRAMEWORK_TITLE", "Django"),
-        'MAX_WEIGHT': SearchV2.objects.all().aggregate(Max('weight'))['weight__max']
-        }
+        'SITE_TITLE': getattr(settings, "SITE_TITLE"),
+        'FRAMEWORK_NAME': getattr(settings, "FRAMEWORK_NAME"),
+        'MAX_WEIGHT': SearchV2.objects.all().aggregate(Max('weight'))['weight__max'],
+        'PROJECT_GITHUB_REPOSITORY_URL': getattr(settings, 'PROJECT_GITHUB_REPOSITORY_URL'),
+        'PROJECT_SLUG_ON_PAGE': getattr(settings, 'PROJECT_SLUG_ON_PAGE')
+    }
     return data
 
 

@@ -55,15 +55,3 @@ $(".scrollable").scrollable();
 $(".m-messagebar").messageBar({
   slide: true
 });
-
-$(window).scroll(function(){
-
-	var wScroll = $(this).scrollTop();
-
-	if (wScroll > 0) {
-		$('body').addClass('scrolled');
-} else {
-		$('body').removeClass('scrolled');
-	}
-
-});

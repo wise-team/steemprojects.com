@@ -24,6 +24,19 @@
     border-color: $m-btn-border-color-hover;
   }
 
+  &--inverse {
+    color: $m-btn-font-color-hover;
+    border-color: $m-btn-border-color-hover;
+    background-color: $m-btn-border-color-hover;
+
+    &:hover {
+      color: $base-font-color;
+      border-color: $m-btn-border-color;
+      background-color: $m-btn-background-color;
+
+    }
+  }
+
   &__icon {
     position: relative;
     top: -2px;
@@ -56,6 +69,15 @@
         }
       }
     }
+  }
+
+  &--small {
+    height: 30px;
+    border-radius: 15px;
+    line-height: 28px - $m-btn-border-width;
+    padding: 0 10px;
+    margin: 10px 0;
+    font-size: 14px;
   }
 }
 

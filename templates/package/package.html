@@ -19,7 +19,7 @@
 {% block body %}
 
 <div class="row">
-    <div class="col-md-6 title-row m-title-panel">
+    <div class="col-sm-6 col-lg-6 title-row m-title-panel">
         <h1 class="m-title-panel__title">{{ package.name }}</h1>
         <a class="m-title-panel__link" href="{% url 'edit_package' package.slug %}">
             <i class="m-title-panel__edit-icon"></i>
@@ -33,7 +33,7 @@
             <a href="{% url "category" package.category.slug %}"> {{ package.category }}</a>
         </p>
     </div>
-    <div class="col-md-6 m-action-panel">
+    <div class="col-sm-6 col-lg-6 m-action-panel">
         {% fav_button %}
 
         {% if request.user.is_authenticated and package.is_draft %}
@@ -59,7 +59,7 @@
 
 </div>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-sm-6 col-lg-4">
         {% if package.url %}
             <div class="website">
                 <h3>Project Website</h3>
@@ -80,7 +80,7 @@
         {% endif %}
         {% if package.grids|length %}
             <div class="grids">
-                <h3>Comparision grids aasdad</h3>
+                <h3>Comparision grids</h3>
                 <div>
                 {% for grid in package.grids %}
                     <a href="{% url 'grid' grid.slug %}" title="{{ grid.description }}">{{ grid }}</a> &nbsp;- test
@@ -90,7 +90,7 @@
         {% endif %}
     </div>
 
-    <div class="col-md-4">
+    <div class="col-sm-6 col-lg-4">
         <div class="description">
             <h3>Description</h3>
             <p>{{ package.description }}</p>
@@ -190,7 +190,7 @@
             {% endif %}
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-sm-12 col-lg-4">
         <div class="m-gallery" >
             <ul id="image-gallery" class="cS-hidden">
                 {% if not project_imgs %}
@@ -207,13 +207,13 @@
             </ul>
         </div>
         {% if can_edit_package %}
-            <a id="edit-images" href="{% url 'edit_images' package.slug %}" class="btn btn-default sp-btn sp-btn-normal">Add/Edit project images</a>
+            <a id="edit-images" href="{% url 'edit_images' package.slug %}" class="m-btn">Add/Edit project images</a>
         {% endif %}
     </div>
 </div>
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-lg-12">
         <h2>Timeline  <a href="{% url 'edit_timeline' package.slug %}"><span class="glyphicon glyphicon-pencil"></span></a></h2>
         <div id="timeline" style=""></div>
         <script type="text/javascript">

@@ -112,6 +112,9 @@ fabric.properties
 
 # Processed CSS files
 static/css/
+#_variables is a copy of _{theme}.scss
+static/scss/new/base/_variables.scss
+
 
 # Sass cache files
 .sass-cache/

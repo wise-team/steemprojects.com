@@ -10,7 +10,7 @@ ADMIN_URL_BASE (Default: r"^admin/")
 Used to control the URL for the admin in production.
 
 
-FRAMEWORK_TITLE (Default: "Django")
+FRAMEWORK_NAME (Default: "Django")
 ====================================
 
 Used to create the name of the site.

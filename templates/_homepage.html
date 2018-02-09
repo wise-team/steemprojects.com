@@ -3,73 +3,40 @@
 
 <div class="homepage">
     <!-- GRIDs -->
-    <div class="col-sm-2 compare-tools">
-        <h1><i class="material-icons">swap_horiz</i>Compare tools</h1>
-        <div class="list-group">
+    <div class="col-sm-12 col-lg-2 col-lg-2-mod compare-tools m-list m-list--compare clearfix">
+        <h1 class="m-list__title"><span class="m-list__icon"></span>Compare tools</h1>
+        <div class="m-list__list-group">
             {% for grid in grid_headers %}
-            <a class="list-group-item compare-grid-item" href="{% url 'grid' grid.slug %}" title="{{ grid.description }}">
-                {{ grid.title|truncatechars:"30" }}
-            </a>
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-12 tool-item">
+                    <a class="m-list__list-group-item" href="{% url 'grid' grid.slug %}" title="{{ grid.description }}">
+                        {{ grid.title|truncatechars:"30" }}
+                    </a>
+                </div>
             {% endfor %}
         </div>
     </div>
-    <div class="col-sm-4 categories">
-        <h1><i class="material-icons">format_list_bulleted</i>Categories</h1>
-        <div class="list-group">
+
+    <div class="col-sm-4 col-lg-4 col-lg-4-mod categories m-list m-list--categories">
+        <h1 class="m-list__title"><span class="m-list__icon"></span>Categories</h1>
+        <div class="m-list__list-group">
         <!-- start Categories panel -->
         {% for category in categories %}
-            <a href="{% url 'category' category.slug %}" class="list-group-item">
-                <h4 class="list-group-item-heading">
-                    {{ category.title_plural }}<span class="category-count">{{ category.count }}</span>
+            <a href="{% url 'category' category.slug %}" class="m-list__list-group-item">
+                <h4 class="m-list__list-group-item-heading">
+                    {{ category.title_plural }}<span class="m-list__header-counter">{{ category.count }}</span>
                 </h4>
-                <p class="list-group-item-text">{{ category.description }}</p>
+                <p class="m-list__list-group-item-text">{{ category.description }}</p>
             </a>
         {% endfor %}
         <!-- end Categories panel -->
         </div>
     </div>
-    <div class="col-sm-6 latest-projects">
-        <h1><i class="material-icons">notifications_none</i>Latest projects</h1>
-        <div class="list-group">
+    <div class="col-sm-8 col-lg-6 col-lg-6-mod latest-projects m-list m-list--latest-projects">
+        <h1 class="m-list__title"><span class="m-list__icon"></span>Latest projects</h1>
+        <div class="m-list__list-group">
         {% for package in latest_packages %}
-            <div class="list-group-item">
-                <a href="{{ package.get_absolute_url }}">
-                    <img class="project-img" src="{% if package.img %}{{ package.img.url }}{% else %}https://via.placeholder.com/123x71?text=No Image :({% endif %}">
-                    <div class="project-details">
-                        <h3 class="list-group-item-heading">{{ package.name }}</h3>
-
-                        <p class="list-group-item-text description">
-                            {% with package.description|truncatewords:20 as short %}
-                                {% if package.description|length > short|length %}
-                                    {{ short|slice:"-3" }}...
-                                {% else %}
-                                    {{ short }}
-                                {% endif %}
-                            {% endwith %}
-                        </p>
-                        <p class="list-group-item-text category"><a href="{% url "category" package.category.slug %}"><i class="material-icons">format_list_bulleted</i> {{ package.category }}</a></p>
-
-                    </div>
-                </a>
-                <div class="project-links">
-                    <div class="project-link-icon">
-                        {% fav_button 'small' %}
-                    </div>
-                    <div class="project-link-icon">
-                        {% if package.repo_url %}
-                            <a class="m-clickable-icon" href="{{ package.repo_url }}">
-                                <i class="m-clickable-icon__icon m-clickable-icon__icon--github"></i>
-                            </a>
-                        {% endif %}
-                    </div>
-                    <div class="project-link-icon">
-                        {% if package.url %}
-                            <a class="m-clickable-icon" href="{{ package.url }}">
-                                <i class="m-clickable-icon__icon m-clickable-icon__icon--link"></i>
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
+            <div class="m-list__list-group-item">
+                {% project_tile package %}
             </div>
         {% endfor %}
         </div>
@@ -77,7 +44,7 @@
 </div>
   {% comment %}
   <div class="row">
-    <h2><i>{{ SITE_TITLE }} is a directory of reusable apps, sites, tools, and more for your {{ FRAMEWORK_TITLE }} projects.</i></h2>
+    <h2><i>{{ SITE_TITLE }} is a directory of reusable apps, sites, tools, and more for your {{ FRAMEWORK_NAME }} projects.</i></h2>
     <p><b>{{ package_count }}</b> {% trans "projects and counting!" %}</p>
     {#<p><a href="{% url 'py3_compat' %}"><b>{{ py3_compat }}</b> {% trans "packages compatible with Python 3!" %}</a></p>#}
     <p><b>{{ open_source_count}}</b> {% trans "projects are open source!" %}</p>

@@ -1,0 +1,62 @@
+
+.m-project-tile {
+    $thumbnail-width: 123px;
+
+    &--thumbnail {
+        float: left;
+        width: 123px;
+        height: 71px;
+        object-fit: cover;
+        box-shadow: 0 3px 7px rgba(0,0,0,.1);  // TODO: adjust EOS color
+    }
+
+    &--details {
+        float: left;
+        padding-left: 30px;
+        width: calc(100% - #{$thumbnail-width} - 37px);
+
+    }
+
+    &--project-name {
+        line-height: 1;
+        color: $base-font-color;
+        font-size: 16px;
+        font-weight: 400;
+        margin-top: 0;
+        margin-bottom: 3px;
+    }
+
+    &--description {
+        font-size: 14px;
+        line-height: 1.2;
+        color: $second-font-color;
+        max-height: 34px;
+        overflow: hidden;
+    }
+
+    &--category {
+        font-size: 14px;
+        font-weight: 400;
+        position: absolute;
+        bottom: 11px;
+        margin-bottom: 0;
+        line-height: 1.3;
+
+        a { // TODO: should not be needed after cleaning
+            color: $base-link-color;
+        }
+
+        &-icon {
+            @extend .material-icons;
+
+            font-size: 12px;
+            position: relative;
+            top: -2px;
+
+            &::before {
+                content: 'format_list_bulleted';
+
+            }
+        }
+    }
+}
