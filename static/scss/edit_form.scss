@@ -21,19 +21,6 @@ input[id^="id_form-"][id$="-DELETE"] {
     margin: 5px;
 }
 
-#formset-add-new-form-btn {
-    height: 30px;
-    border-radius: 15px;
-    line-height: 28px - $m-btn-border-width;
-    padding: 0 10px;
-    margin: 10px 0;
-    font-size: 14px;
-}
-
-#formset-add-new-form-btn:hover {
-    cursor: pointer;
-}
-
 input[type="file"] {
     display: inline-block;
     border: none;

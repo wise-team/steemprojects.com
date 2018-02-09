@@ -31,12 +31,8 @@
         select
         {
             width: 100%;
-            background-color: $base-form-background-color;
             height: 40px;
             margin-bottom: 20px;
-            &:focus {
-                background-color: $base-form-background-color-focus;
-            }
         }
     }
 }
@@ -51,15 +47,6 @@
 {
     height: 60px;
     resize: none;
-    border: 0;
-    border-bottom: 1px solid $base-form-border-color;
-}
-
-.project-form .field textarea:focus
-{
-    background-color: $base-form-background-color-focus;
-    border: 1px solid $base-form-border-color-focus;
-    border-bottom: 1px solid $base-form-border-color-focus;
 }
 
 

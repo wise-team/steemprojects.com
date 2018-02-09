@@ -23,7 +23,7 @@
         <p>Next major release of SteemProject <a href="https://github.com/noisy/steemprojects.com/issues/29" target="_blank">will have a tool to automatically add new updates about the project</a> (from Steemit posts or github releases), based on criteria defined by project members.</p>
     </div>
     <div class="col-md-12">
-        <h3>Timeline Events <div id="formset-add-new-form-btn" class="btn btn-default sp-btn sp-btn-normal">Add New Event</div></h3>
+        <h3>Timeline Events <div id="formset-add-new-form-btn" class="m-btn m-btn--small">Add New Event</div></h3>
         <form action="{{ request.path }}" method="post" id="package-form">
             {% csrf_token %}
             {{ formset.management_form }}
@@ -34,7 +34,7 @@
                     </div>
                 {% endfor %}
             </div>
-            <input class="btn btn-default sp-btn sp-btn-normal" type="submit" name="add" value="{{ action }} {% trans "timeline" %}">
+            <input class="m-btn m-btn--inverse" type="submit" name="add" value="{{ action }} {% trans "timeline" %}">
         </form>
 
         <div id="empty-form" style="display:none;">

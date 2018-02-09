@@ -70,6 +70,15 @@
       }
     }
   }
+
+  &--small {
+    height: 30px;
+    border-radius: 15px;
+    line-height: 28px - $m-btn-border-width;
+    padding: 0 10px;
+    margin: 10px 0;
+    font-size: 14px;
+  }
 }
 
 .m-clickable-icon {
