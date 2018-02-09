@@ -2,4 +2,102 @@
 
 * {
     color: $base-font-color;
+    font-family: $base-font-family;
+    font-weight: 400;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    min-width: 414px;
+    background-color: $base-background-color;
+    margin-bottom: 80px;
+}
+
+a {
+    color: $base-link-color;
+    transition: all .3s;
+    &:focus,
+    &:hover{
+        color: $base-font-color;
+        text-decoration: none;
+    }
+}
+
+/////////// FORMS
+
+input,
+textarea,
+select {
+
+    border: 1px solid $base-background-color;
+    border-bottom-color: $base-form-border-color;
+    background-color: $base-form-background-color;
+    transition: all .3s;
+
+    &:focus {
+        border: 1px solid $base-form-border-color-focus;
+        border-bottom-color: $base-form-border-bottom-color-focus;
+        background-color: $base-form-background-color-focus;
+
+    }
+}
+
+input {
+    min-height: 40px;
+    padding: 0 10px;
+
+}
+
+textarea {
+    padding: 10px;
+}
+
+select {
+    height: 40px;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+label {
+    color: $second-font-color;
+}
+
+input,
+textarea {
+    &::-webkit-input-placeholder,
+    &:-ms-input-placeholder,
+    &::-ms-input-placeholder
+    {
+        color: $second-font-color;
+    }
+}
+
+
+/////////// GRID
+
+@media (min-width: 1200px) and (max-width: 1410px) {
+    .col-lg-2-mod {
+        width: calc(16.6666666667% + 3%);
+    }
+
+    .col-lg-4-mod {
+        width: calc(33.3333333333% - 1.6%);
+    }
+
+    .col-lg-6-mod {
+        width: calc(50% - 1.4%);
+    }
+
+    .col-lg-10-mod {
+        width: calc(83.3333333333% - 3%);
+    }
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
 }

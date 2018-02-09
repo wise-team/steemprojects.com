@@ -14,12 +14,6 @@
 
 @import "new/themes/steem";
 
-@import "new/layout/footer";
-@import "new/layout/grid";
-@import "new/layout/header";
-@import "new/layout/main";
-@import "new/layout/sidebar";
-
 @import "new/module/avatar";
 @import "new/module/buttons";
 @import "new/module/panels";
@@ -28,6 +22,15 @@
 @import "new/module/merge";
 @import "new/module/repo_section";
 @import "new/module/gallery";
+@import "new/module/project-tile";
+@import "new/module/list";
+
+@import "new/layout/footer";
+@import "new/layout/grid";
+@import "new/layout/header";
+@import "new/layout/main";
+@import "new/layout/navbar";
+@import "new/layout/sidebar";
 
 @import "new/state/state";
 

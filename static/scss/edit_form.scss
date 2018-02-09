@@ -1,3 +1,5 @@
+@import "new/base/variables";
+
 label[for^="id_form-"][for$="-DELETE"],
 input[id^="id_form-"][id$="-DELETE"] {
     display: none;
@@ -17,19 +19,6 @@ input[id^="id_form-"][id$="-DELETE"] {
     position: relative;
     top: 1px;
     margin: 5px;
-}
-
-#formset-add-new-form-btn {
-    height: 30px;
-    border-radius: 15px;
-    line-height: 28px;
-    padding: 0 10px;
-    margin: 10px 0;
-    font-size: 14px;
-}
-
-#formset-add-new-form-btn:hover {
-    cursor: pointer;
 }
 
 input[type="file"] {

@@ -1,0 +1,40 @@
+{% load package_tags %}
+<div class="m-project-tile">
+    <a href="{{ package.get_absolute_url }}">
+        <img class="m-project-tile--thumbnail" src="{% if package.img %}{{ package.img.url }}{% else %}https://via.placeholder.com/123x71?text=No Image :({% endif %}">
+        <div class="project-details m-project-tile--details">
+            <h3 class="m-project-tile--project-name">{{ package.name }}</h3>
+            <p class="m-project-tile--description">
+                {% with package.description|truncatewords:20 as short %}
+                    {% if package.description|length > short|length %}
+                        {{ short|slice:"-3" }}...
+                    {% else %}
+                        {{ short }}
+                    {% endif %}
+                {% endwith %}
+            </p>
+            <p class="m-project-tile--category">
+                <a href="{% url "category" package.category.slug %}"><span class="m-project-tile--category-icon"></span>{{ package.category }}</a>
+            </p>
+        </div>
+    </a>
+    <div class="project-links">
+        <div class="project-link-icon">
+            {% fav_button 'small' %}
+        </div>
+        <div class="project-link-icon">
+            {% if package.repo_url %}
+                <a class="m-clickable-icon" href="{{ package.repo_url }}">
+                    <i class="m-clickable-icon__icon m-clickable-icon__icon--github"></i>
+                </a>
+            {% endif %}
+        </div>
+        <div class="project-link-icon">
+            {% if package.url %}
+                <a class="m-clickable-icon" href="{{ package.url }}">
+                    <i class="m-clickable-icon__icon m-clickable-icon__icon--link"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
