@@ -114,7 +114,10 @@ def homepage(request, template_name="homepage.html"):
 
 
 def error_500_view(request):
-    response = render(request, "500.html", context={'SENTRY_PUBLIC_DSN': getattr(settings, 'SENTRY_PUBLIC_DSN', '')})
+    context = {
+        'SENTRY_PUBLIC_DSN': getattr(settings, 'SENTRY_PUBLIC_DSN', '')
+    }
+    response = render(request, "500.html", context=context)
     response.status_code = 500
     return response
 

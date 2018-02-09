@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
-{% load cache %}
-{% load i18n %}
+{% load i18n cache %}
 
 {% block head_title %}Apps, sites and tools build by {{ FRAMEWORK_TITLE }} community{% endblock %}
 
@@ -10,7 +9,7 @@
 {% block extra_messages %}
 <div class="m-messagebar m-messagebar--info" data-stick="true">
     <div class="container">
-        Release is coming! There are {{ drafts_count }} drafts in our database, {{ awaiting_projects_count }} projects are waiting for approval, {{ published_projects_count }} are already approved and are waiting for final release of <i>{{ SITE_TITLE }}</i>. Learn here <a href="https://steemit.com/utopian-io/@noisy/pre-release-tutorial-how-to-add-edit-a-project-on-steemprojects-com" target="_blank">how to add own project</a>. Want to be notified about a release? Then add <i>{{ SITE_TITLE }}</i> to <a href="https://eosprojects.org/projects/usage/eosprojects/add/">your favorite projects</a>.
+        Release is coming! There are {{ drafts_count }} drafts in our database, {{ awaiting_projects_count }} projects are waiting for approval, {{ published_projects_count }} are already approved and are waiting for final release of <i>{{ SITE_TITLE }}</i>. Learn here <a href="https://steemit.com/utopian-io/@noisy/pre-release-tutorial-how-to-add-edit-a-project-on-steemprojects-com" target="_blank">how to add own project</a>. Want to be notified about a release? Then add <i>{{ SITE_TITLE }}</i> to <a href="{% url 'usage' PROJECT_SLUG_ON_PAGE 'add' %}">your favorite projects</a>.
     </div>
 </div>
 {% endblock %}
