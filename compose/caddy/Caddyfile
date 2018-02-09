@@ -1,0 +1,32 @@
+www.djangopackages.org {
+    redir https://djangopackages.org
+}
+
+djangopackages.org {
+    proxy / django-a:5000 django-b:5000 {
+        health_check /health_check/
+        health_check_interval 1s
+        health_check_timeout 5s
+        fail_timeout 5s
+        policy round_robin
+        header_upstream Host {host}
+        header_upstream X-Real-IP {remote}
+        header_upstream X-Forwarded-Proto {scheme}
+    }
+    ratelimit / 2 3 second
+    log stdout
+    errors stdout
+    gzip
+}
+
+djangopackages.org/static {
+    root /data/static
+    header / Cache-Control "max-age=2592000"
+    gzip
+}
+
+djangopackages.org/media {
+    root /data/media
+    header / Cache-Control "max-age=2592000"
+    gzip
+}

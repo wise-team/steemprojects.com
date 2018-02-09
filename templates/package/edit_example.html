@@ -1,0 +1,31 @@
+{% extends "package/base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{% trans "Edit package example" %}{% endblock %}
+
+{% block body %}
+
+    <h2>{% trans "Edit package example" %}</h2>
+    
+    <form action="{{ request.path }}" method="post">
+        {% csrf_token %}
+        <fieldset>
+            {{ form|crispy }}
+            <div class="form_block">
+                <input class="btn btn-default" type="submit" name="edit" value="{% trans "Edit" %}">            
+                <a href="{% url 'package' package.slug %}">{% trans "cancel" %}</a>     
+            </div>
+        </fieldset>
+
+    </form>
+
+{% endblock %}
+
+
+{% block extra_body %}
+<script>
+    $("#id_title").focus();
+</script>
+{% endblock %}

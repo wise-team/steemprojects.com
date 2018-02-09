@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}Profile form for {{ profile.user.username }}{% endblock %}
+
+{% block body %}
+
+    {% crispy form %}
+
+{% endblock body %}
