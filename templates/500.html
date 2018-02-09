@@ -17,15 +17,28 @@
 <body>
     <div class="header">
         <div class="container">
-            <div class="navbar">
-                <a class="navbar-brand col-sm-2" href="{% url 'home' %}">
-                    <img src="{{ STATIC_URL }}img/logo_steemprojects.svg" />
-                </a>
-                <ul class="nav navbar-nav navbar-right hidden-xs">
-                    <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
-                    <li><a href="{% url 'faq' %}">{% trans "FAQ" %}</a></li>
-                </ul>
-            </div>
+            <nav class="m-navbar">
+                <div class="navbar-header col-sm-12 col-md-3 col-lg-2 col-lg-2-mod">
+                    <label for="navbar-toggle-cbox" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="m-navbar--toggle-menu-btn"></span>
+                    </label>
+
+                    <a class="navbar-brand" href="{% url 'home' %}">
+                        <img class="m-navbar__brand-image"/>
+                    </a>
+                </div>
+
+                <div class="col-sm-12 col-md-9 col-lg-10 col-lg-10-mod">
+                    <input type="checkbox" id="navbar-toggle-cbox">
+                    <input type="checkbox" id="navbar-toggle-cbox2">
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="m-navbar--item"><a class="m-navbar--item-text" href="{% url 'home' %}">{% trans "Home" %}</a></li>
+                            <li class="m-navbar--item"><a class="m-navbar--item-text"  href="{% url 'faq' %}">{% trans "FAQ" %}</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
         </div>
     </div>
 
@@ -45,20 +58,7 @@
         {% endif %}
     </div>
 
-    <!-- Start of footer -->
-    <div class="footer">
-        <div class="container">
-            <div class="col-sm-2">
-                <a class="btn btn-default sp-btn sp-btn-normal" href="{% url 'contribute' %}">{% trans "Contribute" %}</a>
-            </div>
-            <div class="col-sm-10 footer-items">
-              <span class="footer-item">&copy; {% now "Y" %} <a href="https://steemit.com/@noisy" target="_blank">Krzysztof Szumny - @noisy</a></span>
-              <span class="footer-item"><a href="https://github.com/noisy/steemprojects.com" target="_blank">Repo</a></span>
-              <span class="footer-item"><a href="{% url 'faq' %}">{% trans "FAQ" %}</a></span>
-              <span class="footer-item"><a href="{% url 'terms' %}">{% trans "Terms" %}</a></span>
-            </div>
-        </div>
-    </div>
+    {% include "footer.html" %}
 
     <script src="https://cdn.ravenjs.com/2.1.0/raven.min.js"></script>
     {% if request.sentry.id %}
