@@ -56,7 +56,7 @@ def rollback(commit="HEAD~1"):
 
 def env(name="prod"):
     """
-    Set environment based on your local .env.<name> file  
+    Set environment based on your local .env.<name> file
     """
 
     filename = ".env.{}".format(name)
@@ -147,35 +147,36 @@ def download_db(filename="tmp.sqlc"):
     Download and apply database from remote environment to your local environment
     """
 
+    filename, ext = filename.split('.')
+
     temp_dirpath = "/tmp/"
-    remote_filename = "{}-{}-{}".format(
+    remote_filename = "{}-{}".format(
         ENV.name,
         datetime.datetime.utcnow().isoformat(),
-        filename
+        # filename
     )
 
     with ENV.cd(ENV.project_dir):
         docker_compose("run postgres backup {}".format(remote_filename))
-        remote_sql_dump_filepath = os.path.join(temp_dirpath, remote_filename)
+        remote_sql_dump_filepath = os.path.join(temp_dirpath, '{}.{}'.format(remote_filename, ext))
         container_id = docker_compose("ps -q postgres").split()[0]
         ENV.run("docker cp {}:/backups/{} {}".format(
             container_id,
-            remote_filename,
+            '{}.{}'.format(remote_filename, ext),
             remote_sql_dump_filepath
         ))
-        get(remote_sql_dump_filepath, '{}/{}'.format(temp_dirpath, filename))
+        get(remote_sql_dump_filepath, '{}/{}.{}'.format(temp_dirpath, filename, ext))
 
-        docker_compose("run postgres rm /backups/{}".format(remote_filename))
-        ENV.run("rm {}".format(remote_sql_dump_filepath))
+        # docker_compose("run postgres rm /backups/{}.{}".format(remote_filename, ext))
+        # ENV.run("rm {}".format(remote_sql_dump_filepath))
         print("Remote done!")
 
 
 def restore_db(filename="tmp.sqlc"):
     temp_dirpath = "/tmp/"
-    remote_filename = "{}-{}-{}".format(
+    remote_filename = filename or "{}-{}".format(
         ENV.name,
-        datetime.datetime.utcnow().isoformat(),
-        filename
+        datetime.datetime.utcnow().isoformat()
     )
 
     with ENV.cd(ENV.project_dir):
@@ -243,7 +244,9 @@ def upload_media(media_dir="/tmp"):
     ENV.run("mkdir -p {}".format(temp_dirpath))
     put(media_dir, temp_dirpath)
 
-    container_id = docker_compose("ps -q django-a").split()[0]
+    django_service_name = "django" if ENV.name == 'local' else "django-a"
+
+    container_id = docker_compose("ps -q {}".format(django_service_name)).split()[0]
     ENV.run(
         "docker cp {}/media {}:/data/".format(
             temp_dirpath,
