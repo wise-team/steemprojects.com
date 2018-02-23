@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load i18n static %}
+
+{% block head_title %}{% trans "Email Required" %}{% endblock %}
+
+{% block body_class %}email_required{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/email_required.css" />
+{% endblock %}
+
+{% block body %}
+<div class="jumbotron">
+    <h1>Newsletter</h1>
+    <form method="post" role="form" class="text-center">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <input type="hidden" name="partial_token" value="{{ partial_token }}">
+        Do you really desire to get our newsletter? <input type="checkbox" name="subscription">
+        <button class="btn btn-default sp-btn sp-btn-normal" type="submit">Continue</button>
+    </form>
+</div>
+{% endblock %}
+
