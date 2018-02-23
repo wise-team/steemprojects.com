@@ -36,6 +36,7 @@ urlpatterns = [
     url(r"^projects/", include("package.urls")),
     url(r"^grids/", include("grid.urls")),
     url(r"^feeds/", include("feeds.urls")),
+    url(r'^newsletter/', include('newsletter.urls')),
 
     url(r"^categories/(?P<slug>[-\w]+)/$", category, name="category"),
     url(r"^categories/$", homepage, name="categories"),
