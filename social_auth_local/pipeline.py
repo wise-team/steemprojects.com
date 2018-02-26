@@ -61,6 +61,15 @@ def require_email(strategy, details, user=None, is_new=False, *args, **kwargs):
             )
 
 
+@partial
+def ask_for_newsletter(strategy, details, *args, **kwargs):
+    subscription = strategy.request_data().get('subscription')
+    if subscription:
+        details['subscription'] = subscription
+    current_partial = kwargs.get('current_partial')
+    return strategy.redirect('/newsletter/ask/?partial_token={}'.format(current_partial.token))
+
+
 def save_profile_pipeline(backend, user, response, details, social, *args, **kwargs):
     try:
         # profile could be created for a user which previously logged in

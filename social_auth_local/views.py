@@ -29,7 +29,6 @@ def merging_accounts(request):
     }
 
 
-
 @render_to('social_auth_local/email_required.html')
 def require_email(request):
     """Email required page"""
