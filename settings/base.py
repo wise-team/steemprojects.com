@@ -4,6 +4,8 @@
 import os.path
 from os import environ
 import environ as envmax
+from steem.instance import set_shared_steemd_instance
+from steem.steemd import Steemd
 
 env = envmax.Env()
 
@@ -137,7 +139,7 @@ PROJECT_APPS = [
     "apiv3",
     "social_auth_local",
     "im",
-    'timeline_event_inserter',
+    "timeline",
 ]
 
 PREREQ_APPS = [
@@ -514,6 +516,8 @@ ROCKET_CHAT_PASSWORD = environ.get('ROCKET_CHAT_PASSWORD')
 ROCKET_CHAT_URL = environ.get('ROCKET_CHAT_URL')
 
 STEEM_NODES = [node.strip() for node in environ.get('STEEM_NODES').split(',')]
+
+set_shared_steemd_instance(Steemd(nodes=STEEM_NODES))
 
 PROJECT_GITHUB_REPOSITORY_URL = environ.get('PROJECT_GITHUB_REPOSITORY_URL')
 if PROJECT_GITHUB_REPOSITORY_URL.endswith("/"):

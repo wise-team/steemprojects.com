@@ -386,18 +386,6 @@ class Project(BaseModel):
         return [int(x) for x in self.commits_over_52().split(',')]
 
 
-class TimelineEvent(BaseModel):
-    name = models.CharField(_("Event Name"), max_length=100)
-    url = models.URLField(
-        _("URL"),
-        # help_text="Link to place, where event is described.",
-        blank=False,
-        null=False
-    )
-    date = models.DateField(blank=False, null=False, default=timezone.now)
-    project = models.ForeignKey(Project, related_name="events")
-
-
 class TeamMembership(BaseModel):
     account = models.ForeignKey(Account, default=None, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
@@ -417,7 +405,6 @@ class TeamMembership(BaseModel):
 
     def __str__(self):
         return "{} in {} as {}".format(str(self.account), self.project.name, self.role)
-
 
 
 def project_img_path(instance, filename):
