@@ -15,12 +15,12 @@ from package.views import (
     post_data,
     edit_documentation,
     github_webhook,
-    edit_timeline,
     edit_images,
     project_approval,
     publish_project,
 )
 from timeline.views import (
+    edit_timeline,
     add_ruleset,
     edit_ruleset,
     delete_ruleset,
