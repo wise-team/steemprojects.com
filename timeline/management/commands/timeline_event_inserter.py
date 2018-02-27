@@ -14,7 +14,7 @@ class Command(BaseCommand):
             rulebooks_counter += 1
 
             events = rulebook.fetch_new_events()
-            events_counter += len(events)
+            events_counter += len(list(events))
 
         print("Stats: {} new TimelineEvents were created thanks to rules in {} rulebooks".format(
             events_counter, rulebooks_counter)

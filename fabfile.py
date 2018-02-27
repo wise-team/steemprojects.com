@@ -153,7 +153,6 @@ def download_db(filename="tmp.sqlc"):
     remote_filename = "{}-{}".format(
         ENV.name,
         datetime.datetime.utcnow().isoformat(),
-        # filename
     )
 
     with ENV.cd(ENV.project_dir):
