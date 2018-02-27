@@ -82,6 +82,7 @@ class SteemPostService(RulebookService):
 
             if self.are_rules_valid(post):
                 event = self.post_to_event(post, self.rulebook.project)
+                event.ruleset = self.rulebook
                 event.save()
                 if self.rulebook.notify:
                     self.notify(post)
