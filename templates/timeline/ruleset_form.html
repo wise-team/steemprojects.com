@@ -1,0 +1,126 @@
+{% extends "package/base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{{ action|title }} {% trans "package" %}{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/edit_form.css?deployment={{ DEPLOYMENT_DATETIME }}" type="text/css"/>
+  {{ block.super }}
+{% endblock %}
+
+{% block body %}
+    <div class="col-md-12">
+        <h2>{{ package.name }}'s Timeline</h2>
+    </div>
+    <div id="package-form-message" class="col-md-6">
+        <p>You don't have to add new items to Timeline manually. You can defined rules, according to which Timeline will be populated automatically!</p>
+    </div>
+    <div class="col-md-12">
+        <h3>Create new Insert Rules</h3>
+
+        <div>Insert new event, every time when
+            {{ rulebook_form.service_type }}
+            and <strong>all following rules are fulfilled</strong>:<br>
+
+            {% for rule_formset in rule_formsets %}
+                <form class="m-ruleset-form" action="{{ request.path }}" method="post" id="rulset-form-{{ rule_formset.management_form.SERVICE_TYPE.value }}" style="display: none;">
+                    {% csrf_token %}
+
+                    <ul id="event-forms">
+                        {% for rule_form in rule_formset %}
+                            <li class="event-form">
+                                {{ rule_form.type }} {{ rule_form.argument }} {{ rule_form.service_type }} {{ rule_form.DELETE }}<span class="rm-btn te-form icon-close"></span>
+                                {{ rule_form.errors }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {{ rule_formset.management_form }}
+                    <div class="notification-example">
+                        {{ rule_formset.management_form.notification_example|safe }}
+                    </div>
+                    <br>
+                    <input class="m-btn m-btn--inverse" type="submit" name="add" value="Save RuleSet">
+                </form>
+                <div id="empty-form" style="display:none;">
+                <li class="event-form">
+                    {{ rule_formset.empty_form.type }} {{ rule_formset.empty_form.argument }} {{ rule_formset.empty_form.DELETE }}<span class="rm-btn te-form icon-close" style="display: none"></span>
+                </li>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_body %}
+<script src="{{ STATIC_URL }}js/urlify.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}js/package_form.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(function(){
+
+        $('#rulset-form-' + $('#id_service_type').val()).show();
+
+        $('#id_service_type').change(function(event){
+            var service_type = $(event.target).val();
+
+            $('[id^=rulset-form-]').hide();
+            if(service_type) {
+                $('#rulset-form-' + service_type).show();
+            }
+
+        });
+
+
+        var rmForm = function(event) {
+            var eventForm = $(event.target).closest('.event-form')
+            eventForm.hide();
+            eventForm.find('input[type=checkbox]').prop('checked', true);
+
+        };
+
+        $('.rm-btn.te-form').each(function(index, btn){
+            var btn = $(btn);
+            var select = btn.closest(".event-form").find("select");
+            if (select.attr("required")){
+                btn.hide();
+            } else if (select.val() === "") {
+                btn.hide();
+                btn.click(rmForm);
+            }
+            else {
+                btn.click(rmForm);
+            }
+        });
+
+        var on_change = function(add_new_fn){
+            return function(event){
+                var select = $(event.target);
+                select.off("change");
+                var btn = select.closest(".event-form").find(".te-form");
+                btn.show();
+                add_new_fn();
+            };
+        };
+
+        function add_new() {
+            var total_forms = $('#id_form-TOTAL_FORMS');
+            var form_idx = total_forms.val();
+            total_forms.val(parseInt(form_idx) + 1);
+
+            var new_form = $($('#empty-form').html().replace(/__prefix__/g, form_idx));
+            $('#event-forms').append(new_form);
+
+            $('#id_form-' + parseInt(form_idx) + '-type').change(on_change(add_new));
+
+            new_form.find('.rm-btn.te-form').click(rmForm);
+        };
+
+        $('.event-form select option[value=""]:selected').parent().change(on_change(add_new));
+
+    });
+</script>
+
+{% endblock %}

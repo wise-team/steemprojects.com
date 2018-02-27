@@ -3,7 +3,8 @@ from django.forms.models import modelformset_factory
 from django.forms.widgets import Textarea, TextInput
 from floppyforms.__future__ import ModelForm
 import itertools
-from package.models import Category, Project, PackageExample, TeamMembership, TimelineEvent, ProjectImage
+from package.models import Category, Project, PackageExample, TeamMembership, ProjectImage
+from timeline.models import TimelineEvent
 from django.template.defaultfilters import slugify
 from django.forms.formsets import formset_factory
 from django import forms
@@ -165,44 +166,6 @@ class TeamMembersFormSet(BaseTeamMembersFormSet):
             return count
         else:
             return BaseTeamMembersFormSet.total_form_count(self)
-
-
-class TimelineEventForm(forms.ModelForm):
-    model = TimelineEvent
-    fields = ["date", "name", "url", "project"]
-
-    def __init__(self, project, *args, **kwargs):
-        super(TimelineEventForm, self).__init__(*args, **kwargs)
-        self.fields["project"].widget = forms.HiddenInput()
-        self.fields["project"].initial = project.id
-        self.fields["date"].widget.attrs = {"placeholder": "YYYY-MM-DD"}
-
-
-BaseTimelineEventFormSet = modelformset_factory(
-    TimelineEvent,
-    fields=["date", "name", "url", "project"],
-    form=TimelineEventForm,
-    can_delete=True,
-    extra=0,
-)
-
-
-class TimelineEventFormSet(BaseTimelineEventFormSet):
-
-    def __init__(self, project, queryset=None, *args, **kwargs):
-        self.project = project
-
-        if queryset:
-            queryset = queryset.order_by("date")
-
-        super(TimelineEventFormSet, self).__init__(queryset=queryset, *args, **kwargs)
-
-    def get_form_kwargs(self, *args, **kwargs):
-        form_kwargs = super(TimelineEventFormSet, self).get_form_kwargs(*args, **kwargs)
-        form_kwargs.update({
-            "project": self.project,
-        })
-        return form_kwargs
 
 
 class ProjectImageForm(forms.ModelForm):

@@ -20,6 +20,12 @@ from package.views import (
     project_approval,
     publish_project,
 )
+from timeline.views import (
+    add_ruleset,
+    edit_ruleset,
+    delete_ruleset,
+)
+
 
 urlpatterns = [
 
@@ -54,6 +60,24 @@ urlpatterns = [
         regex="^(?P<slug>[-\w]+)/timeline/edit/$",
         view=edit_timeline,
         name="edit_timeline",
+    ),
+
+    url(
+        regex="^(?P<slug>[-\w]+)/timeline/ruleset/add/$",
+        view=add_ruleset,
+        name="add_ruleset",
+    ),
+
+    url(
+        regex="^(?P<slug>[-\w]+)/timeline/ruleset/(?P<ruleset_id>[\d]+)/edit/$",
+        view=edit_ruleset,
+        name="edit_ruleset",
+    ),
+
+    url(
+        regex="^(?P<slug>[-\w]+)/timeline/ruleset/(?P<ruleset_id>[\d]+)/delete/$",
+        view=delete_ruleset,
+        name="delete_ruleset",
     ),
 
     url(

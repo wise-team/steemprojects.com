@@ -15,19 +15,34 @@
         <h2>{{ package.name }}'s Timeline</h2>
     </div>
 
-    <div id="package-form-message" class="col-md-6">
+    <div class="col-md-12">
         <p>Timeline is designed to give a user quick information about important things which happen in the project lately and in the past. People are more comfortable using applications which give <b>frequent updates</b> - communication with a users is a key!</p>
 
-        <p>In the future users of SteemProjects will be able to receive weekly newsletters with updates from their favorite projects. If timeline event url will be a link to Steemit, users will be able to help monetize a project by <a href="https://github.com/noisy/steemprojects.com/issues/40" target="_blank">smart autoupvotes</a>.</p>
+        <p>Users of SteemProjects receive newsletter every week with updates from their favorite projects. If timeline event url will be a link to Steemit, users will be able to help monetize a project by <a href="https://github.com/noisy/steemprojects.com/issues/40" target="_blank">smart autoupvotes</a>.</p>
 
-        <p>Next major release of SteemProject <a href="https://github.com/noisy/steemprojects.com/issues/29" target="_blank">will have a tool to automatically add new updates about the project</a> (from Steemit posts or github releases), based on criteria defined by project members.</p>
+    </div>
+    <div class="col-md-12">
+        <h3>Insert Rules <a href="{% url "add_ruleset" package.slug %}" class="m-btn m-btn--small">Create New RuleSet</a></h3>
+        <p>You don't have to add new items to Timeline manually. You can defined rules, according to which Timeline will be populated automatically!</p>
+
+        {% if rulesets|length %}
+            <p>Timeline Events are automatically added to Timeline based on following rule sets:</p>
+        {% endif %}
+        <ul class="m-ruleset-list">
+            {% for ruleset in rulesets %}
+                <li class="ruleset">{{ ruleset.name }}
+                    <a href="{% url "delete_ruleset" package.slug ruleset.id %}" class="m-btn m-btn--small">Delete</a>
+                    <a href="{% url "edit_ruleset" package.slug ruleset.id %}" class="m-btn m-btn--small">Edit</a>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
     <div class="col-md-12">
         <h3>Timeline Events <div id="formset-add-new-form-btn" class="m-btn m-btn--small">Add New Event</div></h3>
         <form action="{{ request.path }}" method="post" id="package-form">
             {% csrf_token %}
             {{ formset.management_form }}
-            <div id="event-forms">
+            <div id="event-forms" class="m-timeline-form">
                 {% for form in formset reversed %}
                     <div class="event-form">
                         {{ form }} <span class="rm-btn te-entry icon-close"></span>

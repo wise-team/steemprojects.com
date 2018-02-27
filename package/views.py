@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
-from django.core.mail import send_mass_mail, mail_managers
+from django.core.mail import mail_managers
 from django.core.urlresolvers import reverse
 from django.db.models import Q, Count
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
@@ -17,14 +17,14 @@ from django.views.decorators.csrf import csrf_exempt
 
 from grid.models import Grid
 from homepage.models import Dpotw, Gotw
-from package.forms import PackageForm, PackageExampleForm, DocumentationForm, TimelineEventFormSet, ProjectImagesFormSet
-from package.models import Category, Project, PackageExample, ProjectImage, TeamMembership, TimelineEvent
+from package.forms import PackageForm, PackageExampleForm, DocumentationForm, ProjectImagesFormSet
+from package.models import Category, Project, PackageExample, ProjectImage, TeamMembership
+from timeline.models import TimelineEvent, TimelineEventInserterRulebook
+from timeline.forms import TimelineEventFormSet
 from package.repos import get_all_repos
 from package.forms import TeamMembersFormSet
-from profiles.models import Profile, Account, AccountType
+from profiles.models import Account, AccountType
 from searchv2.builders import rebuild_project_search_index
-
-from .utils import quote_plus
 
 
 def repo_data_for_js():
@@ -204,9 +204,12 @@ def edit_timeline(request, slug, template_name="package/timeline_form.html"):
         messages.add_message(request, messages.INFO, 'Project updated successfully')
         return HttpResponseRedirect(reverse("package", kwargs={"slug": project.slug}))
 
+    rulesets = TimelineEventInserterRulebook.objects.filter(project=project)
+
     return render(request, template_name, {
         "formset": formset,
         "package": project,
+        "rulesets": rulesets,
         "action": "Save",
     })
 

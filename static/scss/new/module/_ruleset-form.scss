@@ -1,0 +1,36 @@
+.m-ruleset-form {
+
+    input[name$="-argument"]{
+        margin-left: 10px;
+    }
+
+    input[name="form-NOTIFY"] {
+        float: left;
+    }
+    label[for="id_form-NOTIFY"] {
+        color: $base-font-color;
+        line-height: 40px;
+        position: relative;
+        top: 3px;
+        left: 10px;
+
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none;   /* Safari */
+        -khtml-user-select: none;    /* Konqueror HTML */
+        -moz-user-select: none;      /* Firefox */
+        -ms-user-select: none;       /* Internet Explorer/Edge */
+        user-select: none;           /* Non-prefixed version, currently
+                                      supported by Chrome and Opera */
+    }
+
+    .notification-example {
+        margin-left: 24px;
+        * {
+            color: $second-font-color;
+        }
+        a {
+            color: $base-font-color;
+        }
+    }
+}
+
