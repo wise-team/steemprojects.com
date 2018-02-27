@@ -25,7 +25,7 @@
             and <strong>all following rules are fulfilled</strong>:<br>
 
             {% for rule_formset in rule_formsets %}
-                <form action="{{ request.path }}" method="post" id="rulset-form-{{ rule_formset.management_form.SERVICE_TYPE.value }}" style="display: none;">
+                <form class="m-ruleset-form" action="{{ request.path }}" method="post" id="rulset-form-{{ rule_formset.management_form.SERVICE_TYPE.value }}" style="display: none;">
                     {% csrf_token %}
 
                     <ul id="event-forms">
@@ -37,6 +37,10 @@
                         {% endfor %}
                     </ul>
                     {{ rule_formset.management_form }}
+                    <div class="notification-example">
+                        {{ rule_formset.management_form.notification_example|safe }}
+                    </div>
+                    <br>
                     <input class="m-btn m-btn--inverse" type="submit" name="add" value="Save RuleSet">
                 </form>
                 <div id="empty-form" style="display:none;">

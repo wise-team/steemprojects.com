@@ -18,11 +18,12 @@ def add_ruleset(request, slug, template_name="timeline/ruleset_form.html"):
     rule_formsets = []
 
     if request.POST:
-        rule_formset = TimelineEventInserterRuleFormSet(data=request.POST)
+        rule_formset = TimelineEventInserterRuleFormSet(project=project, data=request.POST)
         if rule_formset.is_valid():
             ruleset = TimelineEventInserterRulebook.objects.create(
                 project=project,
                 service_type=rule_formset.management_form.cleaned_data[TimelineManagementForm.SERVICE_TYPE_FORM],
+                notify=rule_formset.management_form.cleaned_data[TimelineManagementForm.NOTIFY_FORM],
             )
 
             for inlineform in rule_formset:
@@ -42,7 +43,7 @@ def add_ruleset(request, slug, template_name="timeline/ruleset_form.html"):
 
     else:
         rule_formsets.extend([
-            TimelineEventInserterRuleFormSet(service_type)
+            TimelineEventInserterRuleFormSet(project=project, service_type=service_type)
             for service_type in TimelineEventInserterRulebook.service_types()
         ])
 
@@ -66,8 +67,9 @@ def edit_ruleset(request, slug, ruleset_id, template_name="timeline/ruleset_form
     rule_formsets = []
 
     if request.POST:
-        rule_formset = TimelineEventInserterRuleFormSet(data=request.POST)
+        rule_formset = TimelineEventInserterRuleFormSet(project=project, data=request.POST)
         if rule_formset.is_valid():
+            ruleset.notify = rule_formset.management_form.cleaned_data[TimelineManagementForm.NOTIFY_FORM]
             ruleset.rules.all().delete()
 
             for inlineform in rule_formset:
@@ -80,6 +82,7 @@ def edit_ruleset(request, slug, ruleset_id, template_name="timeline/ruleset_form
                         rulebook=ruleset
                     )
 
+            ruleset.save()
             messages.add_message(request, messages.INFO, 'New RuleSet "{}" updated successfully'.format(ruleset.name))
             return HttpResponseRedirect(reverse("edit_timeline", kwargs={"slug": project.slug}))
         else:
@@ -90,7 +93,9 @@ def edit_ruleset(request, slug, ruleset_id, template_name="timeline/ruleset_form
         for service_type in TimelineEventInserterRulebook.service_types():
 
             kwargs = {
-                "service_type": service_type
+                "service_type": service_type,
+                "project": project,
+                "notify": ruleset.notify,
             }
             if service_type == ruleset.service_type:
                 kwargs["initial"] = [

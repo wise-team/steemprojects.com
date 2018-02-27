@@ -57,17 +57,23 @@ class SteemTagTimelineEventRule(SteemPostTimelineEventRule):
     def is_valid(post, argument):
         return argument in post.tags
 
+#
+# class SteemAfterDatetimeTimelineEventRule(SteemPostTimelineEventRule):
+#     @staticmethod
+#     def is_valid(post, argument):
+#         return post.date < argument
+#
+#
+# class SteemTitleRegexpTimelineEventRule(SteemPostTimelineEventRule):
+#     @staticmethod
+#     def is_valid(post, argument):
+#         return bool(re.match(argument, post.title))
 
-class SteemAfterDatetimeTimelineEventRule(SteemPostTimelineEventRule):
+
+class SteemTitleContainsTimelineEventRule(SteemPostTimelineEventRule):
     @staticmethod
     def is_valid(post, argument):
-        return post.date < argument
-
-
-class SteemTitleRegexpTimelineEventRule(SteemPostTimelineEventRule):
-    @staticmethod
-    def is_valid(post, argument):
-        return bool(re.match(argument, post.title))
+        return bool(argument in post.title)
 
 
 class SteemTitlePrefixTimelineEventRule(SteemPostTimelineEventRule):

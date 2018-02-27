@@ -64,8 +64,9 @@ class TimelineEventInserterRulebook(models.Model):
         ])
 
     service_type = models.CharField(choices=SERVICE_TYPES, max_length=64)
-    last = models.DateTimeField(default=None, null=True, blank=True)
+    last = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     project = models.ForeignKey(Project, related_name="timeline_rulebooks")
+    notify = models.BooleanField(default=True)
 
     def fetch_new_events(self):
         Service = getattr(getattr(__import__("timeline.services"), 'services'), self.service_type)
@@ -73,17 +74,15 @@ class TimelineEventInserterRulebook(models.Model):
         events = service.get_new_events()
         return events
 
-    def notify_owner_about_new_event(self, event):
-        print("TimelineEvent {} was added".format(str(event)))
-
 
 class TimelineEventInserterRule(models.Model):
 
     STEEM_AUTHOR_RULE = "SteemAuthorTimelineEventRule"
     STEEM_TAG_RULE = "SteemTagTimelineEventRule"
-    STEEM_AFTER_RULE = "SteemAfterDatetimeTimelineEventRule"
-    STEEM_TITLE_REGEXP_RULE = "SteemTitleRegexpTimelineEventRule"
+    # STEEM_AFTER_RULE = "SteemAfterDatetimeTimelineEventRule"
+    # STEEM_TITLE_REGEXP_RULE = "SteemTitleRegexpTimelineEventRule"
     STEEM_TITLE_PREFIX_RULE = "SteemTitlePrefixTimelineEventRule"
+    STEEM_TITLE_CONTAINS_RULE = "SteemTitleContainsTimelineEventRule"
 
     # GITHUB_REPOSITORY_URL = "GithubRepositoryTimelineEventRule"
     # GITHUB_NEW_MAJOR_RELEASE = "GithubNewMajorReleaseTimelineEventRule"
@@ -94,9 +93,10 @@ class TimelineEventInserterRule(models.Model):
         TimelineEventInserterRulebook.STEEM_POST_SERVICE: [
             (STEEM_AUTHOR_RULE, "Published by"),
             (STEEM_TAG_RULE, "Has a tag"),
-            (STEEM_AFTER_RULE, "Published after"),
-            (STEEM_TITLE_REGEXP_RULE, "Title regexp"),
-            (STEEM_TITLE_PREFIX_RULE, "Title prefix"),
+            # (STEEM_AFTER_RULE, "Published after"),
+            # (STEEM_TITLE_REGEXP_RULE, "Title regexp"),
+            (STEEM_TITLE_PREFIX_RULE, "Title starts with"),
+            (STEEM_TITLE_CONTAINS_RULE, "Title contains"),
         ],
         # TimelineEventInserterRulebook.GITHUB_RELEASE_SERVICE: [
         #     (GITHUB_REPOSITORY_URL, "In repository"),

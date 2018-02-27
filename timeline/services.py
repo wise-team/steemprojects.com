@@ -1,11 +1,17 @@
 from abc import ABCMeta, abstractmethod
+from textwrap import dedent
 from steem.blog import Blog
+from steembase.exceptions import RPCError
 
 from profiles.models import AccountType
 from timeline.forms import TimelineEventForm
 from timeline.models import TimelineEventInserterRule, TimelineEventInserterRulebook
 from timeline import rules as rules_module
 from datetime import datetime
+
+from django.conf import settings
+from django.urls import reverse
+from django.utils.html import escape
 
 
 class RulebookServiceABC(ABCMeta):
@@ -40,6 +46,11 @@ class RulebookService(metaclass=RulebookServiceABC):
     def get_required_rule_types():
         pass
 
+    @staticmethod
+    @abstractmethod
+    def get_notification_msg(project):
+        pass
+
 
 class SteemPostService(RulebookService):
     DEFAULT_STEEM_INTERFACE = 'https://steemit.com'
@@ -56,7 +67,6 @@ class SteemPostService(RulebookService):
         return form.instance if form.is_valid() else None
 
     def get_new_events(self):
-
         try:
             author_rule = self.rulebook.rules.get(type=TimelineEventInserterRule.STEEM_AUTHOR_RULE)
         except TimelineEventInserterRule.DoesNotExist:
@@ -72,11 +82,24 @@ class SteemPostService(RulebookService):
 
             if self.are_rules_valid(post):
                 event = self.post_to_event(post, self.rulebook.project)
+                event.save()
+                if self.rulebook.notify:
+                    self.notify(post)
+
                 if event:
                     yield event
 
         self.rulebook.last = now
         self.rulebook.save()
+
+    def notify(self, post):
+        msg = self.get_notification_msg(self.rulebook.project)
+        resposnse = None
+
+        try:
+            resposnse = post.reply(msg, "", settings.STEEM_ACCOUNT)
+        except RPCError as e:
+            raise Exception("Steem Notify Service Exception:\n\n{}\n\n{}".format(str(e), str(resposnse)))
 
     @staticmethod
     def fetch_source(project):
@@ -92,7 +115,19 @@ class SteemPostService(RulebookService):
             TimelineEventInserterRule.STEEM_AUTHOR_RULE,
         ]
 
+    @staticmethod
+    def get_notification_msg(project):
+        return dedent(
+            """
+            This post has been just added as new item to _[timeline of {project_name} on {site_title}]({project_page})_.
 
+            If you want to be notified about new updates from this project, register on {site_title} and add {project_name} to your favorite projects.
+            """.format(
+                site_title=settings.SITE_TITLE,
+                project_name=escape(project.name),
+                project_page=reverse('package', kwargs={'slug': project.slug})
+            )
+        )
 
 # import re
 # from django.conf import settings

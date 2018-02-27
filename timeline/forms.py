@@ -1,8 +1,9 @@
 import re
+from markdown import markdown
 
 from django.core.exceptions import ValidationError
 from django import forms
-from django.forms import formset_factory, BaseFormSet, HiddenInput, CharField
+from django.forms import formset_factory, BaseFormSet, HiddenInput, CharField, BooleanField
 from django.forms.formsets import (
     ManagementForm,
     TOTAL_FORM_COUNT,
@@ -145,9 +146,14 @@ class TimelineEventInserterRuleForm(forms.ModelForm):
 
 class TimelineManagementForm(ManagementForm):
     SERVICE_TYPE_FORM = 'SERVICE_TYPE'
+    NOTIFY_FORM = 'NOTIFY'
 
     def __init__(self, *args, **kwargs):
         self.base_fields[self.SERVICE_TYPE_FORM] = CharField(widget=HiddenInput)
+        self.base_fields[self.NOTIFY_FORM] = BooleanField(label="""
+            Notify about new items added to timeline by this set of rules, by posting following comment bellow posts: 
+        """, required=False)
+        kwargs.setdefault('label_suffix', '')
         super(TimelineManagementForm, self).__init__(*args, **kwargs)
 
     def clean_service_type(self):
@@ -175,7 +181,11 @@ class TimelineRuleBaseFormSet(BaseFormSet):
                 MIN_NUM_FORM_COUNT: self.min_num,
                 MAX_NUM_FORM_COUNT: self.max_num,
                 TimelineManagementForm.SERVICE_TYPE_FORM: self.service_type,
+                TimelineManagementForm.NOTIFY_FORM: self.notify,
             })
+            from timeline import services
+            service_class = getattr(services, self.service_type)
+            form.notification_example = markdown(service_class.get_notification_msg(self.project))
         return form
 
 
@@ -188,8 +198,10 @@ BaseTimelineEventInserterRuleFormSet = formset_factory(
 
 
 class TimelineEventInserterRuleFormSet(BaseTimelineEventInserterRuleFormSet):
-    def __init__(self, service_type=None, initial=None, data=None, *args, **kwargs):
+    def __init__(self, project=None, service_type=None, notify=None, initial=None, data=None, *args, **kwargs):
         self.service_type = service_type
+        self.notify = notify
+        self.project = project
 
         if not service_type and "data" in kwargs:
             service_type = kwargs["data"].get('form-{}'.format(TimelineManagementForm.SERVICE_TYPE_FORM))

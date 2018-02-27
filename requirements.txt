@@ -33,6 +33,7 @@ six==1.10.0
 whitenoise==3.2.2
 Pillow==4.2.1
 rocketchat-API==0.6.3
+markdown==2.6.11
 
 # Redis support
 django-redis==4.6.0

@@ -519,6 +519,14 @@ STEEM_NODES = [node.strip() for node in environ.get('STEEM_NODES').split(',')]
 
 set_shared_steemd_instance(Steemd(nodes=STEEM_NODES))
 
+STEEM_NODES = [node.strip() for node in environ.get('STEEM_NODES').split(',')]
+
+STEEM_ACCOUNT = environ.get('STEEM_ACCOUNT')
+STEEM_POSTING_KEY = environ.get('STEEM_POSTING_KEY')
+
+from steem.wallet import Wallet
+Wallet(keys=[STEEM_POSTING_KEY])
+
 PROJECT_GITHUB_REPOSITORY_URL = environ.get('PROJECT_GITHUB_REPOSITORY_URL')
 if PROJECT_GITHUB_REPOSITORY_URL.endswith("/"):
     PROJECT_GITHUB_REPOSITORY_URL = PROJECT_GITHUB_REPOSITORY_URL[:-1]
