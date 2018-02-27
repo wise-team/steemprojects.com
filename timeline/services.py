@@ -82,12 +82,13 @@ class SteemPostService(RulebookService):
 
             if self.are_rules_valid(post):
                 event = self.post_to_event(post, self.rulebook.project)
-                event.ruleset = self.rulebook
-                event.save()
-                if self.rulebook.notify:
-                    self.notify(post)
 
                 if event:
+                    event.ruleset = self.rulebook
+                    event.save()
+                    if self.rulebook.notify:
+                        self.notify(post)
+
                     yield event
 
         self.rulebook.last = now
@@ -126,7 +127,7 @@ class SteemPostService(RulebookService):
             """.format(
                 site_title=settings.SITE_TITLE,
                 project_name=escape(project.name),
-                project_page=reverse('package', kwargs={'slug': project.slug})
+                project_page=settings.SITE_URL + reverse('package', kwargs={'slug': project.slug})
             )
         )
 
