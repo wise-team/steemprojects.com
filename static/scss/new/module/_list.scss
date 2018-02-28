@@ -60,6 +60,10 @@
         top: -1px;
     }
 
+    &__more {
+        float: right;
+    }
+
     &--categories {
         #{$m-list}__list-group-item {
             //height: 67px;
@@ -73,7 +77,7 @@
 
     &--latest-projects {
         #{$m-list}__list-group-item {
-            position: relative; // TODO: remove! right now project-tile--category
+            position: relative; // TODO: remove! right now project-tile__category
                     // depends on this 'relative'
             padding: 15px 0 15px 15px;
             overflow: hidden;

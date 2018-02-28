@@ -1,0 +1,27 @@
+.m-projects-grid {
+    $m-projects-grid: &;
+
+    &__category {
+        clear: both;
+    }
+
+    &__category-title {
+        display: inline-block;
+        color: $base-font-color;
+        font-size: 24px;
+        padding: 0;
+    }
+
+    &__category-counter {
+        padding-left: 10px;
+        color: $second-font-color;
+        font-size: 12px;
+        position: relative;
+        top: -1px;
+    }
+
+    &__category-description{
+        margin: 20px 0;
+        font-size: 16px;
+    }
+}
