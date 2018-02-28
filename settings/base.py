@@ -193,20 +193,8 @@ SECRET_KEY = "CHANGEME"
 URCHIN_ID = ""
 
 DEFAULT_FROM_EMAIL = environ.get('DEFAULT_FROM_EMAIL')
+SERVER_EMAIL = environ.get('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-try:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = 'smtp.sendgrid.net'
-    EMAIL_HOST_PASSWORD = os.environ['SENDGRID_PASSWORD']
-    EMAIL_HOST_USER = os.environ['SENDGRID_USERNAME']
-    EMAIL_PORT = 587
-    SERVER_EMAIL = environ.get('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
-    EMAIL_USE_TLS = True
-    DEBUG = False
-except Exception as e:
-    EMAIL_HOST = 'localhost'
-    EMAIL_PORT = 1025
-
 EMAIL_SENDER_DOMAIN = env('MAILGUN_SENDER_DOMAIN')
 
 DEBUG_TOOLBAR_CONFIG = {
