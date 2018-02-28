@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load package_tags %}
+
+{% block head_title %}List of all projects in {{ FRAMEWORK_NAME }} ecosystem{% endblock %}
+
+{% block body %}
+<div class="col-lg-12 m-projects-grid">
+    {% for category in categories %}
+        <div class="m-projects-grid__category">
+            <h2 class="m-projects-grid__category-title">{{ category.title_plural }}</h2>
+            <span class="m-projects-grid__category-counter">{{ category.count }}</span>
+
+            <p class="m-projects-grid__category-description">{{ category.description }}</p>
+
+            {% for package in category.packages %}
+                {% project_tile package 'gallery'%}
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

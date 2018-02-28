@@ -4,9 +4,40 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
 from package.models import Project
-from timeline.models import TimelineEventInserterRulebook, TimelineEventInserterRule
-from timeline.forms import TimelineEventInserterRulebookForm, TimelineEventInserterRuleFormSet, \
-    TimelineManagementForm
+from timeline.models import TimelineEvent, TimelineEventInserterRulebook, TimelineEventInserterRule
+from timeline.forms import (
+    TimelineEventFormSet,
+    TimelineEventInserterRulebookForm,
+    TimelineEventInserterRuleFormSet,
+    TimelineManagementForm,
+)
+
+
+@login_required
+def edit_timeline(request, slug, template_name="package/timeline_form.html"):
+    project = get_object_or_404(Project, slug=slug)
+    if not request.user.profile.can_edit_package(project):
+        return HttpResponseForbidden("permission denied")
+
+    if request.POST:
+        formset = TimelineEventFormSet(data=request.POST, project=project,)
+    else:
+        formset = TimelineEventFormSet(project=project, queryset=TimelineEvent.objects.filter(project=project))
+
+    if formset.is_valid():
+        formset.save()
+
+        messages.add_message(request, messages.INFO, 'Project updated successfully')
+        return HttpResponseRedirect(reverse("package", kwargs={"slug": project.slug}))
+
+    rulesets = TimelineEventInserterRulebook.objects.filter(project=project)
+
+    return render(request, template_name, {
+        "formset": formset,
+        "package": project,
+        "rulesets": rulesets,
+        "action": "Save",
+    })
 
 
 @login_required
@@ -114,7 +145,6 @@ def edit_ruleset(request, slug, ruleset_id, template_name="timeline/ruleset_form
         "rulebook_form": rulebook_form,
         "rule_formsets": rule_formsets,
     })
-
 
 
 @login_required

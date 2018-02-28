@@ -19,8 +19,6 @@ from grid.models import Grid
 from homepage.models import Dpotw, Gotw
 from package.forms import PackageForm, PackageExampleForm, DocumentationForm, ProjectImagesFormSet
 from package.models import Category, Project, PackageExample, ProjectImage, TeamMembership
-from timeline.models import TimelineEvent, TimelineEventInserterRulebook
-from timeline.forms import TimelineEventFormSet
 from package.repos import get_all_repos
 from package.forms import TeamMembersFormSet
 from profiles.models import Account, AccountType
@@ -186,32 +184,6 @@ def publish_project(request, slug):
     except PermissionError:
         return HttpResponseForbidden("permission denied")
 
-
-@login_required
-def edit_timeline(request, slug, template_name="package/timeline_form.html"):
-    project = get_object_or_404(Project, slug=slug)
-    if not request.user.profile.can_edit_package(project):
-        return HttpResponseForbidden("permission denied")
-
-    if request.POST:
-        formset = TimelineEventFormSet(data=request.POST, project=project,)
-    else:
-        formset = TimelineEventFormSet(project=project, queryset=TimelineEvent.objects.filter(project=project))
-
-    if formset.is_valid():
-        formset.save()
-
-        messages.add_message(request, messages.INFO, 'Project updated successfully')
-        return HttpResponseRedirect(reverse("package", kwargs={"slug": project.slug}))
-
-    rulesets = TimelineEventInserterRulebook.objects.filter(project=project)
-
-    return render(request, template_name, {
-        "formset": formset,
-        "package": project,
-        "rulesets": rulesets,
-        "action": "Save",
-    })
 
 
 @login_required
@@ -409,28 +381,21 @@ def python3_list(request, template_name="package/python3_list.html"):
         }
     )
 
-def package_list(request, template_name="package/package_list.html"):
 
-    categories = []
-    for category in Category.objects.annotate(package_count=Count("project")):
-        element = {
-            "title": category.title,
-            "description": category.description,
-            "count": category.package_count,
-            "slug": category.slug,
-            "title_plural": category.title_plural,
-            "packages": category.project_set.annotate(usage_count=Count("usage")).order_by("-pypi_downloads", "-repo_watchers", "name")[:9]
-        }
-        categories.append(element)
+def package_list(request, template_name="package/package_grid.html"):
+    context = {
+        'categories': [
+            {
+                "title_plural": category.title_plural,
+                "count": category.package_count,
+                "description": category.description,
+                "packages": category.project_set.order_by("-repo_watchers", "name")
+            }
+            for category in Category.objects.annotate(package_count=Count("project"))
+        ]
+    }
 
-    return render(
-        request,
-        template_name, {
-            "categories": categories,
-            "dpotw": Dpotw.objects.get_current(),
-            "gotw": Gotw.objects.get_current(),
-        }
-    )
+    return render(request, template_name, context)
 
 
 def package_detail(request, slug, template_name="package/package.html"):
