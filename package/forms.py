@@ -1,8 +1,13 @@
+from PIL import Image
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.forms.models import modelformset_factory
 from django.forms.widgets import Textarea, TextInput
 from floppyforms.__future__ import ModelForm
 import itertools
+
+from io import BytesIO
+
 from package.models import Category, Project, PackageExample, TeamMembership, ProjectImage
 from timeline.models import TimelineEvent
 from django.template.defaultfilters import slugify
@@ -176,6 +181,18 @@ class ProjectImageForm(forms.ModelForm):
         super(ProjectImageForm, self).__init__(*args, **kwargs)
         self.fields["project"].widget = forms.HiddenInput()
         self.fields["project"].initial = project.id
+
+    def clean_img(self):
+        image_field = self.cleaned_data['img']
+        image_file = BytesIO(image_field.read())
+        image = Image.open(image_file)
+        image.thumbnail(settings.PROJECT_IMAGE_THUMBNAIL_MAX_SIZE)
+        save_format = 'JPEG' if image.mode is 'RGB' else 'PNG'
+        image_file = BytesIO()
+        image.save(image_file, format=save_format, quality=90)
+        image_field.file = image_file
+        image_field.image = image
+        return image_field
 
 
 BaseProjectImagesFormSet = modelformset_factory(
