@@ -192,7 +192,7 @@ SECRET_KEY = "CHANGEME"
 
 URCHIN_ID = ""
 
-DEFAULT_FROM_EMAIL = 'Steem Projects <steemprojects-noreply@steemprojects.com>'
+DEFAULT_FROM_EMAIL = environ.get('DEFAULT_FROM_EMAIL')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 try:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -200,7 +200,7 @@ try:
     EMAIL_HOST_PASSWORD = os.environ['SENDGRID_PASSWORD']
     EMAIL_HOST_USER = os.environ['SENDGRID_USERNAME']
     EMAIL_PORT = 587
-    SERVER_EMAIL = 'info@cartwheelweb.com'
+    SERVER_EMAIL = environ.get('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
     EMAIL_USE_TLS = True
     DEBUG = False
 except Exception as e:
@@ -347,7 +347,7 @@ SOCIAL_AUTH_PIPELINE = (
 SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = 'social_auth_local.mail.send_validation'
 SOCIAL_AUTH_EMAIL_VALIDATION_URL = '/auth/email-sent/'
 SOCIAL_AUTH_STEEMCONNECT_FORCE_EMAIL_VALIDATION = True
-VALIDATION_EMAIL_SENDER = environ.get('VALIDATION_EMAIL_SENDER')
+VALIDATION_EMAIL_SENDER = environ.get('VALIDATION_EMAIL_SENDER', DEFAULT_FROM_EMAIL)
 
 LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/profiles/confirm'
