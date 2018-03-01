@@ -14,7 +14,7 @@ from timeline.forms import (
 
 
 @login_required
-def edit_timeline(request, slug, template_name="package/timeline_form.html"):
+def edit_timeline(request, slug, template_name="timeline/timeline_form.html"):
     project = get_object_or_404(Project, slug=slug)
     if not request.user.profile.can_edit_package(project):
         return HttpResponseForbidden("permission denied")
