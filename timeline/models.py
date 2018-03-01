@@ -124,7 +124,7 @@ class TimelineEventInserterRule(models.Model):
             raise ValidationError('This field cannot be empty.')
 
     def __str__(self):
-        return "{} {}".format(
+        return '{} "{}"'.format(
             self.RULE_TYPES_DICT.get(self.type),
             self.argument
         )
