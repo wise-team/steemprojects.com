@@ -151,12 +151,14 @@ def edit_ruleset(request, slug, ruleset_id, template_name="timeline/ruleset_form
 def delete_ruleset(request, slug, ruleset_id):
     project = get_object_or_404(Project, slug=slug)
     ruleset = get_object_or_404(TimelineEventInserterRulebook, id=ruleset_id)
+
+    name = ruleset.name
     ruleset.delete()
 
     messages.add_message(
         request,
         messages.INFO,
-        'Ruleset "{}" has been deleted'.format(ruleset.name)
+        'Ruleset "{}" has been deleted'.format(name)
     )
 
     # Intelligently determine the URL to redirect the user to based on the
