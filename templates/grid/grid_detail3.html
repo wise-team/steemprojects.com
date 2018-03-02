@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load cache %}
+{% load grid_tags %}
+{% load package_tags %}
+
+{% block head_title %}{{ grid.title }}{% endblock %}
+
+{% block extra_head %}
+    {{ block.super }}
+    <meta name="description" content="{{ grid.description }}" />
+    <meta name="keywords" content="{{ grid.packages.all|join:',' }}" />
+{% endblock %}
+
+{% block body %}
+    {% cache 300 html_grid_detail_outer grid.pk %}
+    <div class="row">
+        <div class="col-sm-6 col-lg-6 title-row m-title-panel">
+            <h1 class="m-title-panel__title"><span class="m-title-panel__icon m-title-panel__icon--compare"></span>Compare {{ grid.title|lower }}</h1>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        {% if grid_packages|length %}
+        <table class="m-grid">
+            <thead>
+                {% include "grid/snippets/grid_row_header.html" %}
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{% trans "Description" %}</td>
+                    {% for grid_package in grid_packages %}
+                        <td>
+                            {% with grid_package.package.description|truncatewords:20 as short %}
+                                {% if grid_package.package.description|length > short|length %}
+                                   {{ short|wordwrap:40|linebreaksbr|slice:"-3" }}<a href="{{ grid_package.package.get_absolute_url }}">...</a>
+                                {% else %}
+                                    {{ short|wordwrap:40|linebreaksbr }}
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>{% trans "Category" %}</td>
+                    {% for grid_package in grid_packages %}
+                        <td>{{ grid_package.package.category }}</td>
+                    {% endfor %}
+                </tr>
+                {% comment %}
+                <tr>
+                    <td>{% trans "# Using This" %}</td>
+                    {% for grid_package in grid_packages %}
+
+                        <td class="usage-holder">
+                            {% with grid_package.package as package %}
+                                <span class="usage-count" id="usage-count-{{ package.id }}">{{ grid_package.usage_count }}</span>
+                                {% usage_button %}
+                            {% endwith %}
+                        </td>
+                    {% endfor %}
+                </tr>
+                {% endcomment %}
+                <tr>
+                    <td>{% trans "Project Status" %}</td>
+                    {% for grid_package in grid_packages %}
+                        <td>
+                            {{ grid_package.package.get_status_display }}
+                        </td>
+                    {% endfor %}
+                </tr>
+                {% comment %}
+                <tr>
+                    <td>{% trans "Last updated" %}</td>
+                    {% for grid_package in grid_packages %}
+                        <td>
+                        {% with last_updated=grid_package.package.last_updated %}
+                            {% if last_updated %}
+                               {{ last_updated|date:"DATETIME_FORMAT" }}
+                            {% endif %}
+                        {% endwith %}
+                        </td>
+                    {% endfor %}
+                </tr>
+                {% endcomment %}
+                <tr>
+                    <td>{% trans "Repo" %}</td>
+                    {% for grid_package in grid_packages %}
+                        <td><a href="{{ grid_package.package.repo_url }}">{{ grid_package.package.repo }}</a></td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>{% trans "Development" %}</td>
+                    {% for grid_package in grid_packages %}
+                        <td><img class="package-githubcommits" src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{ grid_package.package|commits_over_52 }}&chco=666666&chbh=1,1,1&chds=0,20" /></td>
+                    {% endfor %}
+                </tr>
+                {% comment %}
+                <tr>
+                    <td>{% trans "Stars" %}</td>
+                    {% for grid_package in grid_packages %}
+                        <td>{{ grid_package.package.repo_watchers|default:"n/a" }}</td>
+                    {% endfor %}
+                </tr>
+                {% endcomment %}
+{#                <tr>#}
+{#                    <td>{% trans "Participants" %}</td>#}
+{#                    {% for grid_package in grid_packages %}#}
+{#                        <td>#}
+{#                            {% for collaborator in grid_package.package.participant_list %}#}
+{#                                {% if forloop.counter <= 10 %}#}
+{#                                    <a href="{{ grid_package.package.repo.url }}/{{ collaborator }}">{{ collaborator }}</a>#}
+{#                                    {% if not forloop.last %}#}
+{#                                        <br />#}
+{#                                    {% endif %}#}
+{#                                {% endif %}#}
+{#                                {% if forloop.counter == 11 %}#}
+{#                                    <a href="{% url 'package' grid_package.package.slug %}">{% trans "more..." %}</a>#}
+{#                                {% endif %}#}
+{#                            {% endfor %}#}
+{#                        </td>#}
+{#                    {% endfor %}#}
+{#                </tr>#}
+
+                {% for feature in features %}
+                    <tr class="{% cycle 'even' 'odd' %}">
+                        <td>{{ feature.title }}</td>
+                        {% for grid_package in grid_packages %}
+                            {% with elements|hash:feature.pk|hash:grid_package.pk as element %}
+
+                            <td id="element-f{{ feature.pk }}-p{{ grid_package.pk }}">
+                                {{ element.text|style_element|safe|urlize|linebreaksbr }}
+                            </td>
+
+                            {% endwith %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    {% else %}
+        {% if request.user.is_authenticated and profile.can_add_grid_package %}
+        <p><a href="{% url 'add_grid_package' grid.slug %}"><span class="glyphicon glyphicon-plus"></span>&nbsp;{% trans "Add a package to get a grid view" %}</a></p>
+        {% endif %}
+    {% endif %}
+
+    </div>
+    {% endcache %}
+{% endblock %}
