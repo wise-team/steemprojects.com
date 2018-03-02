@@ -85,15 +85,27 @@
                 </tr>
                 {% endcomment %}
                 <tr>
-                    <td>{% trans "Repo" %}</td>
+                    <td>{% trans "Code repository" %}</td>
                     {% for grid_package in grid_packages %}
-                        <td><a href="{{ grid_package.package.repo_url }}">{{ grid_package.package.repo }}</a></td>
+                        <td>
+                            {% if grid_package.package.repo_url %}
+                                <a href="{{ grid_package.package.repo_url }}">{{ grid_package.package.repo }}</a>
+                            {% else %}
+                                This project is not open-source :(
+                            {% endif %}
+                        </td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td>{% trans "Development" %}</td>
                     {% for grid_package in grid_packages %}
-                        <td><img class="package-githubcommits" src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{ grid_package.package|commits_over_52 }}&chco=666666&chbh=1,1,1&chds=0,20" /></td>
+                        <td>
+                            {% if grid_package.package.repo_url %}
+                                <img class="package-githubcommits"
+                                     src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{ grid_package.package|commits_over_52 }}&chco=666666&chbh=1,1,1&chds=0,20"
+                                />
+                            {% endif %}
+                        </td>
                     {% endfor %}
                 </tr>
                 {% comment %}
