@@ -318,7 +318,7 @@ def ajax_grid_list(request, template_name="grid/ajax_grid_list.html"):
     return render(request, template_name, {'grids': grids})
 
 
-def grid_detail(request, slug, template_name="grid/grid_detail.html"):
+def grid_detail(request, slug, template_name="grid/grid_detail3.html"):
     """displays a grid in detail
 
     Template context:

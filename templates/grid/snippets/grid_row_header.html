@@ -1,10 +1,10 @@
 {% load i18n %}
-<tr class="grid-row-header">
-    <th>{% trans "Package" %}</th>
+<tr>
+    <th class="m-grid__header">{% trans "Project" %}</th>
     {% for grid_package in grid_packages %}
-        <th>
+        <th class="m-grid__header">
           <a href="{% url 'package' grid_package.package.slug %}">
-            {{ grid_package.package.name }}
+            <span class="m-grid__project-name">{{ grid_package.package.name }}</span><i class="m-grid__project-link-icon"></i>
           </a>
         </th>
     {% endfor %}

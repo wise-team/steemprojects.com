@@ -28,6 +28,20 @@
     text-align: center;
   }
 
+  &__icon {
+    @extend .material-icons;
+
+    color: $base-icon-color;
+    position: relative;
+    top: 4px;
+    left: 8px;
+    padding-right: 15px;
+
+    &--compare::before {
+      content: 'swap_horiz';
+    }
+  }
+
   &__status {
     color: $m-btn-font-color-hover;
     background-color: $m-btn-background-color-hover;
