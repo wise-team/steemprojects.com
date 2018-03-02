@@ -5,7 +5,8 @@ ENV PYTHONUNBUFFERED 1
 # Requirements have to be pulled and installed here, otherwise caching won't work
 COPY ./requirements.txt /requirements.txt
 
-RUN apt-get update && apt-get install -y libssl-dev
+RUN apt-get update
+RUN apt-get install -y libssl-dev
 
 RUN pip install setuptools
 RUN pip install scrypt
@@ -17,8 +18,9 @@ RUN pip install -r /requirements.txt \
     && groupadd -r django \
     && useradd -m -r -g django django
 
-RUN apt-get update
 RUN apt-get install -y ruby-dev rubygems
+RUN apt-get install -y cron
+
 RUN gem install sass
 
 COPY ./compose/django/entrypoint.sh /entrypoint.sh
@@ -32,6 +34,9 @@ COPY ./compose/django/start.sh /start.sh
 RUN sed -i 's/\r//' /start.sh \
     && chmod +x /start.sh \
     && chown django /start.sh
+
+ADD chroniker_crontab /etc/cron.d/chroniker-cron
+RUN chmod 0644 /etc/cron.d/chroniker-cron
 
 WORKDIR /app
 

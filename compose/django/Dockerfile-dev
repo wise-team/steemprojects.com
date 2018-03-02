@@ -6,7 +6,8 @@ ENV PYTHONUNBUFFERED 1
 COPY ./requirements.txt /requirements.txt
 
 
-RUN apt-get update && apt-get install -y libssl-dev
+RUN apt-get update
+RUN apt-get install -y libssl-dev
 
 RUN pip install setuptools
 RUN pip install scrypt
@@ -16,6 +17,8 @@ RUN pip install steem
 RUN pip install -r /requirements.txt
 
 RUN apt-get install -y ruby-dev rubygems
+RUN apt-get install -y cron
+
 RUN gem install sass
 
 COPY ./compose/django/entrypoint.sh /entrypoint.sh
@@ -26,6 +29,9 @@ COPY ./compose/django/start-dev.sh /start-dev.sh
 RUN sed -i 's/\r//' /start-dev.sh
 RUN chmod +x /start-dev.sh
 
+
+ADD chroniker_crontab /etc/cron.d/chroniker-cron
+RUN chmod 0644 /etc/cron.d/chroniker-cron
 
 WORKDIR /app
 

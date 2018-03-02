@@ -164,6 +164,7 @@ PREREQ_APPS = [
     'social_django',
     'floppyforms',
     'rest_framework',
+    'chroniker',
 
 ]
 
