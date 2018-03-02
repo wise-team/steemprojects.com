@@ -26,9 +26,13 @@ $navbar-nav-padding: $container-padding + $column-padding;
         transition: all .4s;
     }
 
-    &__brand-image {
+    &__brand-image::before {
+        float: left;
         height: 35px;
-        content:url("/static/img/#{$base-brand-image}");
+        width: 187px;
+        content: '';
+        background: url("/static/img/#{$base-brand-image}") no-repeat;
+        background-size: contain;
     }
 
     .navbar-nav {
