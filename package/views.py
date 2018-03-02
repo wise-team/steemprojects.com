@@ -261,14 +261,21 @@ def package_autocomplete(request):
     return response
 
 
-def category(request, slug, template_name="package/category.html"):
-    category = get_object_or_404(Category, slug=slug)
-    packages = category.project_set.published().select_related().annotate(usage_count=Count("usage")).order_by("-repo_watchers", "name")
-    return render(request, template_name, {
-        "category": category,
-        "packages": packages,
-        }
-    )
+def category(request, slug, template_name="package/package_grid.html"):
+    category_ = get_object_or_404(Category, slug=slug)
+
+    context = {
+        'categories': [
+            {
+                "title_plural": category_.title_plural,
+                "count": category_.project_set.count(),
+                "description": category_.description,
+                "packages": category_.project_set.published().select_related().annotate(usage_count=Count("usage"))
+            }
+        ]
+    }
+
+    return render(request, template_name, context)
 
 
 def ajax_package_list(request, template_name="package/ajax_package_list.html"):
