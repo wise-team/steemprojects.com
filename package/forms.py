@@ -1,15 +1,16 @@
+import itertools
+
+from package.models import Category, Project, PackageExample, ProjectImage
+from package.utils import prepare_thumbnails
+from profiles.models import Account
+
 from django.core.exceptions import ValidationError
+from django import forms
+from django.forms.formsets import formset_factory
 from django.forms.models import modelformset_factory
 from django.forms.widgets import Textarea, TextInput
-from floppyforms.__future__ import ModelForm
-import itertools
-from package.models import Category, Project, PackageExample, TeamMembership, ProjectImage
-from timeline.models import TimelineEvent
 from django.template.defaultfilters import slugify
-from django.forms.formsets import formset_factory
-from django import forms
-
-from profiles.models import Account, AccountType
+from floppyforms.__future__ import ModelForm
 
 
 def package_help_text():
@@ -169,13 +170,20 @@ class TeamMembersFormSet(BaseTeamMembersFormSet):
 
 
 class ProjectImageForm(forms.ModelForm):
-    model = ProjectImage
-    fields = ["img", "project"]
+
+    class Meta:
+        model = ProjectImage
+        fields = ["img", "project"]
 
     def __init__(self, project, *args, **kwargs):
         super(ProjectImageForm, self).__init__(*args, **kwargs)
         self.fields["project"].widget = forms.HiddenInput()
         self.fields["project"].initial = project.id
+
+    def save(self, *args, **kwargs):
+        super(ProjectImageForm, self).save(*args, **kwargs)
+        prepare_thumbnails(self.instance.img.file.name)
+        return self.instance
 
 
 BaseProjectImagesFormSet = modelformset_factory(

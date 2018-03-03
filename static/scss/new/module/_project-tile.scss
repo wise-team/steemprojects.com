@@ -3,12 +3,12 @@ $gallery-size: 20;
 
 .m-project-tile {
     $m-project-tile: &;
-    $thumbnail-width: 123px;
+    $thumbnail-width: 128px;
 
     &__thumbnail {
         float: left;
-        width: 123px;
-        height: 71px;
+        width: $thumbnail-width;
+        height: 72px;
         object-fit: cover;
         box-shadow: 0 3px 7px rgba(0,0,0,.1);  // TODO: adjust EOS color
     }

@@ -521,3 +521,22 @@ if PROJECT_GITHUB_REPOSITORY_URL.endswith("/"):
 
 
 PROJECT_SLUG_ON_PAGE = environ.get('PROJECT_SLUG_ON_PAGE')
+
+PROJECT_IMAGE_THUMBNAIL_RATIO = (16, 9)
+
+PROJECT_IMAGE_THUMBNAIL_SIZES = (
+    (64, 36),
+    (128, 72),
+    (320, 180),
+    (640, 360),
+    (1024, 576),
+    (1280, 720),
+)
+PROJECT_IMAGE_THUMBNAIL_QUALITY = 90
+
+assert all(
+    [
+        x/float(PROJECT_IMAGE_THUMBNAIL_RATIO[0]) == y/float(PROJECT_IMAGE_THUMBNAIL_RATIO[1])
+        for x, y in PROJECT_IMAGE_THUMBNAIL_SIZES
+    ]
+), "Make sure, that all PROJECT_IMAGE_THUMBNAIL_SIZES math defined ratio"

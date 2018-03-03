@@ -199,8 +199,8 @@
                     </li>
                 {% else %}
                     {% for img in project_imgs %}
-                        <li data-thumb="{{ img.url }}">
-                            <img class="m-gallery__image" src="{{ img.url }}"/>
+                        <li data-thumb="{{ img|thumb:64 }}">
+                            <img class="m-gallery__image" src="{{ img|thumb:1024 }}"/>
                         </li>
                     {% endfor %}
                 {% endif %}
