@@ -1,20 +1,18 @@
-from PIL import Image
-from django.conf import settings
+
 from django.core.exceptions import ValidationError
 from django.forms.models import modelformset_factory
 from django.forms.widgets import Textarea, TextInput
 from floppyforms.__future__ import ModelForm
 import itertools
 
-from io import BytesIO
 
-from package.models import Category, Project, PackageExample, TeamMembership, ProjectImage
-from timeline.models import TimelineEvent
+from package.models import Category, Project, PackageExample, ProjectImage
 from django.template.defaultfilters import slugify
 from django.forms.formsets import formset_factory
 from django import forms
 
-from profiles.models import Account, AccountType
+from package.utils import prepare_thumbnails
+from profiles.models import Account
 
 
 def package_help_text():
@@ -174,25 +172,20 @@ class TeamMembersFormSet(BaseTeamMembersFormSet):
 
 
 class ProjectImageForm(forms.ModelForm):
-    model = ProjectImage
-    fields = ["img", "project"]
+
+    class Meta:
+        model = ProjectImage
+        fields = ["img", "project"]
 
     def __init__(self, project, *args, **kwargs):
         super(ProjectImageForm, self).__init__(*args, **kwargs)
         self.fields["project"].widget = forms.HiddenInput()
         self.fields["project"].initial = project.id
 
-    def clean_img(self):
-        image_field = self.cleaned_data['img']
-        image_file = BytesIO(image_field.read())
-        image = Image.open(image_file)
-        image.thumbnail(settings.PROJECT_IMAGE_THUMBNAIL_MAX_SIZE)
-        save_format = 'JPEG' if image.mode is 'RGB' else 'PNG'
-        image_file = BytesIO()
-        image.save(image_file, format=save_format, quality=90)
-        image_field.file = image_file
-        image_field.image = image
-        return image_field
+    def save(self, *args, **kwargs):
+        super(ProjectImageForm, self).save(*args, **kwargs)
+        prepare_thumbnails(self.instance.img.file.name)
+        return self.instance
 
 
 BaseProjectImagesFormSet = modelformset_factory(
