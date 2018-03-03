@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
-
+from datetime import datetime
 from core.models import BaseModel
 from package.models import Project
 from profiles.models import Profile
@@ -64,7 +64,7 @@ class TimelineEventInserterRulebook(models.Model):
         ])
 
     service_type = models.CharField(choices=SERVICE_TYPES, max_length=64)
-    last = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    last = models.DateTimeField(default=datetime.now, blank=True, null=True)
     project = models.ForeignKey(Project, related_name="timeline_rulebooks")
     notify = models.BooleanField(default=True)
 

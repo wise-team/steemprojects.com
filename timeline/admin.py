@@ -19,7 +19,6 @@ class TimelineEventInserterRuleAdmin(VersionAdmin):
 
 class TimelineEventInserterRulebookAdmin(VersionAdmin):
     list_display = ("project", "service_type", "last", "rules_counter")
-    readonly_fields = ('last',)
     list_filter = ("project", "id")
 
     def rules_counter(self, obj):
