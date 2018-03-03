@@ -1,4 +1,4 @@
-from os.path import splitext, dirname, basename
+from os.path import splitext, dirname, basename, isfile
 from django import template
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -81,18 +81,26 @@ def project_tile(context, package, style=None):
 
 
 @register.filter
-def thumb(url, width):
+def thumb(img, width):
 
     size = next((size for size in settings.PROJECT_IMAGE_THUMBNAIL_SIZES if size[0] >= width), None)
-    if size is None:
-        return url
 
-    base = dirname(url)
-    filename, ext = splitext(basename(url))
-    return "{base}/thumbs/{filename}_{size}{ext}".format(
+    if img is None:
+        return '/static/img/noimage/{size}.png'.format(size="x".join(map(str, size)))
+
+    if size is None:
+        return img.url if img else '/static/img/noimage/1280x720.png'
+
+    base = dirname(img.url)
+    filename, ext = splitext(basename(img.url))
+    path = "{base}/thumbs/{filename}_{size}{ext}".format(
         base=base,
         filename=filename,
         size="x".join(map(str, size)),
         ext=ext
-
     )
+
+    if isfile(path.replace('/media', settings.MEDIA_ROOT)):
+        return path
+    else:
+        return img.url
