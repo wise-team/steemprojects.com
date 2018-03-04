@@ -35,6 +35,7 @@ whitenoise==3.2.2
 Pillow==4.2.1
 rocketchat-API==0.6.3
 markdown==2.6.11
+python-dotenv==0.8.0
 
 # Redis support
 django-redis==4.6.0

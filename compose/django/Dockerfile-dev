@@ -17,8 +17,6 @@ RUN pip install steem
 RUN pip install -r /requirements.txt
 
 RUN apt-get install -y ruby-dev rubygems
-RUN apt-get install -y cron
-
 RUN gem install sass
 
 COPY ./compose/django/entrypoint.sh /entrypoint.sh
@@ -28,12 +26,6 @@ RUN chmod +x /entrypoint.sh
 COPY ./compose/django/start-dev.sh /start-dev.sh
 RUN sed -i 's/\r//' /start-dev.sh
 RUN chmod +x /start-dev.sh
-
-COPY ./compose/django/start-cron-dev.sh /start-cron-dev.sh
-RUN chmod +x /start-cron-dev.sh
-
-COPY ./compose/django/cron.sh /cron.sh
-RUN chmod +x /cron.sh
 
 WORKDIR /app
 

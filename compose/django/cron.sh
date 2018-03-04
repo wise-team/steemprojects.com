@@ -1,6 +1,5 @@
-set -a
-. /app/.env.local
-set +a
+#!/bin/bash
 
-/usr/local/bin/chroniker -p /app/ -s settings.test
-#python /app/manage.py cron 
+source /etc/profile
+source /tmp/env
+/entrypoint.sh python /app/manage.py cron >> /app/cron-logs 2>&1

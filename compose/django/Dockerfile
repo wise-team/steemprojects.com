@@ -19,7 +19,7 @@ RUN pip install -r /requirements.txt \
     && useradd -m -r -g django django
 
 RUN apt-get install -y ruby-dev rubygems
-RUN apt-get install -y cron
+RUN apt-get install -y cron rsyslog
 
 RUN gem install sass
 
@@ -35,8 +35,13 @@ RUN sed -i 's/\r//' /start.sh \
     && chmod +x /start.sh \
     && chown django /start.sh
 
-ADD chroniker_crontab /etc/cron.d/chroniker-cron
-RUN chmod 0644 /etc/cron.d/chroniker-cron
+COPY ./compose/django/configure_and_run_cron.sh /configure_and_run_cron.sh
+RUN chmod +x /configure_and_run_cron.sh \
+    && chown django /configure_and_run_cron.sh
+
+COPY ./compose/django/cron.sh /cron.sh
+RUN chmod +x /cron.sh \
+    && chown django /cron.sh
 
 WORKDIR /app
 
