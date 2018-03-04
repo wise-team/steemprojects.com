@@ -46,5 +46,18 @@ services:
     command: /start.sh
     env_file: .env
 
+  django-chroniker:
+    build:
+      context: .
+      dockerfile: ./compose/django/Dockerfile
+    command: /configure_and_run_cron.sh
+    depends_on:
+      - postgres
+      - redis
+    links:
+      - postgres
+    env_file:
+      - .env
+
   redis:
     build: ./compose/redis

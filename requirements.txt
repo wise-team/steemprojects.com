@@ -3,6 +3,7 @@ chardet==2.3.0
 coverage==4.3.4
 Django==1.11 # pyup: >=1.11,<2.0
 django-braces==1.9.0
+django-chroniker==1.0.10
 django-crispy-forms==1.6.1
 django-debug-toolbar==1.5
 django-environ==0.4.0
@@ -34,6 +35,7 @@ whitenoise==3.2.2
 Pillow==4.2.1
 rocketchat-API==0.6.3
 markdown==2.6.11
+python-dotenv==0.8.0
 
 # Redis support
 django-redis==4.6.0

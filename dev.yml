@@ -30,6 +30,3 @@ services:
       - postgres
     env_file:
       - .env.local
-
-  redis:
-    build: ./compose/redis
