@@ -123,6 +123,7 @@ TEMPLATES = [
                 'social_django.context_processors.login_redirect',
                 "core.context_processors.core_values",
                 "core.context_processors.google_analytics",
+                "dynamic_preferences.processors.global_preferences",
             ],
         },
     },
@@ -165,7 +166,7 @@ PREREQ_APPS = [
     'floppyforms',
     'rest_framework',
     'chroniker',
-
+    'dynamic_preferences',
 ]
 
 INSTALLED_APPS = PREREQ_APPS + PROJECT_APPS

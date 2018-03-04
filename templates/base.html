@@ -29,6 +29,7 @@
     <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico" />
     {% block extra_head %}{% endblock %}
 </head>
+{% if global_preferences.general__released or request.user.is_superuser %}
 <body class="{% block body_class %}{% endblock %}" ng-controller="SearchCtrl" ng-init="init_search('{{ request.GET.q }}', '{% url 'apiv4:searchv2-list' %}', {{ MAX_WEIGHT }})">
 
 {% block messages %}
@@ -196,5 +197,10 @@
 
     {{ PIWIK_CODE|safe }}
 </body>
+{% else %} {# else of if global_preferences.general__released #}
+    <body>
+        <img src="{{ STATIC_URL }}/img/noreleased.png" style="width: 100%">
+    </body>
+{% endif %}
 </html>
 {% endspaceless %}

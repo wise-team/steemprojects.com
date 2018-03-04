@@ -21,7 +21,6 @@ services:
     command: /start-dev.sh
     depends_on:
       - postgres
-      - redis
     volumes:
       - .:/app
     ports:

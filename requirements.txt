@@ -13,6 +13,7 @@ django-jsonview>=0.4.2
 dj-pagination==2.2.1
 django-reversion==2.0.8
 django-secure==1.0.1
+django-dynamic-preferences==1.5
 webstack-django-sorting==1.0.1
 django-storages==1.5.1
 djangorestframework==3.4.0
