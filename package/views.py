@@ -1,5 +1,6 @@
 import importlib
 import json
+from datetime import timedelta
 
 from django.conf import settings
 from django.contrib import messages
@@ -16,7 +17,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 from grid.models import Grid
-from homepage.models import Dpotw, Gotw
 from package.forms import PackageForm, PackageExampleForm, DocumentationForm, ProjectImagesFormSet
 from package.models import Category, Project, PackageExample, ProjectImage, TeamMembership
 from package.repos import get_all_repos
@@ -464,9 +464,18 @@ def package_detail(request, slug, template_name="package/package.html"):
 
     can_edit_package = hasattr(request.user, "profile") and request.user.profile.can_edit_package(package)
 
+    events_on_timeline = 5
+    timeline_events = package.events.order_by('date')
+    timeline_events_reversed = package.events.order_by('-date')
+    timeline_axis_end = timeline_events_reversed.first()
+    timeline_axis_start = timeline_events_reversed[events_on_timeline-1] if timeline_events.count() > events_on_timeline else timeline_events[0]
+
     return render(request, template_name,
             dict(
                 package=package,
+                timeline_events=timeline_events,
+                timeline_axis_start=timeline_axis_start.date - timedelta(30),
+                timeline_axis_end=timeline_axis_end.date + timedelta(30),
                 project_imgs=[pi.img for pi in proj_imgs],
                 pypi_ancient=pypi_ancient,
                 no_development=no_development,

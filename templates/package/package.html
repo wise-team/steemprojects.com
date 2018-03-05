@@ -103,7 +103,7 @@
                     {% if membership.role_confirmed_by_account != False %}
                     <div class="contributor team-member">
                         <img class="img-circle" src="{{ membership.account.avatar_medium }}">
-                        <a class="name" href="{{ membership.account.profile_page }}">{{ membership.account.name }}</a> - {{ membership.role }}
+                        <a class="name" href="{{ membership.account.profile_page }}">{{ membership.account.name }}</a> - {{ membership.role|title }}
                         {% if membership.role_confirmed_by_account == None %}
                             <span class="role-panel">
                             {% if request.user == membership.account.profile.user %}
@@ -220,7 +220,7 @@
             var container = document.getElementById('timeline');
 
             var items = new vis.DataSet([
-            {% for event in package.events.all %}
+            {% for event in timeline_events %}
                 {
                     id: {{ forloop.counter }},
                     content: '<div class="event-date">{{ event.date}}</div><a href="{{ event.url}}" target="_blank">{{ event.name}}</a>',
@@ -232,6 +232,8 @@
                 //align: 'left',
                 min: new Date(2016, 3, 1),
                 max: new Date(Date.now() + 1000*60*60*24*31), // next month
+                start: '{{ timeline_axis_start|date:"c" }}',
+                end: '{{ timeline_axis_end|date:"c" }}',
                 showCurrentTime: false
             };
 

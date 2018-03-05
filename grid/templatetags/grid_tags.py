@@ -21,8 +21,10 @@ minus_three_re = re.compile(r'^(\-[3-9]{1,}|\-{3,}|\-[1-9][0-9]+)$')
 
 YES_KEYWORDS = ('check', 'yes', 'good', '+1', '+')
 NO_KEYWORDS = ('bad', 'negative', 'evil', 'sucks', 'no', '-1', '-')
+NOINFO_KEYWORDS = ('noinfo', '?')
 YES_IMG = '<span class="glyphicon glyphicon-ok"></span>'
 NO_IMG = '<span class="glyphicon glyphicon-remove"></span>'
+NOINFO_IMG = '<span class="glyphicon glyphicon-question-sign"></span>'
 
 
 @register.filter
@@ -32,6 +34,8 @@ def style_element(text):
         return YES_IMG
     if low_text in NO_KEYWORDS:
         return NO_IMG
+    if low_text in NOINFO_KEYWORDS:
+        return NOINFO_IMG
 
     if plus_two_re.search(low_text):
         return YES_IMG * 2
@@ -53,11 +57,20 @@ def style_element(text):
             text = '%s&nbsp;%s' % (YES_IMG, text[len(positive):])
             found = True
             break
+
+    if not found:
+        for noinfo in NOINFO_KEYWORDS:
+            if text.startswith(noinfo):
+                text = '%s&nbsp;%s' % (NOINFO_IMG, text[len(noinfo):])
+                found = True
+                break
+
     if not found:
         for negative in NO_KEYWORDS:
             if text.startswith(negative):
                 text = '%s&nbsp;%s' % (NO_IMG, text[len(negative):])
                 break
+
 
     return text
 

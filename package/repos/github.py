@@ -33,7 +33,7 @@ class GitHubHandler(BaseHandler):
         if repo_name.endswith("/"):
             repo_name = repo_name[:-1]
         try:
-            username, repo_name = package.repo_name().split('/')
+            username, repo_name = repo_name.split('/')
         except ValueError:
             return None
         return self.github.repository(username, repo_name)

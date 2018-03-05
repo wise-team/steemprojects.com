@@ -173,7 +173,7 @@
                     <tr class="{% cycle 'even' 'odd' %}">
                         <td>
                             <div class="m-grid__feature-title">{{ feature.title }}</div>
-                            <div class="m-grid__feature-description">{{ feature.description|wordwrap:40|linebreaksbr }}</div>
+                            <div class="m-grid__feature-description">{{ feature.description|wordwrap:50|linebreaksbr }}</div>
                         </td>
                         {% for grid_package in grid_packages %}
                             {% with elements|hash:feature.pk|hash:grid_package.pk as element %}
