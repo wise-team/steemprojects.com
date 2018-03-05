@@ -232,8 +232,10 @@
                 //align: 'left',
                 min: new Date(2016, 3, 1),
                 max: new Date(Date.now() + 1000*60*60*24*31), // next month
-                start: '{{ timeline_axis_start|date:"c" }}',
-                end: '{{ timeline_axis_end|date:"c" }}',
+                {% if timeline_axis_start and timeline_axis_end %}
+                    start: '{{ timeline_axis_start|date:"c" }}',
+                    end: '{{ timeline_axis_end|date:"c" }}',
+                {% endif %}
                 showCurrentTime: false
             };
 

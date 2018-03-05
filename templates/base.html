@@ -157,7 +157,6 @@
         <table class="table">
           <thead>
             <tr>
-              <th>{% trans "Reputation" %}</th>
               <th>{% trans "Project" %}</th>
               <th>{% trans "Description" %}</th>
             </tr>
@@ -165,7 +164,6 @@
           <tbody>
                 {% verbatim %}
                 <tr ng-repeat="item in items">
-                  <td>{{ item.weight / max_weight * 100 | number:0 }}</td>
                   <td>
                       <a ng-href="{{ item.absolute_url }}">{{ item.title }}</a>
                   </td>
