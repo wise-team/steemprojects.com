@@ -1,3 +1,4 @@
+from time import sleep
 from abc import ABCMeta, abstractmethod
 from textwrap import dedent
 from steem.blog import Blog
@@ -88,6 +89,7 @@ class SteemPostService(RulebookService):
                     event.save()
                     if self.rulebook.notify:
                         self.notify(post)
+                        sleep(20)
 
                     yield event
 
