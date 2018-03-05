@@ -1,6 +1,7 @@
 import logging
 import logging.config
 from time import sleep
+from chroniker.models import Job
 
 from django.conf import settings
 
@@ -37,7 +38,9 @@ class Command(NoArgsCommand):
 
         github = github_login(token=settings.GITHUB_TOKEN)
 
+        projects_count = Project.objects.count()
         for index, package in enumerate(Project.objects.iterator()):
+            Job.update_progress(total_parts=projects_count, total_parts_complete=index)
             logging.info("{} ...".format(package.name))
             print("{} ...".format(package.name))
 
@@ -57,11 +60,3 @@ class Command(NoArgsCommand):
                 pass  # We've already caught the error so let's move on now
 
             sleep(5)
-
-        message = "TODO - load logfile here"  # TODO
-        send_mail(
-            subject="Package Updating complete",
-            message=message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[x[1] for x in settings.ADMINS]
-        )
