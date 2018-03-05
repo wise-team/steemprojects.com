@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block body %}
-    {% cache 300 html_grid_detail_outer grid.pk %}
+{#    {% cache 1 html_grid_detail_outer grid.pk %}#}
     <div class="row">
         <div class="col-sm-6 col-lg-6 title-row m-title-panel">
             <h1 class="m-title-panel__title"><span class="m-title-panel__icon m-title-panel__icon--compare"></span>Compare {{ grid.title|lower }}</h1>
@@ -46,6 +46,12 @@
                     <td>{% trans "Category" %}</td>
                     {% for grid_package in grid_packages %}
                         <td>{{ grid_package.package.category }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>{% trans "Project Website" %}</td>
+                    {% for grid_package in grid_packages %}
+                        <td><a href="{{ grid_package.package.url }}" target="_blank">{{ grid_package.package.url }}</a></td>
                     {% endfor %}
                 </tr>
                 {% comment %}
@@ -85,23 +91,51 @@
                 </tr>
                 {% endcomment %}
                 <tr>
-                    <td>{% trans "Code repository" %}</td>
+                    <td>
+                        <div class="m-grid__feature-title">{% trans "Code repository" %}</div>
+                        <div class="m-grid__feature-description">
+                            <a href="https://www.youtube.com/watch?v=1ehpgbb3XD0" target="_blank">Learn why being open-source is important</a>
+                        </div>
+                    </td>
                     {% for grid_package in grid_packages %}
                         <td>
                             {% if grid_package.package.repo_url %}
-                                <a href="{{ grid_package.package.repo_url }}">{{ grid_package.package.repo }}</a>
+                                {{ "yes"|style_element|safe }}<br>
+                                {{ grid_package.package.repo_url|safe|urlize }}
                             {% else %}
+                                {{ "no"|style_element|safe }}<br>
                                 This project is not open-source :(
                             {% endif %}
                         </td>
                     {% endfor %}
                 </tr>
+{#                <tr>#}
+{#                    <td>#}
+{#                        <div class="m-grid__feature-title">{% trans "Contributors" %}</div>#}
+{#                        <div class="m-grid__feature-description">#}
+{#                            {{ "Volunteers which are officially not in the team, but helped because they wanted. Very often this is possible only if project is open-source."|wordwrap:60|linebreaksbr }}#}
+{#                        </div>#}
+{#                    </td>#}
+{#                    {% for grid_package in grid_packages %}#}
+{#                        <td>#}
+{#                            {% for contributor in package.not_team_contributors|slice:"10" %}#}
+{#                                <div class="contributor">#}
+{#                                    <img class="img-circle" src="{{ contributor.avatar_small }}">#}
+{#                                    <a class="name" href="{{ contributor.profile_page }}">{{ contributor.name }}</a>#}
+{#                                </div>#}
+{#                            {% endfor %}#}
+{#                        </td>#}
+{#                    {% endfor %}#}
+{#                </tr>#}
                 <tr>
-                    <td>{% trans "Development" %}</td>
+                    <td>
+                        <div class="m-grid__feature-title">{% trans "Development" %}</div>
+                        <div class="m-grid__feature-description">Graph which illustrate rate of development</div>
+                    </td>
                     {% for grid_package in grid_packages %}
                         <td>
                             {% if grid_package.package.repo_url %}
-                                <img class="package-githubcommits"
+                                <img class="package-githubcommits" style="padding: 7px 0"
                                      src="https://chart.googleapis.com/chart?cht=bvg&chs=105x20&chd=t:{{ grid_package.package|commits_over_52 }}&chco=666666&chbh=1,1,1&chds=0,20"
                                 />
                             {% endif %}
@@ -137,7 +171,10 @@
 
                 {% for feature in features %}
                     <tr class="{% cycle 'even' 'odd' %}">
-                        <td>{{ feature.title }}</td>
+                        <td>
+                            <div class="m-grid__feature-title">{{ feature.title }}</div>
+                            <div class="m-grid__feature-description">{{ feature.description|wordwrap:40|linebreaksbr }}</div>
+                        </td>
                         {% for grid_package in grid_packages %}
                             {% with elements|hash:feature.pk|hash:grid_package.pk as element %}
 
@@ -159,5 +196,5 @@
     {% endif %}
 
     </div>
-    {% endcache %}
+{#    {% endcache %}#}
 {% endblock %}

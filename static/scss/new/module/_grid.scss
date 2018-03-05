@@ -33,4 +33,12 @@
         border: none;
         border-bottom: 1px solid $base-table-border-color;
     }
+
+    &__feature-title {
+
+    }
+    &__feature-description {
+        font-size: 12px;
+        color: $second-font-color;
+    }
 }
