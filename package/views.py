@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.core.mail import mail_managers
 from django.core.urlresolvers import reverse
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Case, When
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
@@ -268,7 +268,7 @@ def category(request, slug, template_name="package/package_grid.html"):
         'categories': [
             {
                 "title_plural": category_.title_plural,
-                "count": category_.project_set.count(),
+                "count": category_.project_set.published().count(),
                 "description": category_.description,
                 "packages": category_.project_set.published().select_related().annotate(usage_count=Count("usage"))
             }
@@ -394,11 +394,13 @@ def package_list(request, template_name="package/package_grid.html"):
         'categories': [
             {
                 "title_plural": category.title_plural,
-                "count": category.package_count,
+                "count": category.project_count,
                 "description": category.description,
-                "packages": category.project_set.order_by("-repo_watchers", "name")
+                "packages": category.project_set.published().order_by("-repo_watchers", "name")
             }
-            for category in Category.objects.annotate(package_count=Count("project"))
+            for category in Category.objects.annotate(
+                project_count=Count(Case(When(project__is_published=True, then=1)))
+            )
         ]
     }
 
