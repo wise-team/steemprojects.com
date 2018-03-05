@@ -35,6 +35,7 @@ def get_feed():
 def homepage(request, template_name="homepage.html"):
 
     categories = []
+    last_category = None
     for category in Category.objects.annotate(
         project_count=Count(Case(When(project__is_published=True, then=1)))
     ):
@@ -45,7 +46,14 @@ def homepage(request, template_name="homepage.html"):
             "slug": category.slug,
             "title_plural": category.title_plural,
         }
-        categories.append(element)
+
+        if element["title"] == "Other":
+            last_category = element
+        else:
+            categories.append(element)
+
+    if last_category:
+        categories.append(last_category)
 
     # get up to 5 random packages
     package_count = Project.objects.count()

@@ -542,3 +542,7 @@ assert all(
         for x, y in PROJECT_IMAGE_THUMBNAIL_SIZES
     ]
 ), "Make sure, that all PROJECT_IMAGE_THUMBNAIL_SIZES math defined ratio"
+
+CHRONIKER_CHECK_LOCK_FILE = False
+CHRONIKER_DISABLE_RAW_COMMAND = True
+CHRONIKER_EMAIL_SENDER = 'Chroniker'

@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-
+from chroniker.models import Job
 from timeline.models import TimelineEventInserterRulebook
 
 
@@ -10,12 +10,21 @@ class Command(BaseCommand):
         events_counter = 0
         rulebooks_counter = 0
 
-        for rulebook in TimelineEventInserterRulebook.objects.all():
+        rulebooks = TimelineEventInserterRulebook.objects.all()
+        rulebooks_count = rulebooks.count()
+        for rulebook in rulebooks.order_by('project'):
+            print("Project: {}, Rulebook: {}".format(rulebook.project, rulebook.name))
+            Job.update_progress(total_parts=rulebooks_count, total_parts_complete=rulebooks_counter)
+
+            for event in rulebook.fetch_new_events():
+                events_counter += 1
+                print("\t[{}][{}] {}".format(str(event.project), str(event.date), event.name))
+                print("\t{}\n".format(event.url))
+
             rulebooks_counter += 1
 
-            events = rulebook.fetch_new_events()
-            events_counter += len(list(events))
-
-        print("Stats: {} new TimelineEvents were created thanks to rules in {} rulebooks".format(
-            events_counter, rulebooks_counter)
+        print(
+            "\nStats: {} new TimelineEvents were created thanks to rules in {} rulebooks".format(
+                events_counter, rulebooks_counter
+            )
         )
