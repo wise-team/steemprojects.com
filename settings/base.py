@@ -233,8 +233,8 @@ STEEMCONNECT_APP_ID = environ.get('STEEMCONNECT_APP_ID')
 STEEMCONNECT_APP_SECRET = environ.get('STEEMCONNECT_APP_SECRET')
 
 ########################## Site specific stuff
-FRAMEWORK_NAME = "Steem"
-SITE_TITLE = "Steem Projects"
+SITE_TITLE = environ.get('SITE_TITLE', 'Steem Projects')
+FRAMEWORK_NAME = environ.get('FRAMEWORK_NAME', 'Steem')
 
 if LOCAL_INSTALLED_APPS:
     INSTALLED_APPS.extend(LOCAL_INSTALLED_APPS)

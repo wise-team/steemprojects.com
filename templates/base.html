@@ -197,7 +197,7 @@
 </body>
 {% else %} {# else of if global_preferences.general__released #}
     <body>
-        <img src="{{ STATIC_URL }}/img/noreleased.png" style="width: 100%">
+        <img src="{{ STATIC_URL }}img/noreleased_{{ FRAMEWORK_NAME|lower }}.png" style="width: 100%">
     </body>
 {% endif %}
 </html>
