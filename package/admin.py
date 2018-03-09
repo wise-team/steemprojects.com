@@ -52,6 +52,7 @@ class PackageAdmin(VersionAdmin):
                 "is_published",
                 "publication_time",
                 "is_awaiting_approval",
+                "approval_request_datetime",
             )
         }),
         ("Pulled data", {
