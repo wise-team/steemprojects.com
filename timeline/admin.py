@@ -19,7 +19,7 @@ class TimelineEventInserterRuleAdmin(VersionAdmin):
 
 def run_rulebook(modeladmin, request, queryset):
     for rulebook in queryset.all():
-        rulebook.fetch_new_events()
+        list(rulebook.fetch_new_events())  # to fire generator
 
 
 run_rulebook.short_description = "Run selected rulebooks"
