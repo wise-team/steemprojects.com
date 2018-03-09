@@ -80,10 +80,10 @@
         {% endif %}
         {% if package.grids|length %}
             <div class="grids">
-                <h3>Comparision grids</h3>
+                <h3>Comparison grids</h3>
                 <div>
                 {% for grid in package.grids %}
-                    <a href="{% url 'grid' grid.slug %}" title="{{ grid.description }}">{{ grid }}</a> &nbsp;- test
+                    <a href="{% url 'grid' grid.slug %}" title="{{ grid.description }}">{{ grid }}</a>{% if not forloop.last %}<br> {% endif %}
                 {% endfor %}
                 </div>
             </div>
