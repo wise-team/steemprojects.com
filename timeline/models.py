@@ -17,7 +17,7 @@ class TimelineEvent(BaseModel):
     date = models.DateField(blank=False, null=False, default=timezone.now)
     project = models.ForeignKey(Project, related_name="events")
     added_by = models.ForeignKey(Profile, default=None, null=True)
-    ruleset = models.ForeignKey("TimelineEventInserterRulebook", default=None, null=True)
+    ruleset = models.ForeignKey("TimelineEventInserterRulebook", default=None, null=True, on_delete=models.SET_NULL)
 
     def save(self, *args, **kwargs):
         return super(TimelineEvent, self).save(*args, **kwargs)
@@ -60,7 +60,7 @@ class TimelineEventInserterRulebook(models.Model):
     @property
     def name(self):
         return ", ".join([
-            str(r) if index == 0 else str(r).lower() for index, r in enumerate(self.rules.all())
+            str(r) if index == 0 else str(r)[:1].lower() + str(r)[1:] for index, r in enumerate(self.rules.all())
         ])
 
     service_type = models.CharField(choices=SERVICE_TYPES, max_length=64)

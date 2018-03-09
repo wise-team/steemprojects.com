@@ -44,13 +44,18 @@
     {% endfor %}
 
 
-    {% for project in projects_to_approve %}
+    {% if projects_to_approve|length > 0 %}
         <div class="m-messagebar m-messagebar--info" data-stick="true">
             <div class="container">
-                Project <a href="{% url 'package' project.slug %}">{{ project.name }}</a> is waiting for approval.
+                Projects waiting for approval:
+                {% for project in projects_to_approve %}
+                    <a href="{% url 'package' project.slug %}">{{ project.name }}</a>
+                    {% if not forloop.last %}, {% endif %}
+                {% endfor %}
             </div>
         </div>
-    {% endfor %}
+    {% endif %}
+
 {% endblock %}
 
 <div class="header">
