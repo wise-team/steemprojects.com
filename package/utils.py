@@ -93,7 +93,7 @@ def prepare_thumbnails(image_path):
     logger.info("Thumbnail {}".format(thumbnail_path))
 
     shrinked_thumbnails = [
-        croped_thumbnail.resize(thumb_size)
+        croped_thumbnail.resize(thumb_size, Image.ANTIALIAS)
         for thumb_size in settings.PROJECT_IMAGE_THUMBNAIL_SIZES
         if thumb_size[0] < croped_thumbnail.size[0]
     ]
