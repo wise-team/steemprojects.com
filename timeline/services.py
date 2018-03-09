@@ -5,7 +5,7 @@ from steembase.exceptions import RPCError
 
 from profiles.models import AccountType
 from timeline.forms import TimelineEventForm
-from timeline.models import TimelineEventInserterRule, TimelineEventInserterRulebook
+from timeline.models import TimelineEventInserterRule, TimelineEventInserterRulebook, TimelineEvent
 from timeline import rules as rules_module
 from datetime import datetime
 
@@ -64,7 +64,12 @@ class SteemPostService(RulebookService):
             "project": project.id,
         })
 
-        return form.instance if form.is_valid() else None
+        if form.is_valid():
+            te = form.instance
+            if not TimelineEvent.objects.filter(url=te.url, project=te.project).exists():
+                return te
+
+        return None
 
     def get_new_events(self):
         try:
