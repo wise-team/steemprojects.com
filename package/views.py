@@ -1,5 +1,6 @@
 import importlib
 import json
+from datetime import timedelta, datetime
 
 from django.conf import settings
 from django.contrib import messages
@@ -159,6 +160,8 @@ def project_approval(request, slug, action):
 
     project = get_object_or_404(Project, slug=slug)
     project.is_awaiting_approval = action == 'request'
+    project.approval_request_datetime = datetime.now()
+
     project.save()
 
     if action == 'request':
