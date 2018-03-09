@@ -17,9 +17,19 @@ class TimelineEventInserterRuleAdmin(VersionAdmin):
         return obj.rulebook.project
 
 
+def run_rulebook(modeladmin, request, queryset):
+    for rulebook in queryset.all():
+        rulebook.fetch_new_events()
+
+
+run_rulebook.short_description = "Run selected rulebooks"
+
+
 class TimelineEventInserterRulebookAdmin(VersionAdmin):
-    list_display = ("project", "service_type", "last", "rules_counter")
+    list_display = ("project", "service_type", "last", "rules_counter", "name")
     list_filter = ("project", "id")
+    search_fields = ("project__name",)
+    actions = [run_rulebook]
 
     def rules_counter(self, obj):
         return obj.rules.count()
