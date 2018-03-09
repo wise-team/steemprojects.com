@@ -204,7 +204,7 @@ class Project(BaseModel):
 
     def grids(self):
 
-        return (x.grid for x in self.gridpackage_set.all())
+        return [x.grid for x in self.gridpackage_set.all()]
 
     def repo_name(self):
         return re.sub(self.repo.url_regex, '', self.repo_url)
