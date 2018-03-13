@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}Contributing to {{ SITE_TITLE }}{% endblock %}
+
+{% block body %}
+
+<h2>Contributing to {{ SITE_TITLE }}</h2>
+
+<p>
+This website can be up to date only with strong community support. If you wish to help or show your gratitude, there are plenty of ways in which you can do that:
+    <ul>
+        <li>Make sure that entries about your favorites projects are in the good shape, edit them if they don't</li>
+        <li>If your favorite project is not listed, you can help by adding it. <a href="https://steemit.com/utopian-io/@noisy/pre-release-tutorial-how-to-add-edit-a-project-on-steemprojects-com" target="_blank">Here is guideline which says how to do that properly</a>.</li>
+        <li>Did you found a bug? If it is not listed <a href="{{ PROJECT_GITHUB_REPOSITORY_URL }}/issues" target="_blank">on our github</a>, please let us know about it!</li>
+        <li>Do you own a {{ FRAMEWORK_NAME }}-related project? Add a signature to your post about a possibility of adding your project to user's favourite projects.</li>
+        <li>Add {{ SITE_TITLE }} to your favorite projects :)</li>
+        <li>Follow our team-members on Steemit:<br>
+            <ul>
+                {% for m in membership_in_this_project %}
+                    <li><a href="{{ m.account.thirdparty_profile_page }}">@{{ m.account.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li>Send a generous donation to our <a href="https://steemit.com/@eosprojects">@eosprojects</a> account :)</li>
+        <li>Share a link to {{ SITE_TITLE }} every time you would like to show how active our community is.</li>
+    </ul>
+</p>
+
+{% endblock body %}

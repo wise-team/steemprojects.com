@@ -52,9 +52,9 @@ urlpatterns = [
     url(
         r"^contribute/$",
         StaticPageView.as_view(
-            template_name='pages/contribute.html',
+            template_name='pages/contribute_{}.html'.format(settings.FRAMEWORK_NAME.lower()),
             context={
-                "membership_in_steemprojects": TeamMembership.objects.filter(project__name="Steem Projects"),
+                "membership_in_this_project": TeamMembership.objects.filter(project__name=settings.SITE_TITLE),
             },
         ),
 
