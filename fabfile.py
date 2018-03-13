@@ -115,7 +115,7 @@ def deploy(branch="master"):
         ENV.run("git checkout -f origin/{} -b {}".format(branch, deployment_branch))
 
         _build_and_restart("django-a")
-        time.sleep(60)
+        time.sleep(10)
 
         # just to make sure they are on
         docker_compose("start postgres")

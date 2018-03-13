@@ -22,7 +22,7 @@
     {% endif %}
     <p id="package-form-message"></p>
 
-    <form action="{{ request.path }}" method="post" id="package-form">
+    <form id="package-form" class="m-project-form" action="{{ request.path }}" method="post">
         <div class="row">
             <div class="col-sm-12">
                 {{ form.errors }}
@@ -68,14 +68,14 @@
         </div>
         <div id="tm-forms">
             <div class="row">
-                {{ formset.management_form }}
+                {{ tmformset.management_form }}
                 <div class="col-sm-1">
                     <div class="field-label" style="margin-top: 5px">
                         Team Members
                     </div>
                 </div>
                 <div class="col-sm-7">
-                    {% for form in formset %}
+                    {% for form in tmformset %}
                         <div class="tm-form">
                             {% if form.is_initialized %}
                                 <div style="display: none">
@@ -95,7 +95,7 @@
                     {% endfor %}
                 </div>
             </div>
-            {% for form in formset %}
+            {% for form in tmformset %}
                 <div class="tm-form">
                     {% if not form.is_initialized %}
                         <div class="row contributor team-member form">
@@ -153,24 +153,84 @@
                 {{ form.category.help_text|safe }}
             </div>
         </div>
+
+        <div id="sl-forms">
+            <div class="row">
+                {{ slformset.management_form }}
+                <div class="col-sm-1">
+                    <div class="field-label" style="margin-top: 5px">
+                        Social Links
+                    </div>
+                </div>
+            </div>
+
+            {% for form in slformset %}
+            <div class="slform">
+                <div class="row social-link form">
+                    <div class="col-sm-1">
+                        <span class="slform__label slform__label--left">{{ form.type.label }}<span class="slform__required">*</span></span>
+                    </div>
+                    <div class="col-sm-11">
+                        <span class="slform__field slform__field--type">{{ form.type }}</span>
+                        <span class="slform__label">{{ form.url.label }}<span class="slform__required">*</span></span>
+                        <span class="slform__field slform__field--url">{{ form.url }}</span>
+                        <span class="rm-btn sl-form"><i class="icon-close"></i>Remove</span>
+                        <span style="display: none;">{{ form.id }}{{ form.project }}{{ form.DELETE }}</span>
+                    </div>
+                    {{ form.errors }}
+                    {% if form.non_field_errors %}
+                        <ul>
+                            {{ form.non_field_errors.as_ul }}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <div id="empty-slform" style="display: none;">
+                <div class="slform">
+                    <div class="row social-link form">
+
+                        <div class="col-sm-1">
+                            <span class="slform__label slform__label--left">{{ slformset.empty_form.type.label }}<span class="slform__required">*</span></span>
+                        </div>
+                        <div class="col-sm-11">
+                            <span class="slform__field slform__field--type">{{ slformset.empty_form.type }}</span>
+                            <span class="slform__label">{{ slformset.empty_form.url.label }}<span class="slform__required">*</span></span>
+                            <span class="slform__field slform__field--url">{{ slformset.empty_form.url }}</span>
+                            <span class="rm-btn sl-form"><i class="icon-close"></i>Remove</span>
+                            <span style="display: none;">{{ slformset.empty_form.id }}{{ slformset.empty_form.project }}{{ slformset.empty_form.DELETE }}</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-1 col-sm-offset-1">
+                <div id="slformset-add-new-form-btn" class="m-btn m-btn--small">Add a social link</div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-1 col-sm-offset-1">
                 <input class="m-btn m-btn--inverse" type="submit" name="add" value="Save {% if package.is_draft %}draft{% else %}project{% endif %}">
             </div>
         </div>
+
     </form>
     <div id="empty-form" style="display: none;">
         <div class="tm-form">
             <div class="row contributor team-member form">
                 <div class="col-sm-1">
-                    <span class="field-label">{{ formset.empty_form.account_name.label }}<span class="required">*</span></span>
+                    <span class="field-label">{{ tmformset.empty_form.account_name.label }}<span class="required">*</span></span>
                 </div>
                 <div class="col-sm-11">
-                    <span class="field account-name">{{ formset.empty_form.account_name }}</span>
-                    <span class="field-label">{{ formset.empty_form.account_type.label }}<span class="required">*</span></span>
-                    <span class="field account-type">{{ formset.empty_form.account_type }}</span>
-                    <span class="field-label">{{ formset.empty_form.role.label }}<span class="required">*</span></span>
-                    <span class="field role">{{ formset.empty_form.role }}</span>
+                    <span class="field account-name">{{ tmformset.empty_form.account_name }}</span>
+                    <span class="field-label">{{ tmformset.empty_form.account_type.label }}<span class="required">*</span></span>
+                    <span class="field account-type">{{ tmformset.empty_form.account_type }}</span>
+                    <span class="field-label">{{ tmformset.empty_form.role.label }}<span class="required">*</span></span>
+                    <span class="field role">{{ tmformset.empty_form.role }}</span>
                     <span class="rm-btn tm-form"><i class="icon-close"></i>Remove</span>
                 </div>
             </div>
@@ -202,6 +262,7 @@
         $('.rm-btn.tm-entry').click(rmEntry);
         $('.rm-btn.tm-form').click(rmForm);
 
+
         $('#formset-add-new-form-btn').click(function (event) {
             var total_forms = $('#id_form-TOTAL_FORMS');
             var form_idx = total_forms.val();
@@ -210,6 +271,27 @@
             new_form.find('.rm-btn.tm-form').click(rmForm);
             total_forms.val(parseInt(form_idx) + 1);
         });
+
+        //------------------------------------------------------------------------------
+
+
+        var rmSLForm = function(event) {
+            var sl = $(event.target).closest('.social-link');
+            sl.find('input[type=checkbox]').prop('checked', true);
+            sl.hide();
+        };
+
+        $('#slformset-add-new-form-btn').click(function (event) {
+            var total_forms = $('#id_slform-TOTAL_FORMS');
+            var form_idx = total_forms.val();
+            var new_form = $($('#empty-slform').html().replace(/__prefix__/g, form_idx));
+            $('#sl-forms').append(new_form);
+            new_form.find('.rm-btn.sl-form').click(rmSLForm);
+            total_forms.val(parseInt(form_idx) + 1);
+        });
+
+        $('.rm-btn.sl-form').click(rmSLForm);
+
     });
 
 </script>

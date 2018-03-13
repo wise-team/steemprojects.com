@@ -545,3 +545,30 @@ class Version(BaseModel):
 
     def __str__(self):
         return "%s: %s" % (self.package.name, self.number)
+
+
+class ProjectSocialLink(BaseModel):
+    NO_LINK = ""
+    TWITTER = "TWITTER"
+    FACEBOOK = "FACEBOOK"
+    TELEGRAM = "TELEGRAM"
+    REDDIT = "REDDIT"
+    MEDIUM = "MEDIUM"
+    YOUTUBE = "YOUTUBE"
+
+    LINK_TYPE_CHOICES = (
+        (NO_LINK, '----'),
+        (TWITTER, 'Twitter'),
+        (FACEBOOK, 'Facebook'),
+        (TELEGRAM, 'Telegram'),
+        (REDDIT, 'Reddit'),
+        (MEDIUM, 'Medium'),
+        (YOUTUBE, 'YouTube'),
+    )
+    url = models.URLField(_("URL"))
+    project = models.ForeignKey(Project, related_name='sociallinks')
+    type = models.CharField(max_length=16, choices=LINK_TYPE_CHOICES, default=NO_LINK)
+
+    class Meta:
+        unique_together = ("url", "project")
+

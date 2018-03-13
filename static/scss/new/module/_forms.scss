@@ -1,0 +1,38 @@
+.slform {
+
+    &__label {
+        height: 40px;
+        width: 80px;
+        //display: flex;
+        float: left;
+        text-align: right;
+        margin-top: 10px;
+        //padding-right: 15px;
+
+        &--left {
+            float: right;
+        }
+    }
+
+    &__required {
+        position: relative;
+        right: 0;
+        margin-left: 2px;
+    }
+
+    &__field {
+        float: left;
+
+        &--type select{
+            width: 100px;
+        }
+
+        &--url {
+            padding-left: 20px;
+
+            input{
+                width: 350px;
+            }
+        }
+    }
+}

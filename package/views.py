@@ -17,8 +17,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 from grid.models import Grid
-from package.forms import PackageForm, PackageExampleForm, DocumentationForm, ProjectImagesFormSet
-from package.models import Category, Project, PackageExample, ProjectImage, TeamMembership
+from package.forms import PackageForm, PackageExampleForm, DocumentationForm, ProjectImagesFormSet, \
+    ProjectSocialLinkFormSet
+from package.models import Category, Project, PackageExample, ProjectImage, TeamMembership, ProjectSocialLink
 from package.repos import get_all_repos
 from package.forms import TeamMembersFormSet
 from profiles.models import Account, AccountType
@@ -88,7 +89,7 @@ def edit_package(request, slug, template_name="package/package_form.html"):
 
     form = PackageForm(request.POST or None, instance=package)
 
-    initial = [
+    tminitial = [
         {
             'role': tm.role,
             'account_name': tm.account.name,
@@ -99,20 +100,23 @@ def edit_package(request, slug, template_name="package/package_form.html"):
         }
         for tm in package.teammembership_set.all()
     ]
+
     if request.POST:
-        formset = TeamMembersFormSet(request.POST)
+        tmformset = TeamMembersFormSet(request.POST)
+        slformset = ProjectSocialLinkFormSet(project=package, data=request.POST)
     else:
-        formset = TeamMembersFormSet(initial=initial)
+        tmformset = TeamMembersFormSet(initial=tminitial)
+        slformset = ProjectSocialLinkFormSet(project=package, queryset=ProjectSocialLink.objects.filter(project=package))
 
-    formset.extra = 0
+    tmformset.extra = 0
 
-    if form.is_valid() and formset.is_valid():
+    if form.is_valid() and tmformset.is_valid() and slformset.is_valid():
         modified_package = form.save()
         modified_package.last_modified_by = request.user
         modified_package.save()
         rebuild_project_search_index(modified_package)
 
-        for inlineform in formset:
+        for inlineform in tmformset:
             if hasattr(inlineform, 'cleaned_data') and inlineform.cleaned_data:
                 data = inlineform.cleaned_data
 
@@ -128,6 +132,8 @@ def edit_package(request, slug, template_name="package/package_form.html"):
                     membership.role = data['role']
                     membership.save()
 
+        slformset.save()
+
         if package.is_published:
             messages.add_message(request, messages.INFO, 'Project updated successfully')
 
@@ -135,7 +141,8 @@ def edit_package(request, slug, template_name="package/package_form.html"):
 
     return render(request, template_name, {
         "form": form,
-        "formset": formset,
+        "tmformset": tmformset,
+        "slformset": slformset,
         "package": package,
         "repo_data": repo_data_for_js(),
         "action": "Save",
@@ -490,7 +497,8 @@ def package_detail(request, slug, template_name="package/package.html"):
                 latest_version=package.last_released(),
                 repo=package.repo,
                 not_team_contributors=package.contributors.exclude(pk__in=all_github_accounts_of_teammambers),
-                can_edit_package=can_edit_package
+                can_edit_package=can_edit_package,
+                sociallinks=package.sociallinks.all(),
             )
         )
 

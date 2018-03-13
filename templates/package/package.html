@@ -88,6 +88,18 @@
                 </div>
             </div>
         {% endif %}
+        {% if package.sociallinks.all|length %}
+            <div class="m-sociallinks">
+                <h3>Social links</h3>
+                <div>
+                {% for sociallink in package.sociallinks.all %}
+                    <a href="{{ sociallink.url }}" target="_blank">
+                        <i class="m-sociallinks__icon m-sociallinks__icon--{{ sociallink.type|lower }}"></i>
+                    </a>
+                {% endfor %}
+                </div>
+            </div>
+        {% endif %}
     </div>
 
     <div class="col-sm-6 col-lg-4">

@@ -32,7 +32,16 @@ urlpatterns = [
     url(r"^health_check/$", health_check_view, name="health_check"),
     url(settings.ADMIN_URL_BASE, include(admin.site.urls)),
     url(r"^profiles/", include("profiles.urls")),
-    url(r"^@(?P<steem_account>[-\.\w]+)", lambda request, steem_account: redirect('steem_profile_detail', steem_account, permanent=True)),
+    url(
+        r"^@(?P<steem_account>[-\.\w]+)",
+        lambda request, steem_account: redirect('steem_profile_detail', steem_account, permanent=True),
+        name="steem_account_short"
+    ),
+    url(
+        r"^~(?P<slug>[-\.\w]+)",
+        lambda request, slug: redirect('package', slug, permanent=True),
+        name="project_short"
+    ),
     url(r"^projects/", include("package.urls")),
     url(r"^grids/", include("grid.urls")),
     url(r"^feeds/", include("feeds.urls")),

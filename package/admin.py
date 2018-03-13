@@ -9,11 +9,15 @@ from package.models import (
     ProjectImage,
     TeamMembership,
     Version,
-)
+    ProjectSocialLink)
 
 
 class PackageExampleInline(admin.TabularInline):
     model = PackageExample
+
+
+class ProjectSocialLinkInline(admin.TabularInline):
+    model = ProjectSocialLink
 
 
 class PackageAdmin(VersionAdmin):
@@ -30,6 +34,7 @@ class PackageAdmin(VersionAdmin):
     date_hierarchy = "created"
     inlines = [
         PackageExampleInline,
+        ProjectSocialLinkInline,
     ]
     fieldsets = (
         (None, {

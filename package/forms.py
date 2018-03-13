@@ -1,16 +1,15 @@
 import itertools
 
-from package.models import Category, Project, PackageExample, ProjectImage
+from package.models import Category, Project, PackageExample, ProjectImage, ProjectSocialLink
 from package.utils import prepare_thumbnails
 from profiles.models import Account
 
 from django.core.exceptions import ValidationError
 from django import forms
 from django.forms.formsets import formset_factory
-from django.forms.models import modelformset_factory
+from django.forms.models import modelformset_factory, ModelForm
 from django.forms.widgets import Textarea, TextInput
 from django.template.defaultfilters import slugify
-from floppyforms.__future__ import ModelForm
 
 
 def package_help_text():
@@ -204,5 +203,38 @@ class ProjectImagesFormSet(BaseProjectImagesFormSet):
 
     def get_form_kwargs(self, *args, **kwargs):
         form_kwargs = super(ProjectImagesFormSet, self).get_form_kwargs(*args, **kwargs)
+        form_kwargs.update({"project": self.project})
+        return form_kwargs
+
+
+class InlineProjectSocialLinkForm(ModelForm):
+
+    class Meta:
+        model = ProjectSocialLink
+        fields = ['type', 'url', 'project']
+
+    def __init__(self, project, *args, **kwargs):
+        super(InlineProjectSocialLinkForm, self).__init__(*args, **kwargs)
+        self.fields["project"].widget = forms.HiddenInput()
+        self.fields["project"].initial = project.id
+
+
+BaseProjectSocialLinkFormSet = modelformset_factory(
+    model=ProjectSocialLink,
+    fields=["type", "url", 'project'],
+    form=InlineProjectSocialLinkForm,
+    extra=0,
+    can_delete=True,
+)
+
+
+class ProjectSocialLinkFormSet(BaseProjectSocialLinkFormSet):
+
+    def __init__(self, project, queryset=None, *args, **kwargs):
+        self.project = project
+        super(ProjectSocialLinkFormSet, self).__init__(prefix="slform", queryset=queryset, *args, **kwargs)
+
+    def get_form_kwargs(self, *args, **kwargs):
+        form_kwargs = super(ProjectSocialLinkFormSet, self).get_form_kwargs(*args, **kwargs)
         form_kwargs.update({"project": self.project})
         return form_kwargs
