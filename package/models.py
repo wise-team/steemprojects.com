@@ -75,41 +75,49 @@ class Project(BaseModel):
         {
             'id': NONE_STATUS,
             'name': '----',
+            'short_name': '----',
             'description': '',
         },
         {
             'id': UNKNOWN,
             'name': 'Unknown',
+            'short_name': 'Unknown',
             'description': 'Unknown project status',
         },
         {
             'id': LIVE__RELEASED,
             'name': 'Live/Released',
+            'short_name': 'Live/Released',
             'description': 'Project is ready to use',
         },
         {
             'id': WORKING_PROTOTYPE__BETA,
             'name': 'Working Prototype/Beta',
+            'short_name': 'Prototype/Beta',
             'description': 'Project is working however, it still can contain some bugs',
         },
         {
             'id': DEMO__ALPHA,
             'name': 'Demo/Alpha',
+            'short_name': 'Demo/Alpha',
             'description': 'Project can be used by people which are not afraid of bugs and has very high pain threshold',
         },
         {
             'id': CONCEPT,
             'name': 'Concept',
+            'short_name': 'Concept',
             'description': 'Project which pretends to be a working product',
         },
         {
             'id': ABANDONED__BROKEN,
             'name': 'Abandoned/Broken',
+            'short_name': 'Abandoned',
             'description': 'Project is no longer available or it is completely broken',
         },
         {
             'id': OUT_OF_DATE__RETIRED,
             'name': 'Out of Date/Retired',
+            'short_name': 'Retired',
             'description': 'Project is no longer needed, because of changes in ecosystem',
         },
 
@@ -423,6 +431,16 @@ class Project(BaseModel):
         return next(
             (
                 status['description']
+                for status in Project.STATUSES
+                if status['id'] == self.status
+            )
+        )
+
+    @property
+    def short_status_name(self):
+        return next(
+            (
+                status['short_name']
                 for status in Project.STATUSES
                 if status['id'] == self.status
             )

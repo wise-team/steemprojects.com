@@ -13,6 +13,102 @@ $gallery-size: 20;
         box-shadow: 0 3px 7px rgba(0,0,0,.1);  // TODO: adjust EOS color
     }
 
+    &__thumbnail-wrapper {
+        position: relative;
+    }
+
+    &__ribbon {
+        -webkit-transform: rotate(135deg);
+        -moz-transform: rotate(135deg);
+        -ms-transform: rotate(135deg);
+        -o-transform: rotate(135deg);
+        transform: rotate(45deg);
+        border: 20px solid transparent;
+        border-bottom-style: solid;
+        border-bottom-width: 20px;
+        position: absolute;
+        top: 8px;
+        right: -32px;
+        padding: 0 10px;
+        width: 120px;
+        color: white;
+        font-family: sans-serif;
+        size: 11px;
+        text-align: center;
+        display: block;
+        //opacity: 0.7;
+
+        &--unknown {
+            border-bottom-color: lighten($status-unknown, 10%);
+        }
+
+        &--live_released {
+            border-bottom-color: lighten($status-live-released, 10%);
+        }
+
+        &--workingprototype_beta {
+            border-bottom-color: lighten($status-working-prototype-beta, 10%);
+        }
+
+        &--demo_alpha {
+            border-bottom-color: lighten($status-demo-alpha, 10%);
+        }
+
+        &--concept {
+            border-bottom-color: lighten($status-concept, 10%);
+        }
+
+        &--abandoned_broken {
+            border-bottom-color: lighten($status-abandoned-broken, 10%);
+        }
+
+        &--outofdate_retired {
+            border-bottom-color: lighten($status-out-of-date-retired, 10%);
+        }
+    }
+
+    &__thumbnail-wrapper:hover {
+        .m-project-tile__ribbon {
+            &--unknown {
+                border-bottom-color: $status-unknown;
+            }
+
+            &--live_released {
+                border-bottom-color: $status-live-released;
+            }
+
+            &--workingprototype_beta {
+                border-bottom-color: $status-working-prototype-beta;
+            }
+
+            &--demo_alpha {
+                border-bottom-color: $status-demo-alpha;
+            }
+
+            &--concept {
+                border-bottom-color: $status-concept;
+            }
+
+            &--abandoned_broken {
+                border-bottom-color: $status-abandoned-broken;
+            }
+
+            &--outofdate_retired {
+                border-bottom-color: $status-out-of-date-retired;
+            }
+        }
+        position: relative;
+        top: -4px;
+        left: -4px;
+     }
+
+    &__ribbon-text {
+        color: $m-btn-font-color-hover;
+        margin-bottom: -20px;
+        margin-left: -6px;
+        font-size: 12px;
+    }
+
     &__details {
         float: left;
         padding-left: 30px;
