@@ -46,5 +46,41 @@
     color: $m-btn-font-color-hover;
     background-color: $m-btn-background-color-hover;
     padding: 0 3px;
+
+    &--live_released {
+      background-color: $status-live-released;
+    }
+
+    &--workingprototype_beta {
+      background-color: $status-working-prototype-beta;
+    }
+
+    &--demo_alpha {
+      background-color: $status-demo-alpha;
+    }
+
+    &--concept {
+      background-color: $status-concept;
+    }
+
+    &--abandoned_broken {
+      background-color: $status-abandoned-broken;
+    }
+
+    &--outofdate_retired {
+      background-color: $status-out-of-date-retired;
+    }
+  }
+
+  &__status-help-icon {
+    @extend .material-icons;
+    font-size: 15px;
+    position: relative;
+    top: 2px;
+    left: 4px;
+
+    &::before {
+      content: 'help_outline';
+    }
   }
 }
