@@ -80,7 +80,7 @@ class Project(BaseModel):
         {
             'id': UNKNOWN,
             'name': 'Unknown',
-            'description': 'When ',
+            'description': 'Unknown project status',
         },
         {
             'id': LIVE__RELEASED,

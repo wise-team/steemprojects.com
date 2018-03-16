@@ -47,6 +47,10 @@
     background-color: $m-btn-background-color-hover;
     padding: 0 3px;
 
+    &--unknown {
+      background-color: $status-unknown;
+    }
+
     &--live_released {
       background-color: $status-live-released;
     }
