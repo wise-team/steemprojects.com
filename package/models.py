@@ -71,16 +71,51 @@ class Project(BaseModel):
     ABANDONED__BROKEN = "ABANDONED_BROKEN"
     OUT_OF_DATE__RETIRED = "OUTOFDATE_RETIRED"
 
-    STATUS_CHOICES = (
-        (NONE_STATUS, '----'),
-        (UNKNOWN, 'Unknown'),
-        (LIVE__RELEASED, 'Live/Released'),
-        (WORKING_PROTOTYPE__BETA, 'Working Prototype/Beta'),
-        (DEMO__ALPHA, 'Demo/Alpha'),
-        (CONCEPT, 'Concept'),
-        (ABANDONED__BROKEN, 'Abandoned/Broken'),
-        (OUT_OF_DATE__RETIRED, 'Out of Date/Retired'),
-    )
+    STATUSES = [
+        {
+            'id': NONE_STATUS,
+            'name': '----',
+            'description': '',
+        },
+        {
+            'id': UNKNOWN,
+            'name': 'Unknown',
+            'description': 'Unknown project status',
+        },
+        {
+            'id': LIVE__RELEASED,
+            'name': 'Live/Released',
+            'description': 'Project is ready to use',
+        },
+        {
+            'id': WORKING_PROTOTYPE__BETA,
+            'name': 'Working Prototype/Beta',
+            'description': 'Project is working however, it still can contain some bugs',
+        },
+        {
+            'id': DEMO__ALPHA,
+            'name': 'Demo/Alpha',
+            'description': 'Project can be used by people which are not afraid of bugs and has very high pain threshold',
+        },
+        {
+            'id': CONCEPT,
+            'name': 'Concept',
+            'description': 'Project which pretends to be a working product',
+        },
+        {
+            'id': ABANDONED__BROKEN,
+            'name': 'Abandoned/Broken',
+            'description': 'Project is no longer available or it is completely broken',
+        },
+        {
+            'id': OUT_OF_DATE__RETIRED,
+            'name': 'Out of Date/Retired',
+            'description': 'Project is no longer needed, because of changes in ecosystem',
+        },
+
+    ]
+
+    STATUS_CHOICES = [(status["id"], status["name"]) for status in STATUSES]
 
     name = models.CharField(_("Name"), max_length=100, unique=True)
     url = models.URLField(_("Project URL"), blank=True, null=True, unique=True)
@@ -90,18 +125,15 @@ class Project(BaseModel):
         choices=STATUS_CHOICES,
         default=NONE_STATUS,
         help_text=mark_safe(
-            """
-            <ul>
-                <li><strong>Live/Released</strong> - Project is ready to use</li>
-                <li><strong>Working Prototype/Beta</strong> - Project is working however, it still can contain some bugs</li>
-                <li><strong>Demo/Alpha</strong> - Project can be used by people which are not afraid of bugs and has very high pain threshold</li>
-                <li><strong>Concept</strong> - Something that pretends to be a working project</li>
-                <li><strong>Abandoned/Broken</strong> - Project is no longer available or it is completely broken</li>
-                <li><strong>Out of Date/Retired</strong> - Project is no longer needed, because of changes in ecosystem</li>
-            </ul>
-            """
+            "<ul>{}</ul>".format(
+                "".join([
+                    "<li><strong>{name}</strong> - {description}</li>".format(**status)
+                    for status in STATUSES
+                    if status["id"] not in ["", "UNKNOWN"]
+                ])
             )
         )
+    )
     description = models.TextField(_("Description"), blank=True, null=True, default="")
     announcement_post = models.URLField(_("Announcement Post URL"), blank=True, null=True, help_text="Link to place, where project was announced for the first time")
     contact_url = models.URLField(_("Contact URL"), blank=True, null=True, default=None)
@@ -385,6 +417,16 @@ class Project(BaseModel):
 
     def commits_over_52_listed(self):
         return [int(x) for x in self.commits_over_52().split(',')]
+
+    @property
+    def status_description(self):
+        return next(
+            (
+                status['description']
+                for status in Project.STATUSES
+                if status['id'] == self.status
+            )
+        )
 
 
 class TeamMembership(BaseModel):
