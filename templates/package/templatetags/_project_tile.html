@@ -3,16 +3,14 @@
 <div class="m-project-tile {% if style %}m-project-tile--{{style}}{% endif %}">
     <a href="{{ package.get_absolute_url }}">
         {% cache 300 thumbnail package style %}
-            <div class="m-project-tile__thumbnail-wrapper">
-                {% if style == 'gallery' %}
-                    <img class="m-project-tile__thumbnail" src="{{ package.img|thumb:320 }}">
-                    <div class="m-project-tile__status m-project-tile__status--{{ package.status|lower }}">
-                        {{ package.get_status_display }}
-                    </div>
-                {% else %}
-                    <img class="m-project-tile__thumbnail" src="{{ package.img|thumb:128 }}">
-                {% endif %}
-            </div>
+            {% if style == 'gallery' %}
+                <img class="m-project-tile__thumbnail" src="{{ package.img|thumb:320 }}">
+                <div class="m-project-tile__status m-project-tile__status--{{ package.status|lower }}">
+                    {{ package.get_status_display }}
+                </div>
+            {% else %}
+                <img class="m-project-tile__thumbnail" src="{{ package.img|thumb:128 }}">
+            {% endif %}
         {% endcache %}
         <div class="project-details m-project-tile__details">
             <h3 class="m-project-tile__project-name">{{ package.name }}</h3>
