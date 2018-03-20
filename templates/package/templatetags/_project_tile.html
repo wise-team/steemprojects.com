@@ -6,10 +6,8 @@
             <div class="m-project-tile__thumbnail-wrapper">
                 {% if style == 'gallery' %}
                     <img class="m-project-tile__thumbnail" src="{{ package.img|thumb:320 }}">
-                    <div class="m-project-tile__ribbon m-project-tile__ribbon--{{ package.status|lower }}">
-                        <div class="m-project-tile__ribbon-text">
-                            {{ package.short_status_name }}
-                        </div>
+                    <div class="m-project-tile__status m-project-tile__status--{{ package.status|lower }}">
+                        {{ package.get_status_display }}
                     </div>
                 {% else %}
                     <img class="m-project-tile__thumbnail" src="{{ package.img|thumb:128 }}">
