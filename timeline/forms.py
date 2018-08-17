@@ -14,6 +14,8 @@ from django.forms.formsets import (
 from django.forms.models import modelformset_factory
 from django.forms.widgets import Select
 from django.utils.functional import cached_property
+from steem.account import Account
+from steembase.exceptions import AccountDoesNotExistsException
 
 from timeline.fields import TruncatingCharField
 from timeline.models import TimelineEvent, TimelineEventInserterRulebook, TimelineEventInserterRule
@@ -142,6 +144,23 @@ class TimelineEventInserterRuleForm(forms.ModelForm):
                not k or
                k in next(zip(*TimelineEventInserterRule.RULE_TYPES_PER_SERVICE[service_type]))
         ]
+
+    def clean__rule_type__steem_author(self, argument):
+        try:
+            Account(argument)
+        except AccountDoesNotExistsException as e:
+            raise forms.ValidationError("Account does not exists")
+
+    def clean(self):
+        super().clean()
+
+        rule_type = self.cleaned_data.get("type")
+        argument = self.cleaned_data.get("argument")
+
+        if rule_type == TimelineEventInserterRule.STEEM_AUTHOR_RULE:
+            self.clean__rule_type__steem_author(argument)
+
+        return self.cleaned_data
 
 
 class TimelineManagementForm(ManagementForm):

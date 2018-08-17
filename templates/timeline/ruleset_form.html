@@ -32,7 +32,11 @@
                         {% for rule_form in rule_formset %}
                             <li class="event-form">
                                 {{ rule_form.type }} {{ rule_form.argument }} {{ rule_form.service_type }} {{ rule_form.DELETE }}<span class="rm-btn te-form"><i class="icon-close"></i>Remove</span>
-                                {{ rule_form.errors }}
+                                {{ rule_form.non_field_errors }}
+
+                                {% for field in rule_form %}
+                                    {{ field.errors }}
+                                {% endfor %}
                             </li>
                         {% endfor %}
                     </ul>

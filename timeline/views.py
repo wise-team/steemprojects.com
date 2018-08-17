@@ -71,6 +71,9 @@ def add_ruleset(request, slug, template_name="timeline/ruleset_form.html"):
             return HttpResponseRedirect(reverse("edit_timeline", kwargs={"slug": project.slug}))
         else:
             rule_formsets.append(rule_formset)
+            rulebook_form = TimelineEventInserterRulebookForm(
+                initial={"service_type": rule_formset.management_form.cleaned_data[TimelineManagementForm.SERVICE_TYPE_FORM]}
+            )
 
     else:
         rule_formsets.extend([
@@ -78,7 +81,7 @@ def add_ruleset(request, slug, template_name="timeline/ruleset_form.html"):
             for service_type in TimelineEventInserterRulebook.service_types()
         ])
 
-    rulebook_form = TimelineEventInserterRulebookForm()
+        rulebook_form = TimelineEventInserterRulebookForm()
 
     return render(request, template_name, {
         "package": project,
