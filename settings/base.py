@@ -241,11 +241,6 @@ if LOCAL_INSTALLED_APPS:
 
 SUPPORTED_REPO.extend(["bitbucket", "github"])
 
-
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-)
-
 SOCIAL_AUTH_AUTHENTICATION_BACKENDS = [
     'steemconnect.backends.SteemConnectOAuth2',
     'social_core.backends.github.GithubOAuth2',
