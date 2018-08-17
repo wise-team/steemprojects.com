@@ -92,7 +92,7 @@
 
                             <li class="m-navbar--item"><a class="m-navbar--item-text" href="{% url 'logout' %}">{% trans "Log out" %}</a></li>
                         {% else %}
-                            <li class="m-navbar--item"><a class="m-navbar--item-text" href="{% url 'login' %}{% if current_path %}?next={{ current_path }}{% endif %}">{% trans "Log in" %}</a></li>
+                            <li class="m-navbar--item"><a class="m-navbar--item-text" href="{% url 'login' %}{% if current_path %}?next={{ current_path | safe }}{% endif %}">{% trans "Log in" %}</a></li>
                         {% endif %}
 
                         <li class="m-navbar--item hidden-md hidden-lg">
