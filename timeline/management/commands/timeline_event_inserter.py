@@ -12,16 +12,21 @@ class Command(BaseCommand):
 
         rulebooks = TimelineEventInserterRulebook.objects.all()
         rulebooks_count = rulebooks.count()
-        for rulebook in rulebooks.order_by('project'):
+        for rulebook in rulebooks.order_by('?'):
             print("Project: {}, Rulebook: {}".format(rulebook.project, rulebook.name))
             Job.update_progress(total_parts=rulebooks_count, total_parts_complete=rulebooks_counter)
 
-            for event in rulebook.fetch_new_events():
-                events_counter += 1
-                print("\t[{}][{}] {}".format(str(event.project), str(event.date), event.name))
-                print("\t{}\n".format(event.url))
+            try:
+                for event in rulebook.fetch_new_events():
+                    events_counter += 1
+                    print("\t[{}][{}] {}".format(str(event.project), str(event.date), event.name))
+                    print("\t{}\n".format(event.url))
 
-            rulebooks_counter += 1
+                rulebooks_counter += 1
+            except Exception as e:
+                # TODO: report sentry
+                print("Exception during processing rulebook for project: {}".format(rulebook.project))
+                continue
 
         print(
             "\nStats: {} new TimelineEvents were created thanks to rules in {} rulebooks".format(

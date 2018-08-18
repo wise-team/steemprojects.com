@@ -81,7 +81,24 @@ class SteemPostService(RulebookService):
         now = datetime.now()
         blog = Blog(author_rule.argument)
 
-        for post in filter(lambda x: x.is_main_post(), blog.all()):
+        def get_posts(blog):
+            error_count = 0
+
+            while True:
+                try:
+                    for post in blog.all():
+                        print("evaluating post: " + post.title)
+                        if post.is_main_post():
+                            yield post
+                    break
+
+                except RPCError:
+                    error_count += 1
+                    if error_count == 3:
+                        raise
+
+        # for post in filter(lambda x: x.is_main_post(), blog.all()):
+        for post in get_posts(blog):
 
             if self.rulebook.last and post.created < self.rulebook.last:
                 break
@@ -94,7 +111,7 @@ class SteemPostService(RulebookService):
                     event.save()
                     if self.rulebook.notify:
                         self.notify(post)
-                        sleep(20)
+                        sleep(25)
 
                     yield event
 
@@ -128,13 +145,14 @@ class SteemPostService(RulebookService):
     def get_notification_msg(project):
         return dedent(
             """
-            This post has been just added as new item to _[timeline of {project_name} on {site_title}]({project_page})_.
+            This post has been just added as new item to _[timeline of {project_name} on {site_title}]({project_page}{ga_campaign})_.
 
             If you want to be notified about new updates from this project, register on {site_title} and add {project_name} to your favorite projects.
             """.format(
                 site_title=settings.SITE_TITLE,
                 project_name=escape(project.name),
-                project_page=settings.SITE_URL + reverse('package', kwargs={'slug': project.slug})
+                project_page=settings.SITE_URL + reverse('package', kwargs={'slug': project.slug}),
+                ga_campaign="?utm_source=comment_timeline&utm_medium=steem&utm_campaign=new_event&utm_content=c1",
             )
         )
 
