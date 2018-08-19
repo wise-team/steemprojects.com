@@ -5,6 +5,7 @@ from reversion.admin import VersionAdmin
 
 from profiles.models import Profile, AccountType
 from profiles.models import Account
+from social_auth_local.templatetags.witness_tags import is_voting_for_witness, get_proxies, get_witnesses
 
 
 class ProfileAdmin(VersionAdmin):
@@ -42,10 +43,60 @@ class ProfileAdmin(VersionAdmin):
     steem_account_name.allow_tags = True
 
 
+class ConnectedFilter(admin.SimpleListFilter):
+
+    title = "Connected"
+
+    parameter_name = 'connected'
+
+    def lookups(self, request, model_admin):
+
+        return (
+            ('connected', 'Connected'),
+            ('notconnected',  'No connected'),
+        )
+
+    def queryset(self, request, queryset):
+
+        if self.value() == 'connected':
+            return queryset.filter(user_social_auth__isnull=False)
+
+        if self.value() == 'notconnected':
+            return queryset.filter(user_social_auth__isnull=True)
+
+
+class IsVotingForUsFilter(admin.SimpleListFilter):
+
+    title = "Is Voting For Us"
+    parameter_name = 'isvotingforus'
+
+    def lookups(self, request, model_admin):
+
+        return (
+            ('witnesssupporter', 'Witness Supporter'),
+            ('futurewitnesssupporter',  'Future Witness Supporter :) '),
+        )
+
+    def queryset(self, request, queryset):
+
+        if self.value() == 'witnesssupporter':
+            accounts = queryset.filter(user_social_auth__isnull=False, account_type__name="STEEM")
+            accounts_ids = [
+                account.id
+                for account in accounts
+                if is_voting_for_witness(account.profile.user, "noisy.witness")
+            ]
+
+            return queryset.filter(id__in=accounts_ids)
+
+        if self.value() == 'futurewitnesssupporter':
+            return queryset.filter(user_social_auth__isnull=True)
+
+
 class AccountAdmin(VersionAdmin):
-    list_display = ("name", "account_type", "email", "link_to_profile", "connected")
+    list_display = ("name", "account_type", "email", "link_to_profile", "connected", "last_login", "is_voting_for_us", "voting_for", "witness_proxy")
     search_fields = ("name", )
-    list_filter = ("account_type", )
+    list_filter = ("account_type", ConnectedFilter, IsVotingForUsFilter, )
 
     def connected(self, obj):
         return bool(obj.user_social_auth)
@@ -79,6 +130,24 @@ class AccountAdmin(VersionAdmin):
             pass
 
         return queryset, use_distinct
+
+    def last_login(self, obj):
+        return obj.profile and obj.profile.user and obj.profile.user.last_login
+
+    last_login.admin_order_field = 'profile__user__last_login'
+    last_login.short_description = 'Last login'
+
+    def is_voting_for_us(self, obj):
+        return obj.profile and is_voting_for_witness(obj.profile.user, "noisy.witness")
+
+    is_voting_for_us.boolean = True
+
+    def voting_for(self, obj):
+        return obj.profile and ", ".join(get_witnesses(obj.profile.user))
+
+    def witness_proxy(self, obj):
+        return obj.profile and ", ".join(get_proxies(obj.profile.user))
+
 
 
 class AccountTypeAdmin(VersionAdmin):

@@ -1,5 +1,5 @@
 {% spaceless %}
-{% load i18n profile_tags static %}
+{% load i18n profile_tags static witness_tags %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}" xml:lang="{{ LANGUAGE_CODE }}" lang="{{ LANGUAGE_CODE }}" {% block angular_header %}ng-app{% endblock angular_header %}>
 <head>
@@ -55,6 +55,19 @@
                 {% endfor %}
             </div>
         </div>
+    {% endif %}
+
+    {% if global_preferences.witness__asking_for_votes %}
+
+        {% url "contribute" as contribute_url %}
+        {% if user.is_authenticated and not user|is_using_proxy and not user|is_voting_for_us and request.get_full_path != contribute_url %}
+            <div class="m-messagebar m-messagebar--error" data-stick="true">
+                <div class="container">
+                    We care about Steem Community a lot. We created SteemProjects to help Steemians find best apps and tools and to show to the whole world how many skilled developers Steem community has. We would like to keep SteemProjects up and running, keep it ads-free, keep our databese up to date and continue development of new cool features. All of that require funds. Fortunately, you do not have to spend a dime to help us. You can support SteemProjects simply <a href="https://steemit.com/~witnesses">by voting for us here</a> for our <i>noisy.witness</i>. If you would like to learn how you can help us in a different way, please read <a href="{{ contribute_url }}">guidelines for our supporters</a>.
+                </div>
+            </div>
+        {% endif %}
+
     {% endif %}
 
 {% endblock %}
