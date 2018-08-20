@@ -78,6 +78,7 @@ def get_proxies(user):
                     account['proxy']
                     for social in user.social_auth.filter(provider="steemconnect")
                     for account in social.extra_data['account']
+                    if account['proxy'] != ""
                 ]
 
     return []
