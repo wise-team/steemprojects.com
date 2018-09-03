@@ -61,7 +61,7 @@
         {% if package.url %}
             <div class="website">
                 <h3>Project Website</h3>
-                <p><a href="{{ package.url }}" target="_blank">{{ package.url }}</a></p>
+                <p><a href="{{ package.url }}" target="_blank" rel="noopener noreferrer">{{ package.url }}</a></p>
             </div>
         {% endif %}
         {% if package.announcement_post %}
@@ -73,7 +73,7 @@
         {% if package.contact_url %}
             <div class="contact">
                 <h3>Contact</h3>
-                <p><a href="{{ package.contact_url }}" target="_blank">{{ package.contact_url }}</a></p>
+                <p><a href="{{ package.contact_url }}" target="_blank" rel="noopener noreferrer">{{ package.contact_url }}</a></p>
             </div>
         {% endif %}
         {% if package.grids|length %}
@@ -158,7 +158,7 @@
             <div class="m-repo-section">
                 {% if repo.title == "Github" %}
                     <div class="m-repo-section__column m-repo-section__column--first">
-                        <a class="m-repo-section__link" href="{{ package.repo_url }}" target="_blank">
+                        <a class="m-repo-section__link" href="{{ package.repo_url }}" target="_blank" rel="noopener noreferrer">
                             <i class="m-repo-section__icon icon-github"></i>
                         </a>
                     </div>
@@ -184,7 +184,7 @@
                 {% endif %}
             </div>
             {% else %}
-            <div>No information :( This project is not open-source <sup><a href="https://www.youtube.com/watch?v=1ehpgbb3XD0" target="_blank"><i class="material-icons">info_outline</i></a></sup></div>
+            <div>No information :( This project is not open-source <sup><a href="https://www.youtube.com/watch?v=1ehpgbb3XD0" target="_blank" rel="noopener noreferrer"><i class="material-icons">info_outline</i></a></sup></div>
             {% endif %}
         </div>
     </div>
@@ -221,7 +221,7 @@
             {% for event in timeline_events %}
                 {
                     id: {{ forloop.counter }},
-                    content: '<div class="event-date">{{ event.date}}</div><a href="{{ event.url}}" target="_blank">{{ event.name}}</a>',
+                    content: '<div class="event-date">{{ event.date}}</div><a href="{{ event.url}}" target="_blank" rel="noopener noreferrer">{{ event.name}}</a>',
                     start: '{{ event.date|date:"c" }}'},
             {% endfor %}
             ]);

@@ -51,7 +51,7 @@
                 <tr>
                     <td>{% trans "Project Website" %}</td>
                     {% for grid_package in grid_packages %}
-                        <td><a href="{{ grid_package.package.url }}" target="_blank">{{ grid_package.package.url }}</a></td>
+                        <td><a href="{{ grid_package.package.url }}" target="_blank" rel="noopener noreferrer">{{ grid_package.package.url }}</a></td>
                     {% endfor %}
                 </tr>
                 {% comment %}
@@ -94,7 +94,7 @@
                     <td>
                         <div class="m-grid__feature-title">{% trans "Code repository" %}</div>
                         <div class="m-grid__feature-description">
-                            <a href="https://www.youtube.com/watch?v=1ehpgbb3XD0" target="_blank">Learn why being open-source is important</a>
+                            <a href="https://www.youtube.com/watch?v=1ehpgbb3XD0" target="_blank" rel="noopener noreferrer">Learn why being open-source is important</a>
                         </div>
                     </td>
                     {% for grid_package in grid_packages %}
