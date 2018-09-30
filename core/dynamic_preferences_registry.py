@@ -13,6 +13,12 @@ class Released(BooleanPreference):
     default = False
 
 @global_preferences_registry.register
+class showHeaderMessage(BooleanPreference):
+    section = general
+    name = 'show_header_message'
+    default = True
+
+@global_preferences_registry.register
 class OurWitnessName(StringPreference):
     section = witness
     name = 'our_witness_name'

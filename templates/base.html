@@ -58,16 +58,11 @@
     {% endif %}
 
     {% if global_preferences.witness__asking_for_votes %}
-
-        {% url "contribute" as contribute_url %}
-        {% if user.is_authenticated and not user|is_using_proxy and not user|is_voting_for_us and request.get_full_path != contribute_url %}
-            <div class="m-messagebar m-messagebar--error" data-stick="true">
-                <div class="container">
-                    We care about Steem Community a lot. We created SteemProjects to help Steemians find best apps and tools and to show to the whole world how many skilled developers Steem community has. We would like to keep SteemProjects up and running, keep it ads-free, keep our databese up to date and continue development of new cool features. All of that require funds. Fortunately, you do not have to spend a dime to help us. You can support SteemProjects simply <a href="https://steemit.com/~witnesses">by voting for us here</a> for <i>{{ global_preferences.witness__our_witness_name }}</i>. If you would like to learn how you can help us in a different way, please read <a href="{{ contribute_url }}">guidelines for our supporters</a>.
-                </div>
+        <div class="m-messagebar m-messagebar--wise" data-stick="true">
+            <div class="container">
+                If you voted for <i>@noisy.witness</i>, a team which created this service, please update your witness vote. <i>@noisy.witness</i> has merged with Engrave to form <i>@wise-team</i>. Learn more about our us and our projects from <a href="https://steemit.com/steem/@noisy/ann-introduction-of-new-witness-wise-team">our announcement</a>. Vote for us if you want to support is or our projects!
             </div>
-        {% endif %}
-
+        </div>
     {% endif %}
 
 {% endblock %}
