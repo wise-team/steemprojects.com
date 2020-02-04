@@ -480,6 +480,11 @@ class ProjectImage(BaseModel):
         return "Project: {}, Image: {}".format(self.project.name, self.img.name)
 
 
+class ProjectImageUrl(BaseModel):
+    project = models.ForeignKey(Project, related_name="imagesUrl")
+    url = models.CharField(_("Url"), max_length=256)
+
+
 class PackageExample(BaseModel):
 
     package = models.ForeignKey(Project)

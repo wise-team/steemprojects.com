@@ -1,6 +1,6 @@
 import itertools
 
-from package.models import Category, Project, PackageExample, ProjectImage
+from package.models import Category, Project, PackageExample, ProjectImage, ProjectImageUrl
 from package.utils import prepare_thumbnails
 from profiles.models import Account
 
@@ -193,6 +193,18 @@ BaseProjectImagesFormSet = modelformset_factory(
     can_delete=True,
     extra=0,
 )
+
+
+class ProjectImageForm1(forms.ModelForm):
+
+    class Meta:
+        model = ProjectImageUrl
+        fields = ["url", "project"]
+
+    def __init__(self, project, *args, **kwargs):
+        super(ProjectImageForm1, self).__init__(*args, **kwargs)
+        self.fields["project"].widget = forms.HiddenInput()
+        self.fields["project"].initial = project.id
 
 
 class ProjectImagesFormSet(BaseProjectImagesFormSet):
