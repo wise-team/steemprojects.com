@@ -1,7 +1,8 @@
 import itertools
 
 from package.models import Category, Project, PackageExample, ProjectImage, ProjectImageUrl
-from package.utils import prepare_thumbnails
+from package.utils import prepare_thumbnails, download_file, get_image_name, get_file_type_from_url, \
+    rename_file
 from profiles.models import Account
 
 from django.core.exceptions import ValidationError
@@ -11,6 +12,7 @@ from django.forms.models import modelformset_factory
 from django.forms.widgets import Textarea, TextInput
 from django.template.defaultfilters import slugify
 from floppyforms.__future__ import ModelForm
+from django.conf import settings
 
 
 def package_help_text():
@@ -203,8 +205,30 @@ class ProjectImageForm1(forms.ModelForm):
 
     def __init__(self, project, *args, **kwargs):
         super(ProjectImageForm1, self).__init__(*args, **kwargs)
+        self.fields["url"].widget = forms.HiddenInput()
         self.fields["project"].widget = forms.HiddenInput()
         self.fields["project"].initial = project.id
+
+    def save(self, *args, **kwargs):
+        super(ProjectImageForm1, self).save(*args, **kwargs)
+        prepare_thumbnails(self.cleaned_data['url'])
+        return self.instance
+
+    def clean(self):
+        cleaned_data = super(ProjectImageForm1, self).clean()
+
+        image_url = cleaned_data.get("url")
+        project = cleaned_data.get("project")
+        try:
+            dest_path = f"{settings.MEDIA_ROOT}/imgs/{project.id}"
+            uuid_name = download_file(image_url, dest_path)
+            file_type = get_file_type_from_url(image_url)  # png/jpg
+            timestamp_name = get_image_name(file_type)
+            image_path = rename_file(dest_path, uuid_name, timestamp_name)
+        except ValidationError:
+            raise ValidationError("Processing error")
+        cleaned_data['url'] = image_path
+        return cleaned_data
 
 
 class ProjectImagesFormSet(BaseProjectImagesFormSet):

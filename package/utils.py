@@ -1,4 +1,5 @@
 import logging
+import urllib
 from os import makedirs
 from os.path import join, split, exists, splitext
 from PIL import Image
@@ -8,7 +9,9 @@ from requests.compat import quote
 
 from django.conf import settings
 from django.db import models
-
+import uuid
+import time
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -132,3 +135,37 @@ def crop_image(image, ratio):
 
     box = (padding_x, padding_y, x - padding_x, y - padding_y)
     return image.crop(box)
+
+
+def download_from_url(url, id_project): #
+    file_name = url.split('/')[-1]
+    project_dir = f"media/imgs/{id_project}"
+    if not exists(project_dir):
+        makedirs(project_dir)
+    image_dir = join(project_dir, f"{file_name}.png")
+    urllib.request.urlretrieve(url, image_dir)
+    return image_dir
+
+
+def download_file(file_url, dest_path, file_name=None):
+    if not file_name:
+        file_name = str(uuid.uuid4())
+    file_path = f"{dest_path}/{file_name}"
+    makedirs(dest_path, exist_ok=True)
+    urllib.request.urlretrieve(file_url, file_path)
+    return file_name
+
+
+def get_file_type_from_url(file_url):
+    return urllib.request.urlopen(file_url).info().get_content_subtype()
+
+
+def get_image_name(file_type):
+    return f"{int(round(time.time()*1000))}.{file_type}"
+
+
+def rename_file(file_dir, old_name, new_name):
+    file_path_old = f"{file_dir}/{old_name}"
+    file_path_new = f"{file_dir}/{new_name}"
+    os.rename(file_path_old, file_path_new)
+    return file_path_new

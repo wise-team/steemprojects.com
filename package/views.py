@@ -193,18 +193,6 @@ def edit_images(request, slug, template_name="package/images_form.html"):
     project = get_object_or_404(Project, slug=slug)
     if not request.user.profile.can_edit_package(project):
         return HttpResponseForbidden("permission denied")
-    #
-    # if request.POST:
-    #     formset = ProjectImagesFormSet(data=request.POST, files=request.FILES, project=project,)
-    # else:
-    #     formset = ProjectImagesFormSet(project=project, queryset=ProjectImage.objects.filter(project=project))
-    #
-    # if formset.is_valid():
-    #     formset.save()
-    #
-    #     messages.add_message(request, messages.INFO, 'Project updated successfully')
-    #     return HttpResponseRedirect(reverse("package", kwargs={"slug": project.slug}))
-
     if request.POST:
         form = ProjectImageForm1(data=request.POST, project=project, )
     else:
