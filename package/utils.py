@@ -156,7 +156,11 @@ def download_file(file_url, dest_path, file_name=None):
     return file_name
 
 
-def get_file_type_from_url(file_url):
+def get_file_maintype_from_url(file_url):
+    return urllib.request.urlopen(file_url).info().get_content_maintype()
+
+
+def get_file_subtype_from_url(file_url):
     return urllib.request.urlopen(file_url).info().get_content_subtype()
 
 

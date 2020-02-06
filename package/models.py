@@ -22,7 +22,7 @@ from core.utils import STATUS_CHOICES, status_choices_switch
 from core.models import BaseModel
 from package.repos import get_repo_for_repo_url
 from package.signals import signal_fetch_latest_metadata
-from package.utils import get_version, get_pypi_version, normalize_license, get_image_name
+from package.utils import get_version, get_pypi_version, normalize_license, get_image_name, get_file_maintype_from_url
 from profiles.models import Profile, Account
 
 repo_url_help_text = settings.PACKAGINATOR_HELP_TEXT['REPO_URL']
@@ -482,6 +482,11 @@ class ProjectImage(BaseModel):
 class ProjectImageUrl(BaseModel):
     project = models.ForeignKey(Project, related_name="imagesUrl")
     url = models.CharField(_("Url"), max_length=256)
+
+    @staticmethod
+    def is_image(image_url):
+        main_type = get_file_maintype_from_url(image_url)
+        return main_type == 'image'
 
 
 class PackageExample(BaseModel):

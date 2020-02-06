@@ -17,7 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 from grid.models import Grid
-from package.forms import PackageForm, PackageExampleForm, DocumentationForm, ProjectImagesFormSet, ProjectImageForm1
+from package.forms import PackageForm, PackageExampleForm, DocumentationForm, ProjectImageForm1
 from package.models import Category, Project, PackageExample, ProjectImage, TeamMembership
 from package.repos import get_all_repos
 from package.forms import TeamMembersFormSet

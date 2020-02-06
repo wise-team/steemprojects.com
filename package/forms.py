@@ -1,7 +1,7 @@
 import itertools
 
 from package.models import Category, Project, PackageExample, ProjectImage, ProjectImageUrl
-from package.utils import prepare_thumbnails, download_file, get_image_name, get_file_type_from_url, \
+from package.utils import prepare_thumbnails, download_file, get_image_name, get_file_subtype_from_url, \
     rename_file
 from profiles.models import Account
 
@@ -211,18 +211,20 @@ class ProjectImageForm1(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         super(ProjectImageForm1, self).save(*args, **kwargs)
+        ProjectImage(project=self.cleaned_data['project'], img=self.cleaned_data['url'])
         prepare_thumbnails(self.cleaned_data['url'])
         return self.instance
 
     def clean(self):
         cleaned_data = super(ProjectImageForm1, self).clean()
-
         image_url = cleaned_data.get("url")
         project = cleaned_data.get("project")
+        if not ProjectImageUrl.is_image(image_url):
+            raise ValidationError("File is not image")
         try:
             dest_path = f"{settings.MEDIA_ROOT}/imgs/{project.id}"
             uuid_name = download_file(image_url, dest_path)
-            file_type = get_file_type_from_url(image_url)  # png/jpg
+            file_type = get_file_subtype_from_url(image_url)  # png/jpg
             timestamp_name = get_image_name(file_type)
             image_path = rename_file(dest_path, uuid_name, timestamp_name)
         except ValidationError:
