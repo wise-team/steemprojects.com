@@ -137,20 +137,10 @@ def crop_image(image, ratio):
     return image.crop(box)
 
 
-def download_from_url(url, id_project): #
-    file_name = url.split('/')[-1]
-    project_dir = f"media/imgs/{id_project}"
-    if not exists(project_dir):
-        makedirs(project_dir)
-    image_dir = join(project_dir, f"{file_name}.png")
-    urllib.request.urlretrieve(url, image_dir)
-    return image_dir
-
-
 def download_file(file_url, dest_path, file_name=None):
     if not file_name:
-        file_name = str(uuid.uuid4())
-    file_path = f"{dest_path}/{file_name}"
+        file_name = generate_unique_file_name()
+    file_path = join_path_with_file_name(dest_path, file_name)
     makedirs(dest_path, exist_ok=True)
     urllib.request.urlretrieve(file_url, file_path)
     return file_name
@@ -168,8 +158,18 @@ def get_image_name(file_type):
     return f"{int(round(time.time()*1000))}.{file_type}"
 
 
+def generate_unique_file_name():
+    return str(uuid.uuid4())
+
+
 def rename_file(file_dir, old_name, new_name):
-    file_path_old = f"{file_dir}/{old_name}"
-    file_path_new = f"{file_dir}/{new_name}"
+    file_path_old = join_path_with_file_name(file_dir, old_name)
+    file_path_new = join_path_with_file_name(file_dir, new_name)
     os.rename(file_path_old, file_path_new)
     return file_path_new
+
+
+def join_path_with_file_name(path, file_name):
+    if not path.endswith('/'):
+        path += '/'
+    return f"{path}{file_name}"

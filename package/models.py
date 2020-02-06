@@ -481,7 +481,7 @@ class ProjectImage(BaseModel):
 
 class ProjectImageUrl(BaseModel):
     project = models.ForeignKey(Project, related_name="imagesUrl")
-    url = models.CharField(_("Url"), max_length=256)
+    url = models.URLField(_("Url"), max_length=256)
 
     @staticmethod
     def is_image(image_url):
