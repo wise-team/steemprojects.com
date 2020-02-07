@@ -17,7 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 from grid.models import Grid
-from package.forms import PackageForm, PackageExampleForm, DocumentationForm, ProjectImageForm1
+from package.forms import PackageForm, PackageExampleForm, DocumentationForm, ProjectImagesUrlFormSet
 from package.models import Category, Project, PackageExample, ProjectImage, TeamMembership
 from package.repos import get_all_repos
 from package.forms import TeamMembersFormSet
@@ -187,28 +187,29 @@ def publish_project(request, slug):
         return HttpResponseForbidden("permission denied")
 
 
-
 @login_required
 def edit_images(request, slug, template_name="package/images_form.html"):
     project = get_object_or_404(Project, slug=slug)
     if not request.user.profile.can_edit_package(project):
         return HttpResponseForbidden("permission denied")
-    if request.POST:
-        form = ProjectImageForm1(data=request.POST, project=project, )
-    else:
-        form = ProjectImageForm1(project=project, )
 
-    if form.is_valid():
-        form.save()
+    if request.POST:
+        formset = ProjectImagesUrlFormSet(data=request.POST, project=project.id,)
+    else:
+        formset = ProjectImagesUrlFormSet(project=project.id)
+
+    if formset.is_valid():
+        for form in formset.forms:
+            form.save()
         messages.add_message(request, messages.INFO, 'Project updated successfully')
         return HttpResponseRedirect(reverse("package", kwargs={"slug": project.slug}))
 
     return render(request, template_name, {
-        "form": form,
+        "formset": formset,
+        "images": ProjectImage.objects.filter(project=project),
         "package": project,
         "action": "Save",
     })
-
 
 @login_required
 def add_example(request, slug, template_name="package/add_example.html"):

@@ -18,14 +18,36 @@
         Images with different ratio are scaled with <a href="https://www.w3schools.com/cssref/css3_pr_background-size.asp">cover property</a>. First image is used on main page.
     </p>
 
-    <input class="m-btn" value="Upload images" onclick="fileStackOpen()" ></input>
-    <form action="{{ request.path }}" method="post" id="package-form">
+    <form action="{{ request.path }}" method="post" enctype="multipart/form-data" id="package-form">
         {% csrf_token %}
-        {{ form }}
-        <input class="m-btn" type="submit" name="add" style="display: none">
+        {{ formset.management_form }}
+        <div id="img-entries">
+            {% for image in images %}
+                <div class="img-form" style="float: left; margin: 10px;">
+                    <span class="rm-btn te-entry icon-close" title="Delete"></span>
+                        <img src="{{  image.img.url }}" style="width:16vw; height: 9vw; object-fit: cover;" />
+                </div>
+            {% endfor %}
+        </div>
+
+        <div id="img-forms" style="clear: both;"></div>
+        <div>
+            <div id="formset-add-new-form-btn" class="m-btn m-btn--small" style="display: none">Add New Image</div>
+        </div>
+        <input class="m-btn" value="Upload images" onclick="fileStackOpen()" ></input>
+        <input class="m-btn" type="submit" name="add" value="Save changes">
+
+
+
     </form>
 
-
+    <div id="empty-form" style="display:none;">
+        <div class="img-form">
+            {{ formset.empty_form }}
+            <img src="" id="uploaded-__prefix__-img" style="width:16vw; height: 9vw; object-fit: cover;" />
+            <span class="rm-btn te-form icon-close"></span>
+        </div>
+    </div>
 {% endblock %}
 
 {% block extra_body %}
@@ -67,14 +89,11 @@
     const options = {
         "container": ".picker-content",
         "accept": ["image/png", "image/jpg"],
-        "maxFiles": 1,
+        "maxFiles": 5,
         "maxSize": 1024*1024*5,
         "fromSources": ["local_file_system"],
         "uploadInBackground": false,
-        "onFileUploadFinished": function(response){
-            document.getElementById('id_url').value=response.url;
-            document.getElementById('package-form').submit();
-        },
+        "onFileUploadFinished": fillForm,
         "transformations": {
         "crop": true,
         "circle": true,
@@ -83,6 +102,14 @@
     };
      const fileStackOpen = () => {
          client.picker(options).open();
+     }
+     function fillForm(response){
+            document.getElementById("formset-add-new-form-btn").click();
+            let form_id = document.getElementById("id_form-TOTAL_FORMS").value - 1;
+            document.getElementById('id_form-' + form_id + "-url").value=response.url;
+            console.log(response.url);
+            document.getElementById("uploaded-"+ form_id +"-img").src = response.url;
+            {#document.getElementById('package-form').submit();#}
      }
 
 

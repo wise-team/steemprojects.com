@@ -197,28 +197,27 @@ BaseProjectImagesFormSet = modelformset_factory(
 )
 
 
-class ProjectImageForm1(forms.ModelForm):
+class ProjectImageUrlForm(forms.Form):
 
-    class Meta:
-        model = ProjectImageUrl
-        fields = ["url", "project"]
+    url = forms.URLField()
+    project = forms.CharField()
 
     def __init__(self, project, *args, **kwargs):
-        super(ProjectImageForm1, self).__init__(*args, **kwargs)
+        super(ProjectImageUrlForm, self).__init__(*args, **kwargs)
         self.image_path = None
         self.absolute_image_path = None
         self.fields["url"].widget = forms.HiddenInput()
         self.fields["project"].widget = forms.HiddenInput()
-        self.fields["project"].initial = project.id
+        self.fields["project"].initial = project
 
     def clean(self):
-        cleaned_data = super(ProjectImageForm1, self).clean()
+        cleaned_data = super(ProjectImageUrlForm, self).clean()
         image_url = cleaned_data.get("url")
         project = cleaned_data.get("project")
         if not ProjectImageUrl.is_image(image_url):
             raise ValidationError("File is not image")
         try:
-            image_project_path = join_path_with_file_name("imgs", project.id)
+            image_project_path = join_path_with_file_name("imgs", project)
             dest_path = join_path_with_file_name(settings.MEDIA_ROOT, image_project_path)
             uuid_name = download_file(image_url, dest_path)
             file_type = get_file_subtype_from_url(image_url)
@@ -230,22 +229,25 @@ class ProjectImageForm1(forms.ModelForm):
         return cleaned_data
 
     def save(self, *args, **kwargs):
-        super(ProjectImageForm1, self).save(*args, **kwargs)
-        ProjectImage.objects.create(project=self.cleaned_data['project'], img=self.image_path)
+        project = Project.objects.get(id=self.cleaned_data['project'])
+        ProjectImage.objects.create(project=project, img=self.image_path)
         prepare_thumbnails(self.absolute_image_path)
-        return self.instance
 
 
+BaseProjectImagesUrlFormSet = formset_factory(
+    form=ProjectImageUrlForm,
+    can_delete=True,
+    extra=0,
+)
 
 
-class ProjectImagesFormSet(BaseProjectImagesFormSet):
+class ProjectImagesUrlFormSet(BaseProjectImagesUrlFormSet):
 
-    def __init__(self, project, queryset=None, *args, **kwargs):
+    def __init__(self, project, *args, **kwargs):
         self.project = project
-
-        super(ProjectImagesFormSet, self).__init__(queryset=queryset, *args, **kwargs)
+        super(ProjectImagesUrlFormSet, self).__init__(*args, **kwargs)
 
     def get_form_kwargs(self, *args, **kwargs):
-        form_kwargs = super(ProjectImagesFormSet, self).get_form_kwargs(*args, **kwargs)
+        form_kwargs = super(ProjectImagesUrlFormSet, self).get_form_kwargs(*args, **kwargs)
         form_kwargs.update({"project": self.project})
         return form_kwargs
