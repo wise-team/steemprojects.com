@@ -24,8 +24,8 @@
         <div id="img-entries">
             {% for image in images %}
                 <div class="img-form" style="float: left; margin: 10px;">
-                    <span class="rm-btn te-entry icon-close" title="Delete"></span>
-                    <img src="{{  image.img.url }}" style="width:16vw; height: 9vw; object-fit: cover;" />
+                    <span class="rm-btn te-entry icon-close" title="Delete" onclick="deleteImg(this)"></span>
+                    <img src="{{ image.img.url }}" style="width:16vw; height: 9vw; object-fit: cover;" />
                 </div>
             {% endfor %}
         </div>
@@ -62,7 +62,6 @@
             var total_forms = $('#id_form-TOTAL_FORMS');
             var form_idx = total_forms.val();
             total_forms.val(parseInt(form_idx) - 1);
-
             $(event.target).closest('.img-form').remove();
         };
 
@@ -80,7 +79,7 @@
         });
     });
 
-    const client = filestack.init('AAcBfDCujSzWCfXb6L52Nz');
+    const client = filestack.init('AnCMyPYeSUUEf6IM4xBdwz');
     const options = {
         "container": ".picker-content",
         "accept": ["image/png", "image/jpg"],
@@ -101,12 +100,21 @@
 
      function fillForm(response){
             document.getElementById("formset-add-new-form-btn").click();
-
             let form_id = document.getElementById("id_form-TOTAL_FORMS").value - 1;
-            document.getElementById("id_form-" + form_id + "-url").value=response.url;
+            document.getElementById("id_form-" + form_id + "-url").value = response.url;
             document.getElementById("uploaded-"+ form_id +"-img").src = response.url;
      }
-
+     function deleteImg(clickedSpan) {
+        let deleteImgUrl = clickedSpan.nextSibling.src;
+        document.getElementById("formset-add-new-form-btn").click();
+        let form_id = document.getElementById("id_form-TOTAL_FORMS").value - 1;
+        let imgForm = document.getElementById("uploaded-"+ form_id +"-img");
+        let urlForm = document.getElementById("id_form-"+ form_id +"-url");
+        imgForm.src = deleteImgUrl;
+        urlForm.value = deleteImgUrl;
+        document.getElementById("id_form-"+ form_id +"-DELETE").checked = true;
+        imgForm.parentElement.style.display = "none";
+     }
 
 </script>
 

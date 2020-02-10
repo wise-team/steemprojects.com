@@ -173,3 +173,21 @@ def join_path_with_file_name(path, file_name):
     if not path.endswith('/'):
         path += '/'
     return f"{path}{file_name}"
+
+
+def split_path_for_path_and_name(file_path):
+    return file_path.rsplit("/", 1)
+
+
+def cut_domain_name_from_url(file_url):
+    return file_url.split("/", 3)[-1]
+
+
+def delete_file_from_media(image_path):
+    folder_path, image_name = split_path_for_path_and_name(image_path)
+    image_name = image_name.split(".")[0]
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            if file.find(image_name) != -1:
+                os.remove(join(root, file))
+
