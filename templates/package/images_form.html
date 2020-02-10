@@ -29,7 +29,8 @@
                 </div>
             {% endfor %}
         </div>
-        <div id="img-forms" style="clear: both;"></div>
+        <div id="img-forms"></div>
+        <div style="clear: both;"></div>
         <input class="m-btn" value="Upload images" onclick="fileStackOpen()" ></input>
         <input class="m-btn" type="submit" name="add" value="Save changes">
     </form>
@@ -37,7 +38,8 @@
         <div id="formset-add-new-form-btn" class="m-btn m-btn--small" style="display: none">Add New Image</div>
     </div>
     <div id="empty-form" style="display:none;">
-        <div class="img-form">
+        <div class="img-form" style="float: left; margin: 10px;">
+            <div id="form-descr"></div>
             {{ formset.empty_form }}
             <img src="" id="uploaded-__prefix__-img" style="width:16vw; height: 9vw; object-fit: cover;" />
             <span class="rm-btn te-form icon-close" onclick="returnForm(this)"></span>
@@ -101,8 +103,13 @@
      function fillForm(response){
             document.getElementById("formset-add-new-form-btn").click();
             let form_id = document.getElementById("id_form-TOTAL_FORMS").value - 1;
-            document.getElementById("id_form-" + form_id + "-url").value = response.url;
-            document.getElementById("uploaded-"+ form_id +"-img").src = response.url;
+            let form_url = document.getElementById("id_form-" + form_id + "-url")
+            let form_img = document.getElementById("uploaded-"+ form_id +"-img")
+            form_url.value = response.url;
+            form_img.src = response.url;
+            let parentForm = form_url.parentNode;
+            let formDescr = parentForm.firstChild;
+            formDescr.innerText = "Upload";
      }
 
      function deleteImg(clickedSpan) {
@@ -111,16 +118,19 @@
         let form_id = document.getElementById("id_form-TOTAL_FORMS").value - 1;
         let imgForm = document.getElementById("uploaded-"+ form_id +"-img");
         let urlForm = document.getElementById("id_form-"+ form_id +"-url");
-
+        let parentForm = imgForm.parentNode;
+        console.log(parentForm);
         imgForm.src = deleteImgUrl;
         urlForm.value = deleteImgUrl;
         document.getElementById("id_form-"+ form_id +"-DELETE").checked = true;
+        let formDescr = parentForm.firstChild;
+        formDescr.innerText = "Delete";
      }
 
      function returnForm(clickedSpan){
          let formElement = clickedSpan.parentNode;
-         let deleteCheck = formElement.childNodes[1];
-         let image = formElement.childNodes[4]
+         let deleteCheck = formElement.childNodes[2];
+         let image = formElement.childNodes[5]
          if(deleteCheck.checked == true){
             let allUploadedImages = document.getElementById("img-entries").childNodes;
             let hiddenImages = Object.values(allUploadedImages).filter(imgForm => imgForm.style.display == 'none');
