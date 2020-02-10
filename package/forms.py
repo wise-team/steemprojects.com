@@ -1,6 +1,6 @@
 import itertools
 
-from package.models import Category, Project, PackageExample, ProjectImage, ProjectImageUrl
+from package.models import Category, Project, PackageExample, ProjectImage
 from package.utils import prepare_thumbnails, download_file, get_image_name, get_file_subtype_from_url, \
     rename_file, join_path_with_file_name
 from profiles.models import Account
@@ -214,7 +214,7 @@ class ProjectImageUrlForm(forms.Form):
         cleaned_data = super(ProjectImageUrlForm, self).clean()
         image_url = cleaned_data.get("url")
         project = cleaned_data.get("project")
-        if not ProjectImageUrl.is_image(image_url):
+        if not ProjectImage.is_image(image_url):
             raise ValidationError("File is not image")
         try:
             image_project_path = join_path_with_file_name("imgs", project)

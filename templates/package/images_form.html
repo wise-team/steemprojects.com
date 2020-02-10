@@ -25,22 +25,17 @@
             {% for image in images %}
                 <div class="img-form" style="float: left; margin: 10px;">
                     <span class="rm-btn te-entry icon-close" title="Delete"></span>
-                        <img src="{{  image.img.url }}" style="width:16vw; height: 9vw; object-fit: cover;" />
+                    <img src="{{  image.img.url }}" style="width:16vw; height: 9vw; object-fit: cover;" />
                 </div>
             {% endfor %}
         </div>
-
         <div id="img-forms" style="clear: both;"></div>
-        <div>
-            <div id="formset-add-new-form-btn" class="m-btn m-btn--small" style="display: none">Add New Image</div>
-        </div>
         <input class="m-btn" value="Upload images" onclick="fileStackOpen()" ></input>
         <input class="m-btn" type="submit" name="add" value="Save changes">
-
-
-
     </form>
-
+    <div>
+        <div id="formset-add-new-form-btn" class="m-btn m-btn--small" style="display: none">Add New Image</div>
+    </div>
     <div id="empty-form" style="display:none;">
         <div class="img-form">
             {{ formset.empty_form }}
@@ -103,13 +98,13 @@
      const fileStackOpen = () => {
          client.picker(options).open();
      }
+
      function fillForm(response){
             document.getElementById("formset-add-new-form-btn").click();
+
             let form_id = document.getElementById("id_form-TOTAL_FORMS").value - 1;
-            document.getElementById('id_form-' + form_id + "-url").value=response.url;
-            console.log(response.url);
+            document.getElementById("id_form-" + form_id + "-url").value=response.url;
             document.getElementById("uploaded-"+ form_id +"-img").src = response.url;
-            {#document.getElementById('package-form').submit();#}
      }
 
 

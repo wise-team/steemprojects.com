@@ -478,11 +478,6 @@ class ProjectImage(BaseModel):
     def __str__(self):
         return "Project: {}, Image: {}".format(self.project.name, self.img.name)
 
-
-class ProjectImageUrl(BaseModel):
-    project = models.ForeignKey(Project, related_name="imagesUrl")
-    url = models.URLField(_("Url"), max_length=256)
-
     @staticmethod
     def is_image(image_url):
         main_type = get_file_maintype_from_url(image_url)
