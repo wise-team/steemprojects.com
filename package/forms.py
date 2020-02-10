@@ -217,9 +217,12 @@ class ProjectImageUrlForm(forms.Form):
         project = cleaned_data.get("project")
         self.delete = cleaned_data.get("DELETE")
         if self.delete:
-            self.image_path = cut_domain_name_from_url(image_url)
-            delete_file_from_media(self.image_path)
-            self.image_path = self.image_path.split("/", 1)[-1]
+            try:
+                self.absolute_image_path = cut_domain_name_from_url(image_url)
+                delete_file_from_media(self.absolute_image_path)
+                self.image_path = self.absolute_image_path.split("/", 1)[-1]
+            except ValidationError:
+                raise ValidationError("Processing error")
         else:
             if not ProjectImage.is_image(image_url):
                 raise ValidationError("File is not image")

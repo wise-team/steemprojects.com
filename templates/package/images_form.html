@@ -40,7 +40,7 @@
         <div class="img-form">
             {{ formset.empty_form }}
             <img src="" id="uploaded-__prefix__-img" style="width:16vw; height: 9vw; object-fit: cover;" />
-            <span class="rm-btn te-form icon-close"></span>
+            <span class="rm-btn te-form icon-close" onclick="returnForm(this)"></span>
         </div>
     </div>
 {% endblock %}
@@ -104,16 +104,29 @@
             document.getElementById("id_form-" + form_id + "-url").value = response.url;
             document.getElementById("uploaded-"+ form_id +"-img").src = response.url;
      }
+
      function deleteImg(clickedSpan) {
         let deleteImgUrl = clickedSpan.nextSibling.src;
         document.getElementById("formset-add-new-form-btn").click();
         let form_id = document.getElementById("id_form-TOTAL_FORMS").value - 1;
         let imgForm = document.getElementById("uploaded-"+ form_id +"-img");
         let urlForm = document.getElementById("id_form-"+ form_id +"-url");
+
         imgForm.src = deleteImgUrl;
         urlForm.value = deleteImgUrl;
         document.getElementById("id_form-"+ form_id +"-DELETE").checked = true;
-        imgForm.parentElement.style.display = "none";
+     }
+
+     function returnForm(clickedSpan){
+         let formElement = clickedSpan.parentNode;
+         let deleteCheck = formElement.childNodes[1];
+         let image = formElement.childNodes[4]
+         if(deleteCheck.checked == true){
+            let allUploadedImages = document.getElementById("img-entries").childNodes;
+            let hiddenImages = Object.values(allUploadedImages).filter(imgForm => imgForm.style.display == 'none');
+            let findedElement = hiddenImages.find(element => image.src.includes(element.lastChild.src));
+            findedElement.style.display = "";
+         }
      }
 
 </script>
