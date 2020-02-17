@@ -15,12 +15,11 @@ from django.utils import timezone
 from django.utils.html import escape
 from django.views.decorators.csrf import csrf_exempt
 
-
 from grid.models import Grid
 from package.forms import PackageForm, PackageExampleForm, DocumentationForm, ProjectImagesUrlFormSet
+from package.forms import TeamMembersFormSet
 from package.models import Category, Project, PackageExample, ProjectImage, TeamMembership
 from package.repos import get_all_repos
-from package.forms import TeamMembersFormSet
 from profiles.models import Account, AccountType
 from searchv2.builders import rebuild_project_search_index
 

@@ -1,18 +1,27 @@
 import itertools
+from urllib.error import HTTPError
 
-from package.models import Category, Project, PackageExample, ProjectImage
-from package.utils import prepare_thumbnails, download_file, get_image_name, get_file_subtype_from_url, \
-    rename_file, join_path_with_file_name, delete_file_from_media, cut_domain_name_from_url
-from profiles.models import Account
-
-from django.core.exceptions import ValidationError
 from django import forms
+from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.forms.formsets import formset_factory
 from django.forms.models import modelformset_factory
 from django.forms.widgets import Textarea, TextInput
 from django.template.defaultfilters import slugify
 from floppyforms.__future__ import ModelForm
-from django.conf import settings
+
+from package.models import Category, Project, PackageExample, ProjectImage
+from package.utils import (
+    prepare_thumbnails,
+    download_file,
+    get_image_name,
+    get_file_subtype_from_url,
+    rename_file,
+    join_path_with_file_name,
+    delete_file_from_media,
+    cut_domain_name_from_url,
+)
+from profiles.models import Account
 
 
 def package_help_text():
@@ -219,23 +228,24 @@ class ProjectImageUrlForm(forms.Form):
         if self.delete:
             try:
                 self.absolute_image_path = cut_domain_name_from_url(image_url)
-                delete_file_from_media(self.absolute_image_path)
-                self.image_path = self.absolute_image_path.split("/", 1)[-1]
-            except ValidationError:
+            except AttributeError:
                 raise ValidationError("Processing error")
+            delete_file_from_media(self.absolute_image_path)
+            self.image_path = self.absolute_image_path.split("/", 1)[-1]
         else:
-            if not ProjectImage.is_image(image_url):
-                raise ValidationError("File is not image")
             try:
-                image_project_path = join_path_with_file_name("imgs", project)
-                dest_path = join_path_with_file_name(settings.MEDIA_ROOT, image_project_path)
-                uuid_name = download_file(image_url, dest_path)
-                file_type = get_file_subtype_from_url(image_url)
-                timestamp_name = get_image_name(file_type)
-                self.absolute_image_path = rename_file(dest_path, uuid_name, timestamp_name)
-                self.image_path = join_path_with_file_name(image_project_path, timestamp_name)
-            except ValidationError:
-                raise ValidationError("Processing error")
+                if not ProjectImage.is_image(image_url):
+                    raise ValidationError("File is not image")
+            except (AttributeError, HTTPError):
+                raise ValidationError("File is not image")
+
+            image_project_path = join_path_with_file_name("imgs", project)
+            dest_path = join_path_with_file_name(settings.MEDIA_ROOT, image_project_path)
+            uuid_name = download_file(image_url, dest_path)
+            file_type = get_file_subtype_from_url(image_url)
+            timestamp_name = get_image_name(file_type)
+            self.absolute_image_path = rename_file(dest_path, uuid_name, timestamp_name)
+            self.image_path = join_path_with_file_name(image_project_path, timestamp_name)
         return cleaned_data
 
     def save(self, *args, **kwargs):

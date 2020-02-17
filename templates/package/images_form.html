@@ -86,14 +86,16 @@
         "container": ".picker-content",
         "accept": ["image/png", "image/jpg"],
         "maxFiles": 5,
-        "maxSize": 1024*1024*5,
+        "maxSize": 1024*1024*20,
         "fromSources": ["local_file_system"],
         "uploadInBackground": false,
         "onFileUploadFinished": fillForm,
         "transformations": {
-        "crop": true,
-        "circle": true,
-        "rotate": true
+            "crop": {
+                "aspectRatio": 16 / 9,
+                "force": true
+            },
+            "rotate": true
         }
     };
      const fileStackOpen = () => {
@@ -102,40 +104,35 @@
 
      function fillForm(response){
             document.getElementById("formset-add-new-form-btn").click();
-            let form_id = document.getElementById("id_form-TOTAL_FORMS").value - 1;
-            let form_url = document.getElementById("id_form-" + form_id + "-url")
-            let form_img = document.getElementById("uploaded-"+ form_id +"-img")
+            const form_id = document.getElementById("id_form-TOTAL_FORMS").value - 1;
+            const form_url = document.getElementById("id_form-" + form_id + "-url")
+            const form_img = document.getElementById("uploaded-"+ form_id +"-img")
             form_url.value = response.url;
             form_img.src = response.url;
-            let parentForm = form_url.parentNode;
-            let formDescr = parentForm.firstChild;
-            formDescr.innerText = "Upload";
+            form_url.parentNode.firstChild.innerText = "Upload";
      }
 
      function deleteImg(clickedSpan) {
-        let deleteImgUrl = clickedSpan.nextSibling.src;
+        const deleteImgUrl = clickedSpan.nextSibling.src;
         document.getElementById("formset-add-new-form-btn").click();
-        let form_id = document.getElementById("id_form-TOTAL_FORMS").value - 1;
-        let imgForm = document.getElementById("uploaded-"+ form_id +"-img");
-        let urlForm = document.getElementById("id_form-"+ form_id +"-url");
-        let parentForm = imgForm.parentNode;
-        console.log(parentForm);
+        const form_id = document.getElementById("id_form-TOTAL_FORMS").value - 1;
+        const imgForm = document.getElementById("uploaded-"+ form_id +"-img");
+        const urlForm = document.getElementById("id_form-"+ form_id +"-url");
         imgForm.src = deleteImgUrl;
         urlForm.value = deleteImgUrl;
         document.getElementById("id_form-"+ form_id +"-DELETE").checked = true;
-        let formDescr = parentForm.firstChild;
-        formDescr.innerText = "Delete";
+        imgForm.parentNode.firstChild.innerText = "Delete";
      }
 
      function returnForm(clickedSpan){
-         let formElement = clickedSpan.parentNode;
-         let deleteCheck = formElement.childNodes[2];
-         let image = formElement.childNodes[5]
+         const formElement = clickedSpan.parentNode;
+         const deleteCheck = formElement.childNodes[2];
+         const image = formElement.childNodes[5]
          if(deleteCheck.checked == true){
-            let allUploadedImages = document.getElementById("img-entries").childNodes;
-            let hiddenImages = Object.values(allUploadedImages).filter(imgForm => imgForm.style.display == 'none');
-            let findedElement = hiddenImages.find(element => image.src.includes(element.lastChild.src));
-            findedElement.style.display = "";
+            const allUploadedImages = document.getElementById("img-entries").childNodes;
+            const hiddenImages = Object.values(allUploadedImages).filter(imgForm => imgForm.style.display == 'none');
+            const foundElement = hiddenImages.find(element => image.src.includes(element.lastChild.src));
+            foundElement.style.display = "";
          }
      }
 

@@ -1,17 +1,16 @@
 import logging
+import os
+import time
 import urllib
+import uuid
+from distutils.version import LooseVersion as versioner
 from os import makedirs
 from os.path import join, split, exists, splitext
+
 from PIL import Image
-from distutils.version import LooseVersion as versioner
-
-from requests.compat import quote
-
 from django.conf import settings
 from django.db import models
-import uuid
-import time
-import os
+from requests.compat import quote
 
 logger = logging.getLogger(__name__)
 
