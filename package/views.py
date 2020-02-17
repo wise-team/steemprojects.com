@@ -208,6 +208,7 @@ def edit_images(request, slug, template_name="package/images_form.html"):
         "images": ProjectImage.objects.filter(project=project),
         "package": project,
         "action": "Save",
+        "FILESTACK_API_KEY": settings.FILESTACK_API_KEY,
     })
 
 @login_required
