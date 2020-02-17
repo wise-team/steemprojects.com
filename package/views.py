@@ -193,9 +193,9 @@ def edit_images(request, slug, template_name="package/images_form.html"):
         return HttpResponseForbidden("permission denied")
 
     if request.POST:
-        formset = ProjectImagesUrlFormSet(data=request.POST, project=project.id,)
+        formset = ProjectImagesUrlFormSet(data=request.POST, project=project.id, user_data=request.user)
     else:
-        formset = ProjectImagesUrlFormSet(project=project.id)
+        formset = ProjectImagesUrlFormSet(project=project.id, user_data=request.user)
 
     if formset.is_valid():
         for form in formset.forms:
@@ -210,6 +210,7 @@ def edit_images(request, slug, template_name="package/images_form.html"):
         "action": "Save",
         "FILESTACK_API_KEY": settings.FILESTACK_API_KEY,
     })
+
 
 @login_required
 def add_example(request, slug, template_name="package/add_example.html"):

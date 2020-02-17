@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.forms.formsets import formset_factory
 from django.forms.models import modelformset_factory
 from django.forms.widgets import Textarea, TextInput
+from django.http import HttpResponseForbidden
 from django.template.defaultfilters import slugify
 from floppyforms.__future__ import ModelForm
 
@@ -211,11 +212,12 @@ class ProjectImageUrlForm(forms.Form):
     url = forms.URLField()
     project = forms.CharField()
 
-    def __init__(self, project, *args, **kwargs):
+    def __init__(self, project, user_data, *args, **kwargs):
         super(ProjectImageUrlForm, self).__init__(*args, **kwargs)
         self.image_path = None
         self.absolute_image_path = None
         self.delete = False
+        self.user = user_data
         self.fields["url"].widget = forms.HiddenInput()
         self.fields["project"].widget = forms.HiddenInput()
         self.fields["project"].initial = project
@@ -224,6 +226,9 @@ class ProjectImageUrlForm(forms.Form):
         cleaned_data = super(ProjectImageUrlForm, self).clean()
         image_url = cleaned_data.get("url")
         project = cleaned_data.get("project")
+        project_object = Project.objects.get(id=project)
+        if not self.user.profile.can_edit_package(project_object):
+            raise HttpResponseForbidden("permission denied")
         self.delete = cleaned_data.get("DELETE")
         if self.delete:
             try:
@@ -265,11 +270,13 @@ BaseProjectImagesUrlFormSet = formset_factory(
 
 class ProjectImagesUrlFormSet(BaseProjectImagesUrlFormSet):
 
-    def __init__(self, project, *args, **kwargs):
+    def __init__(self, project, user_data, *args, **kwargs):
         self.project = project
+        self.user_data = user_data
         super(ProjectImagesUrlFormSet, self).__init__(*args, **kwargs)
 
     def get_form_kwargs(self, *args, **kwargs):
         form_kwargs = super(ProjectImagesUrlFormSet, self).get_form_kwargs(*args, **kwargs)
         form_kwargs.update({"project": self.project})
+        form_kwargs.update({"user_data": self.user_data})
         return form_kwargs
