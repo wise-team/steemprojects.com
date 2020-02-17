@@ -234,7 +234,7 @@ class ProjectImageUrlForm(forms.Form):
             self.image_path = self.absolute_image_path.split("/", 1)[-1]
         else:
             try:
-                ProjectImage.is_image(image_url)
+                ProjectImage.assert_image(image_url)
             except (AttributeError, HTTPError):
                 raise ValidationError("File is not image")
 

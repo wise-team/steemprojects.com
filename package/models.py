@@ -479,7 +479,7 @@ class ProjectImage(BaseModel):
         return "Project: {}, Image: {}".format(self.project.name, self.img.name)
 
     @staticmethod
-    def is_image(image_url):
+    def assert_image(image_url):
         main_type = get_file_maintype_from_url(image_url)
         return main_type == 'image'
 
