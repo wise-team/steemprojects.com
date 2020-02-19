@@ -141,6 +141,7 @@ PROJECT_APPS = [
     "social_auth_local",
     "im",
     "timeline",
+
 ]
 
 PREREQ_APPS = [
@@ -153,6 +154,7 @@ PREREQ_APPS = [
     "django.contrib.messages",
     "django.contrib.humanize",
     "django.contrib.staticfiles",
+
 
     # external
     "crispy_forms",
@@ -167,6 +169,7 @@ PREREQ_APPS = [
     'rest_framework',
     'chroniker',
     'dynamic_preferences',
+    'graphene_django',
 ]
 
 INSTALLED_APPS = PREREQ_APPS + PROJECT_APPS
@@ -541,3 +544,7 @@ assert all(
 CHRONIKER_CHECK_LOCK_FILE = False
 CHRONIKER_DISABLE_RAW_COMMAND = True
 CHRONIKER_EMAIL_SENDER = 'Chroniker'
+
+GRAPHENE = {
+    'SCHEMA': 'schema.schema'
+}

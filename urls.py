@@ -19,6 +19,7 @@ from core.apiv1 import apiv1_gone
 from homepage.views import homepage, error_404_view, error_500_view, health_check_view, SitemapView
 from package.views import category, python3_list
 from django.contrib.auth.views import logout as contrib_logout_view
+from graphene_django.views import GraphQLView
 
 urlpatterns = [
 
@@ -81,6 +82,8 @@ urlpatterns = [
         view=apiv1_gone,
         name="apiv1_gone",
     ),
+    url(r'^graphql/$', GraphQLView.as_view(graphiql=True)),
+
 
     # url(r'^api/v1/', include('core.apiv1', namespace="apitest")),
 
