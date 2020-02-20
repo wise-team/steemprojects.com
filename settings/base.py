@@ -82,6 +82,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'dj_pagination.middleware.PaginationMiddleware',
     'social_auth_local.middleware.SocialAuthLocalExceptionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 TEMPLATES = [
@@ -170,6 +171,7 @@ PREREQ_APPS = [
     'chroniker',
     'dynamic_preferences',
     'graphene_django',
+    'corsheaders',
 ]
 
 INSTALLED_APPS = PREREQ_APPS + PROJECT_APPS
@@ -548,3 +550,9 @@ CHRONIKER_EMAIL_SENDER = 'Chroniker'
 GRAPHENE = {
     'SCHEMA': 'schema.schema'
 }
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8080',
+    'https://localhost:8080',
+    ]
+
+CORS_ALLOW_CREDENTIALS = True
