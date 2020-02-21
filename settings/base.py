@@ -82,6 +82,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'dj_pagination.middleware.PaginationMiddleware',
     'social_auth_local.middleware.SocialAuthLocalExceptionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 TEMPLATES = [
@@ -141,6 +142,7 @@ PROJECT_APPS = [
     "social_auth_local",
     "im",
     "timeline",
+
 ]
 
 PREREQ_APPS = [
@@ -153,6 +155,7 @@ PREREQ_APPS = [
     "django.contrib.messages",
     "django.contrib.humanize",
     "django.contrib.staticfiles",
+
 
     # external
     "crispy_forms",
@@ -167,6 +170,8 @@ PREREQ_APPS = [
     'rest_framework',
     'chroniker',
     'dynamic_preferences',
+    'graphene_django',
+    'corsheaders',
 ]
 
 INSTALLED_APPS = PREREQ_APPS + PROJECT_APPS
@@ -541,3 +546,13 @@ assert all(
 CHRONIKER_CHECK_LOCK_FILE = False
 CHRONIKER_DISABLE_RAW_COMMAND = True
 CHRONIKER_EMAIL_SENDER = 'Chroniker'
+
+GRAPHENE = {
+    'SCHEMA': 'schema.schema'
+}
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8080',
+    'https://localhost:8080',
+    ]
+
+CORS_ALLOW_CREDENTIALS = True
