@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}components/audreyr-rotatingnav/dist/jquery.rotatingnav.min.css" type="text/css" />
     <link rel="stylesheet" href="{{ STATIC_URL }}css/main.css?deployment={{ DEPLOYMENT_DATETIME }}" type="text/css" />
     <link rel="stylesheet" href="{{ STATIC_URL }}css/oc.css?deployment={{ DEPLOYMENT_DATETIME }}" type="text/css" />
-    <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico" />
+    <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon_{{ FRAMEWORK_NAME|lower }}projects.ico" />
     {% block extra_head %}{% endblock %}
 </head>
 {% if global_preferences.general__released or request.user.is_superuser %}
