@@ -197,7 +197,7 @@ def restore_db(filename="tmp.sqlc"):
             remote_filename,
         ))
 
-        docker_compose("run postgres restore {}".format(remote_filename))
+        print(docker_compose("run postgres restore {}".format(remote_filename)))
 
         docker_compose("run postgres rm /backups/{}".format(remote_filename))
         if ENV.name != "local":

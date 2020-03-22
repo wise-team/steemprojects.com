@@ -38,4 +38,7 @@ fi
 echo "beginning restore from $1"
 echo "-------------------------"
 
-pg_restore --verbose -h postgres -U $POSTGRES_USER --clean -d $POSTGRES_USER $BACKUPFILE
+EXIT_CODE=0
+
+pg_restore --verbose -h postgres -U $POSTGRES_USER --clean -d $POSTGRES_USER $BACKUPFILE || EXIT_CODE=$?
+echo $EXIT_CODE
