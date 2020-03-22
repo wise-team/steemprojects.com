@@ -15,12 +15,11 @@ from django.utils import timezone
 from django.utils.html import escape
 from django.views.decorators.csrf import csrf_exempt
 
-
 from grid.models import Grid
-from package.forms import PackageForm, PackageExampleForm, DocumentationForm, ProjectImagesFormSet
+from package.forms import PackageForm, PackageExampleForm, DocumentationForm, ProjectImagesUrlFormSet
+from package.forms import TeamMembersFormSet
 from package.models import Category, Project, PackageExample, ProjectImage, TeamMembership
 from package.repos import get_all_repos
-from package.forms import TeamMembersFormSet
 from profiles.models import Account, AccountType
 from searchv2.builders import rebuild_project_search_index
 
@@ -187,7 +186,6 @@ def publish_project(request, slug):
         return HttpResponseForbidden("permission denied")
 
 
-
 @login_required
 def edit_images(request, slug, template_name="package/images_form.html"):
     project = get_object_or_404(Project, slug=slug)
@@ -195,20 +193,22 @@ def edit_images(request, slug, template_name="package/images_form.html"):
         return HttpResponseForbidden("permission denied")
 
     if request.POST:
-        formset = ProjectImagesFormSet(data=request.POST, files=request.FILES, project=project,)
+        formset = ProjectImagesUrlFormSet(data=request.POST, project=project.id, user_data=request.user)
     else:
-        formset = ProjectImagesFormSet(project=project, queryset=ProjectImage.objects.filter(project=project))
+        formset = ProjectImagesUrlFormSet(project=project.id, user_data=request.user)
 
     if formset.is_valid():
-        formset.save()
-
+        for form in formset.forms:
+            form.save()
         messages.add_message(request, messages.INFO, 'Project updated successfully')
         return HttpResponseRedirect(reverse("package", kwargs={"slug": project.slug}))
 
     return render(request, template_name, {
         "formset": formset,
+        "images": ProjectImage.objects.filter(project=project),
         "package": project,
         "action": "Save",
+        "FILESTACK_API_KEY": settings.FILESTACK_API_KEY,
     })
 
 

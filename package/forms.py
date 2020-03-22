@@ -1,16 +1,28 @@
 import itertools
+from urllib.error import HTTPError
 
-from package.models import Category, Project, PackageExample, ProjectImage
-from package.utils import prepare_thumbnails
-from profiles.models import Account
-
-from django.core.exceptions import ValidationError
 from django import forms
+from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.forms.formsets import formset_factory
 from django.forms.models import modelformset_factory
 from django.forms.widgets import Textarea, TextInput
+from django.http import HttpResponseForbidden
 from django.template.defaultfilters import slugify
 from floppyforms.__future__ import ModelForm
+
+from package.models import Category, Project, PackageExample, ProjectImage
+from package.utils import (
+    prepare_thumbnails,
+    download_file,
+    get_image_name,
+    get_file_subtype_from_url,
+    rename_file,
+    join_path_with_file_name,
+    delete_file_from_media,
+    cut_domain_name_from_url,
+)
+from profiles.models import Account
 
 
 def package_help_text():
@@ -195,14 +207,76 @@ BaseProjectImagesFormSet = modelformset_factory(
 )
 
 
-class ProjectImagesFormSet(BaseProjectImagesFormSet):
+class ProjectImageUrlForm(forms.Form):
 
-    def __init__(self, project, queryset=None, *args, **kwargs):
+    url = forms.URLField()
+    project = forms.CharField()
+
+    def __init__(self, project, user_data, *args, **kwargs):
+        super(ProjectImageUrlForm, self).__init__(*args, **kwargs)
+        self.image_path = None
+        self.absolute_image_path = None
+        self.delete = False
+        self.user = user_data
+        self.fields["url"].widget = forms.HiddenInput()
+        self.fields["project"].widget = forms.HiddenInput()
+        self.fields["project"].initial = project
+
+    def clean(self):
+        cleaned_data = super(ProjectImageUrlForm, self).clean()
+        image_url = cleaned_data.get("url")
+        project = cleaned_data.get("project")
+        project_object = Project.objects.get(id=project)
+        if not self.user.profile.can_edit_package(project_object):
+            raise HttpResponseForbidden("permission denied")
+        self.delete = cleaned_data.get("DELETE")
+        if self.delete:
+            try:
+                self.absolute_image_path = cut_domain_name_from_url(image_url)
+            except AttributeError:
+                raise ValidationError("Processing error")
+            delete_file_from_media(self.absolute_image_path)
+            self.image_path = self.absolute_image_path.split("/", 1)[-1]
+        else:
+            try:
+                ProjectImage.assert_image(image_url)
+            except (AttributeError, HTTPError):
+                raise ValidationError("File is not image")
+
+            image_project_path = join_path_with_file_name("imgs", project)
+            dest_path = join_path_with_file_name(settings.MEDIA_ROOT, image_project_path)
+            uuid_name = download_file(image_url, dest_path)
+            file_type = get_file_subtype_from_url(image_url)
+            timestamp_name = get_image_name(file_type)
+            self.absolute_image_path = rename_file(dest_path, uuid_name, timestamp_name)
+            self.image_path = join_path_with_file_name(image_project_path, timestamp_name)
+        return cleaned_data
+
+    def save(self, *args, **kwargs):
+        project = Project.objects.get(id=self.cleaned_data['project'])
+        if self.delete:
+            ProjectImage.objects.filter(project=project, img=self.image_path).delete()
+        else:
+            ProjectImage.objects.create(project=project, img=self.image_path)
+            prepare_thumbnails(self.absolute_image_path)
+
+
+BaseProjectImagesUrlFormSet = formset_factory(
+    form=ProjectImageUrlForm,
+    can_delete=True,
+    extra=0,
+)
+
+
+class ProjectImagesUrlFormSet(BaseProjectImagesUrlFormSet):
+
+    def __init__(self, project, user_data, *args, **kwargs):
         self.project = project
-
-        super(ProjectImagesFormSet, self).__init__(queryset=queryset, *args, **kwargs)
+        self.user_data = user_data
+        super(ProjectImagesUrlFormSet, self).__init__(*args, **kwargs)
 
     def get_form_kwargs(self, *args, **kwargs):
-        form_kwargs = super(ProjectImagesFormSet, self).get_form_kwargs(*args, **kwargs)
+        form_kwargs = super(ProjectImagesUrlFormSet, self).get_form_kwargs(*args, **kwargs)
         form_kwargs.update({"project": self.project})
+        form_kwargs.update({"user_data": self.user_data})
         return form_kwargs

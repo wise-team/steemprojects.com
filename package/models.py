@@ -22,7 +22,7 @@ from core.utils import STATUS_CHOICES, status_choices_switch
 from core.models import BaseModel
 from package.repos import get_repo_for_repo_url
 from package.signals import signal_fetch_latest_metadata
-from package.utils import get_version, get_pypi_version, normalize_license
+from package.utils import get_version, get_pypi_version, normalize_license, get_image_name, get_file_maintype_from_url
 from profiles.models import Profile, Account
 
 repo_url_help_text = settings.PACKAGINATOR_HELP_TEXT['REPO_URL']
@@ -442,7 +442,6 @@ class TeamMembership(BaseModel):
 
     role_confirmed_by_account = models.NullBooleanField(_("Role confirmed by team mate"), blank=True, default=None)
 
-
     class Meta:
         unique_together = ("account", "project")
 
@@ -452,7 +451,7 @@ class TeamMembership(BaseModel):
 
 def project_img_path(instance, filename):
     _, ext = os.path.splitext(filename)
-    return 'imgs/{}/{}{}'.format(instance.project.pk, int(round(time.time()*1000)), ext)
+    return 'imgs/{}/{}'.format(instance.project.pk, get_image_name(ext))
 
 
 class ProjectImage(BaseModel):
@@ -478,6 +477,11 @@ class ProjectImage(BaseModel):
 
     def __str__(self):
         return "Project: {}, Image: {}".format(self.project.name, self.img.name)
+
+    @staticmethod
+    def assert_image(image_url):
+        main_type = get_file_maintype_from_url(image_url)
+        return main_type == 'image'
 
 
 class PackageExample(BaseModel):

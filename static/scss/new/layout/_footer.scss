@@ -39,9 +39,10 @@
 
     &__item {
         margin: 0 10px;
+        color: $base-footer-color;
     }
 
     &__link {
-        color: $base-font-color;
+        color: $base-footer-link-font-color;
     }
 }

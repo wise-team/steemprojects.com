@@ -14,48 +14,43 @@
     <h2>{{ package.name }}'s images</h2>
 
     <p id="package-form-message">
-        We do not have image cropping tool yet. Suggested ratio for images is 16:9 (for example: 640×360, 1024×576, 1280×720, <b>1920x1080</b>)<br>
-        Images with different ratio are scaled with <a href="https://www.w3schools.com/cssref/css3_pr_background-size.asp">cover property</a>. First image is used on main page.
+        Suggested ratio for images is 16:9 (for example: 640×360, 1024×576, 1280×720, <b>1920x1080</b>)<br>
+        First image is used on main page.
     </p>
+
     <form action="{{ request.path }}" method="post" enctype="multipart/form-data" id="package-form">
         {% csrf_token %}
         {{ formset.management_form }}
         <div id="img-entries">
-            {% for form in formset %}
+            {% for image in images %}
                 <div class="img-form" style="float: left; margin: 10px;">
-                    <span class="rm-btn te-entry icon-close" title="Delete"></span>
-                    {% if not form.errors %}
-                        <img src="{{ form.img.value.url }}" style="width:16vw; height: 9vw; object-fit: cover;" />
-                    {% endif %}
-                    <div style="display: {% if form.errors %}block{% else %}none{% endif %}">
-                        {{ form }}
-                    </div>
+                    <span class="rm-btn te-entry icon-close" title="Delete" onclick="deleteImg(this)"></span>
+                    <img src="{{ image.img.url }}" style="width:16vw; height: 9vw; object-fit: cover;" />
                 </div>
             {% endfor %}
         </div>
-        <div id="img-forms" style="clear: both;">
-
-        </div>
-
-        <div>
-                <div id="formset-add-new-form-btn" class="m-btn m-btn--small">Add New Image</div>
-        </div>
-        <input class="m-btn" type="submit" name="add" value="Upload images and save changes">
-
+        <div id="img-forms"></div>
+        <div style="clear: both;"></div>
+        <input class="m-btn" value="Upload images" onclick="fileStackOpen()" ></input>
+        <input class="m-btn" type="submit" name="add" value="Save changes">
     </form>
-
+    <div>
+        <div id="formset-add-new-form-btn" class="m-btn m-btn--small" style="display: none">Add New Image</div>
+    </div>
     <div id="empty-form" style="display:none;">
-        <div class="img-form">
+        <div class="img-form" style="float: left; margin: 10px;">
+            <div id="form-descr"></div>
             {{ formset.empty_form }}
-            <span class="rm-btn te-form icon-close"></span>
+            <img src="" id="uploaded-__prefix__-img" style="width:16vw; height: 9vw; object-fit: cover;" />
+            <span class="rm-btn te-form icon-close" onclick="returnForm(this)"></span>
         </div>
     </div>
-
 {% endblock %}
 
 {% block extra_body %}
 <script src="{{ STATIC_URL }}js/urlify.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}js/package_form.js" type="text/javascript"></script>
+<script src="//static.filestackapi.com/filestack-js/3.x.x/filestack.min.js"></script>
 <script type="text/javascript">
     $(function(){
 
@@ -69,7 +64,6 @@
             var total_forms = $('#id_form-TOTAL_FORMS');
             var form_idx = total_forms.val();
             total_forms.val(parseInt(form_idx) - 1);
-
             $(event.target).closest('.img-form').remove();
         };
 
@@ -86,6 +80,61 @@
             new_form.find('.rm-btn.te-form').click(rmForm);
         });
     });
+
+    const client = filestack.init('{{ FILESTACK_API_KEY }}');
+    const options = {
+        "container": ".picker-content",
+        "accept": ["image/png", "image/jpg"],
+        "maxFiles": 5,
+        "maxSize": 1024*1024*20,
+        "fromSources": ["local_file_system"],
+        "uploadInBackground": false,
+        "onFileUploadFinished": fillForm,
+        "transformations": {
+            "crop": {
+                "aspectRatio": 16 / 9,
+                "force": true
+            },
+            "rotate": true
+        }
+    };
+     const fileStackOpen = () => {
+         client.picker(options).open();
+     }
+
+     function fillForm(response){
+            document.getElementById("formset-add-new-form-btn").click();
+            const form_id = document.getElementById("id_form-TOTAL_FORMS").value - 1;
+            const form_url = document.getElementById("id_form-" + form_id + "-url")
+            const form_img = document.getElementById("uploaded-"+ form_id +"-img")
+            form_url.value = response.url;
+            form_img.src = response.url;
+            form_url.parentNode.firstChild.innerText = "Upload";
+     }
+
+     function deleteImg(clickedSpan) {
+        const deleteImgUrl = clickedSpan.nextSibling.src;
+        document.getElementById("formset-add-new-form-btn").click();
+        const form_id = document.getElementById("id_form-TOTAL_FORMS").value - 1;
+        const imgForm = document.getElementById("uploaded-"+ form_id +"-img");
+        const urlForm = document.getElementById("id_form-"+ form_id +"-url");
+        imgForm.src = deleteImgUrl;
+        urlForm.value = deleteImgUrl;
+        document.getElementById("id_form-"+ form_id +"-DELETE").checked = true;
+        imgForm.parentNode.firstChild.innerText = "Delete";
+     }
+
+     function returnForm(clickedSpan){
+         const formElement = clickedSpan.parentNode;
+         const deleteCheck = formElement.childNodes[2];
+         const image = formElement.childNodes[5]
+         if(deleteCheck.checked == true){
+            const allUploadedImages = document.getElementById("img-entries").childNodes;
+            const hiddenImages = Object.values(allUploadedImages).filter(imgForm => imgForm.style.display == 'none');
+            const foundElement = hiddenImages.find(element => image.src.includes(element.lastChild.src));
+            foundElement.style.display = "";
+         }
+     }
 
 </script>
 

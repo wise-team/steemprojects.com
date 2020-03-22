@@ -1,0 +1,75 @@
+
+$hive-white: #fff;
+$hive-white-light: #efeff8;
+$hive-white-lighter: #ebebf5;
+$hive-red: #e31337;
+$hive-black: #000;
+$hive-dark-grey: #212529;
+$hive-light-grey: #77777b;
+
+//$steem-red: #bf2155;
+$steem-gray-dark: #3e4f5e;
+$steem-gray-light: #7e93a0;
+$steem-gray-lighter: #d2d2d2;
+$steem-blue: #4aa1f1;
+$steem-white: #fff;
+$steem-aqua-haze: #f0f4f7;
+
+$logo-font-color: #212529;
+
+$gen-red: $hive-red;
+
+$base-background-color: $hive-white-light;
+$base-font-color: $hive-black;
+$second-font-color: $steem-gray-light;
+$third-font-color: $steem-gray-lighter;
+$base-link-color: $hive-red;
+
+//$m-btn-font-color: $base-font-color; // by default
+$m-btn-border-color: $hive-red;
+$m-btn-background-color: $hive-white;
+$m-btn-border-width: 1px;
+
+//hover
+$m-btn-font-color-hover: $hive-white;
+$m-btn-border-color-hover: $hive-red;
+$m-btn-background-color-hover: $hive-red;
+
+// Icons
+$base-icon-color: $hive-red;
+
+// Borders
+$base-border-style: solid;
+
+// Backgrounds
+$base-hover-background: $steem-aqua-haze;
+
+// Font
+$base-font-family: 'Source Sans Pro', sans-serif;
+// Images
+
+$base-brand-image: "logo_hiveprojects.png";
+
+// Forms
+$base-form-background-color: $steem-white;
+$base-form-background-color-focus: initial;
+$base-form-border-color: $steem-gray-lighter;
+$base-form-border-color-focus: initial;
+$base-form-border-bottom-color-focus: $steem-gray-lighter;
+
+// Footer
+$base-footer-background-color: $hive-dark-grey;
+$base-footer-color: $hive-white;
+$base-footer-link-font-color: $hive-white;
+$base-footer-button-background-color: $hive-white;
+$base-footer-button-border-color: $hive-white;
+
+$base-table-border-color: $steem-gray-lighter;
+
+$status-unknown: #000000;
+$status-live-released: #4aa1f1;
+$status-working-prototype-beta: #c44af1;
+$status-demo-alpha: #714af1;
+$status-concept: #74d919;
+$status-abandoned-broken: #ff0000;
+$status-out-of-date-retired: #777777;
