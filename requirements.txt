@@ -16,7 +16,7 @@ django-secure==1.0.1
 django-dynamic-preferences==1.5
 webstack-django-sorting==1.0.1
 django-storages==1.5.1
-djangorestframework==3.4.0
+djangorestframework==3.11.2
 feedparser==5.2.1
 github3.py==0.9.6
 uwsgi==2.0.18
