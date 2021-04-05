@@ -16,7 +16,7 @@ django-secure==1.0.1
 django-dynamic-preferences==1.5
 webstack-django-sorting==1.0.1
 django-storages==1.5.1
-djangorestframework==3.4.0
+djangorestframework==3.11.2
 feedparser==5.2.1
 github3.py==0.9.6
 uwsgi==2.0.18
@@ -33,7 +33,7 @@ requests==2.11.1
 shortuuid==0.4.3
 six==1.10.0
 whitenoise==3.2.2
-Pillow==4.2.1
+Pillow==8.2.0
 rocketchat-API==0.6.3
 markdown==2.6.11
 python-dotenv==0.8.0
