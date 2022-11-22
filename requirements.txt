@@ -33,7 +33,7 @@ requests==2.11.1
 shortuuid==0.4.3
 six==1.10.0
 whitenoise==3.2.2
-Pillow==4.2.1
+Pillow==9.3.0
 rocketchat-API==0.6.3
 markdown==2.6.11
 python-dotenv==0.8.0
